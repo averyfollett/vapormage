@@ -52,7 +52,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
+	
 }
 
 // Called to bind functionality to input
@@ -104,4 +104,20 @@ void APlayerCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+AActor * APlayerCharacter::CapsuleTraceForEnemy()
+{
+	FHitResult hitActor;
+	FVector startPos = FirstPersonCameraComponent->GetComponentLocation();
+	FVector endPos = FirstPersonCameraComponent->GetComponentLocation() + (FirstPersonCameraComponent->GetForwardVector() * 1500.0f);
+	FCollisionShape capsule = FCollisionShape::MakeCapsule(FVector(100.0f, 100.0f, 100.0f));
+	const FName traceTag("LockOnTrace");
+	GetWorld()->DebugDrawTraceTag = traceTag;
+	FCollisionQueryParams collisionParams;
+	collisionParams.TraceTag = traceTag;
+
+	GetWorld()->SweepSingleByObjectType(hitActor, startPos, endPos, FQuat(), ECC_Pawn, capsule, collisionParams);
+
+	return hitActor.GetActor();
 }

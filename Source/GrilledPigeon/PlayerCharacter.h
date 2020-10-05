@@ -63,6 +63,53 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+	/**
+	 * Capsule trace from the camera position forward looking for other pawns
+	 * Returns the hit AActor
+	 */
+	UFUNCTION(BlueprintCallable)
+	AActor * CapsuleTraceForEnemy();
+
+
+protected:
+	/**
+	 * Whether or not the player's crosshair is locked on to an enemy
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+		bool IsLockedOn = false;
+
+	/**
+	 * The enemy actor to be locked on to
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+		AActor * EnemyActor;
+
+	/**
+	 * Whether or not the player's wand is raised (for casting a spell)
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Wand)
+		bool IsWandRaised = false;
+
+	/**
+	 * Whether or not the player's wand is in a defensive position
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Wand)
+		bool IsWandDefense = false;
+
+	/**
+	 * The transform location of the tip of the wand.
+	 * Used for spawning spells
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Wand)
+		FTransform WandTipPosition;
+
+	/**
+	 * Whether or not the player's shield is activated
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Shield)
+		bool IsShieldActive = false;
+
+
 public:
 	/** Returns Mesh1P subobject **/
 	FORCEINLINE class USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
@@ -70,3 +117,4 @@ public:
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 };
+
