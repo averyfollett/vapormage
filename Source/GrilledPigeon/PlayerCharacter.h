@@ -64,6 +64,16 @@ protected:
 	void LookUpAtRate(float Rate);
 
 	/**
+	 * Switch to next enemy in EnemyArray (looping)
+	 */
+	void NextEnemy();
+
+	/**
+	 * Switch to previous enemy in EnemyArray (looping)
+	 */
+	void PreviousEnemy();
+
+	/**
 	 * Capsule trace from the camera position forward looking for other pawns
 	 * Returns the hit AActor
 	 */
@@ -92,6 +102,9 @@ protected:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
 		TArray<AActor*> EnemyArray;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+		int CurrentEnemyIndex = 0;
 
 	/**
 	 * Whether or not the player's wand is raised (for casting a spell)
