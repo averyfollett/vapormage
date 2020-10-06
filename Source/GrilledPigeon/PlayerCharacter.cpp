@@ -1,11 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+
 #include "PlayerCharacter.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -45,14 +49,20 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Pick the first actor tagged with Enemy and set it as the target
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Enemy"), EnemyArray);
+	EnemyActor = EnemyArray[CurrentEnemyIndex];
+
+	// Print to screen the enemy actor name
+	print("Enemy: " + EnemyActor->GetName());
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
+	
+	AutoAimAtEnemy(EnemyActor);
 }
 
 // Called to bind functionality to input
@@ -62,6 +72,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
+
+	// Bind shoulder buttons
+	PlayerInputComponent->BindAction("SwitchEnemyLeft", IE_Pressed, this, &APlayerCharacter::PreviousEnemy);
+	PlayerInputComponent->BindAction("SwitchEnemyRight", IE_Pressed, this, &APlayerCharacter::NextEnemy);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
@@ -104,4 +118,62 @@ void APlayerCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APlayerCharacter::NextEnemy()
+{
+	if (CurrentEnemyIndex + 1 < EnemyArray.Num())
+	{
+		CurrentEnemyIndex++;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	else if (CurrentEnemyIndex + 1 >= EnemyArray.Num())
+	{
+		CurrentEnemyIndex = 0;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	print("Next Enemy: " + EnemyActor->GetName() + "Index " + FString::FromInt(CurrentEnemyIndex));
+}
+
+void APlayerCharacter::PreviousEnemy()
+{
+	if (CurrentEnemyIndex - 1 < EnemyArray.Num() && CurrentEnemyIndex - 1 >= 0)
+	{
+		CurrentEnemyIndex--;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	else if (CurrentEnemyIndex - 1 < 0)
+	{
+		CurrentEnemyIndex = EnemyArray.Num() - 1;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	print("Prev Enemy: " + EnemyActor->GetName() + "Index " + FString::FromInt(CurrentEnemyIndex));
+}
+
+AActor * APlayerCharacter::CapsuleTraceForEnemy()
+{
+	FHitResult hitActor;
+	FVector startPos = FirstPersonCameraComponent->GetComponentLocation();
+	FVector endPos = FirstPersonCameraComponent->GetComponentLocation() + (FirstPersonCameraComponent->GetForwardVector() * 1500.0f);
+	FCollisionShape capsule = FCollisionShape::MakeCapsule(FVector(100.0f, 100.0f, 100.0f));
+	const FName traceTag("LockOnTrace");
+	GetWorld()->DebugDrawTraceTag = traceTag;
+	FCollisionQueryParams collisionParams;
+	collisionParams.TraceTag = traceTag;
+
+	GetWorld()->SweepSingleByObjectType(hitActor, startPos, endPos, FQuat(), ECC_Pawn, capsule, collisionParams);
+
+	return hitActor.GetActor();
+}
+
+void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
+{
+	FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation
+		(FirstPersonCameraComponent->GetComponentLocation(), enemy->GetActorLocation());
+
+	FRotator newRotation = FMath::RInterpTo
+		(FirstPersonCameraComponent->GetComponentRotation(), targetRotation, GetWorld()->GetDeltaSeconds(), 20.0f);
+	
+	GetController()->SetControlRotation(newRotation);
+
 }
