@@ -68,7 +68,10 @@ protected:
 	 * Returns the hit AActor
 	 */
 	UFUNCTION(BlueprintCallable)
-	AActor * CapsuleTraceForEnemy();
+		AActor * CapsuleTraceForEnemy();
+
+	UFUNCTION(BlueprintCallable)
+		void AutoAimAtEnemy(AActor * enemy);
 
 
 protected:
@@ -83,6 +86,12 @@ protected:
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
 		AActor * EnemyActor;
+
+	/**
+	 * Array of all enemy actors
+	 */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+		TArray<AActor*> EnemyArray;
 
 	/**
 	 * Whether or not the player's wand is raised (for casting a spell)

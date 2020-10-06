@@ -1,11 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+
 #include "PlayerCharacter.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -45,14 +49,20 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Pick the first actor tagged with Enemy and set it as the target
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Enemy"), EnemyArray);
+	EnemyActor = EnemyArray[0];
+
+	// Print to screen the enemy actor name
+	print("Enemy: " + EnemyActor->GetName());
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	
+	AutoAimAtEnemy(EnemyActor);
 }
 
 // Called to bind functionality to input
@@ -120,4 +130,16 @@ AActor * APlayerCharacter::CapsuleTraceForEnemy()
 	GetWorld()->SweepSingleByObjectType(hitActor, startPos, endPos, FQuat(), ECC_Pawn, capsule, collisionParams);
 
 	return hitActor.GetActor();
+}
+
+void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
+{
+	FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation
+		(FirstPersonCameraComponent->GetComponentLocation(), enemy->GetActorLocation());
+
+	FRotator newRotation = FMath::RInterpTo
+		(FirstPersonCameraComponent->GetComponentRotation(), targetRotation, GetWorld()->GetDeltaSeconds(), 20.0f);
+	
+	GetController()->SetControlRotation(newRotation);
+
 }
