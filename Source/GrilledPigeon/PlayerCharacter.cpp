@@ -51,7 +51,7 @@ void APlayerCharacter::BeginPlay()
 	
 	// Pick the first actor tagged with Enemy and set it as the target
 	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Enemy"), EnemyArray);
-	EnemyActor = EnemyArray[0];
+	EnemyActor = EnemyArray[CurrentEnemyIndex];
 
 	// Print to screen the enemy actor name
 	print("Enemy: " + EnemyActor->GetName());
@@ -72,6 +72,10 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	// set up gameplay key bindings
 	check(PlayerInputComponent);
+
+	// Bind shoulder buttons
+	PlayerInputComponent->BindAction("SwitchEnemyLeft", IE_Pressed, this, &APlayerCharacter::PreviousEnemy);
+	PlayerInputComponent->BindAction("SwitchEnemyRight", IE_Pressed, this, &APlayerCharacter::NextEnemy);
 
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
@@ -114,6 +118,36 @@ void APlayerCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
+
+void APlayerCharacter::NextEnemy()
+{
+	if (CurrentEnemyIndex + 1 < EnemyArray.Num())
+	{
+		CurrentEnemyIndex++;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	else if (CurrentEnemyIndex + 1 >= EnemyArray.Num())
+	{
+		CurrentEnemyIndex = 0;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	print("Next Enemy: " + EnemyActor->GetName() + "Index " + FString::FromInt(CurrentEnemyIndex));
+}
+
+void APlayerCharacter::PreviousEnemy()
+{
+	if (CurrentEnemyIndex - 1 < EnemyArray.Num() && CurrentEnemyIndex - 1 >= 0)
+	{
+		CurrentEnemyIndex--;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	else if (CurrentEnemyIndex - 1 < 0)
+	{
+		CurrentEnemyIndex = EnemyArray.Num() - 1;
+		EnemyActor = EnemyArray[CurrentEnemyIndex];
+	}
+	print("Prev Enemy: " + EnemyActor->GetName() + "Index " + FString::FromInt(CurrentEnemyIndex));
 }
 
 AActor * APlayerCharacter::CapsuleTraceForEnemy()
