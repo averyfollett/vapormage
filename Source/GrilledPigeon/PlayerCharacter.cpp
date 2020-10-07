@@ -61,7 +61,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	SequenceOut(this->InputComponent->GetAxisValue(TEXT("Pitch")), this->InputComponent->GetAxisValue(TEXT("Yaw")), IBR);
+
 	AutoAimAtEnemy(EnemyActor);
 }
 
@@ -90,7 +92,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
 
 
-	SequenceOut(PlayerInputComponent->GetAxisValue(TEXT("Pitch")), PlayerInputComponent->GetAxisValue(TEXT("Yaw")));
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -184,10 +185,21 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 
 void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRadius)
 {
-	//check for significant movement in the stick
-	if (bufferRangeCheck(inputBufferRadius, xAxis, yAxis))
+	//dont bother doing this if we dont care about gathering the input, save on some input load times
+	if (GatheringSequence)
 	{
-
+		//check for significant movement in the stick
+		if (bufferRangeCheck(inputBufferRadius, xAxis, yAxis) == false)
+		{
+			//no collision, we have stick movement, record the values
+			NextInSequence(xAxis, yAxis);
+		}
+		else
+		{
+			//combine and release whatever sequence we have
+			//	even if we are constantly gathering, but failing the buffer range check, its okay to release a blank sequence
+			OutputSequence = ConcatSequence();
+		}
 	}
 
 	//make sure this is at very end for next update tick
@@ -225,35 +237,90 @@ void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 			switch (ASIGS.mGrid.at(i).mCellNum)
 			{
 			case ASIGS_a:
-				Sequence.push_back(ASIGS_a);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_a)
+				{
+					UpdatingSequence.push_back(ASIGS_a);
+				}
 				break;
 			case ASIGS_b:
-				Sequence.push_back(ASIGS_b);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_b)
+				{
+					UpdatingSequence.push_back(ASIGS_b);
+				}
 				break;
 			case ASIGS_c:
-				Sequence.push_back(ASIGS_c);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_c)
+				{
+					UpdatingSequence.push_back(ASIGS_c);
+				}
 				break;
 			case ASIGS_d:
-				Sequence.push_back(ASIGS_d);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_d)
+				{
+					UpdatingSequence.push_back(ASIGS_d);
+				}
 				break;
 			case ASIGS_e:
-				Sequence.push_back(ASIGS_e);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_e)
+				{
+					UpdatingSequence.push_back(ASIGS_e);
+				}
 				break;
 			case ASIGS_f:
-				Sequence.push_back(ASIGS_f);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_f)
+				{
+					UpdatingSequence.push_back(ASIGS_f);
+				}
 				break;
 			case ASIGS_g:
-				Sequence.push_back(ASIGS_g);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_g)
+				{
+					UpdatingSequence.push_back(ASIGS_g);
+				}
 				break;
 			case ASIGS_h:
-				Sequence.push_back(ASIGS_h);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_h)
+				{
+					UpdatingSequence.push_back(ASIGS_h);
+				}
 				break;
 			case ASIGS_i:
-				Sequence.push_back(ASIGS_i);
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.back() != ASIGS_i)
+				{
+					UpdatingSequence.push_back(ASIGS_i);
+				}
 				break;
+			
 			}
 		}
 	}
 }
 
+ASIGS_STATE APlayerCharacter::ConcatSequence()
+{
+	ASIGS_STATE temp = ASIGS_empty;
 
+	//go through and concat into one enum
+	for (int i = 0; i < UpdatingSequence.size() - 1; ++i)
+	{
+		temp = (ASIGS_STATE)(temp | UpdatingSequence.at(i));	//i dont know why I had to typecast this
+	}
+
+	//	!!!RETURN TO THIS!!!!!!
+	// find a way to get opposite directions working, probably has to do with a boolean
+
+
+	//clear the Updating sequence
+	UpdatingSequence.clear();
+
+	return temp;
+}

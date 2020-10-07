@@ -9,33 +9,40 @@
 #include <utility>
 #include <vector>
 
-enum ASIGS_STATE
+/*
+	flagged enum with bit operations, allows for combination of enums to create new enums
+*/
+enum ASIGS_STATE	
 {
-	ASIGS_a = 0,	//singular cells
-	ASIGS_b,
-	ASIGS_c,
-	ASIGS_d,
-	ASIGS_e,		//nuetral state
-	ASIGS_f,
-	ASIGS_g,
-	ASIGS_h,
-	ASIGS_i,
-	ASIGS_beh,	//up -> down
-	ASIGS_heb,	//down -> up
-	ASIGS_def,	//left -> right
-	ASIGS_fed,	//right -> left
-	ASIGS_aei,	//diagnonal, top left -> bottom right
-	ASIGS_iea,	//diagonal, bottom right -> top left
-	ASIGS_ceg,	//diagonal, top right -> bottom left
-	ASIGS_gec,	//diagonal, bottom left -> top right
-	ASIGS_abc,	//swoop, top left -> top right
-	ASIGS_cba,	//swoop, top right -> top left
-	ASIGS_ghi,	//swoop, bottom left -> bottom right
-	ASIGS_ihg,	//swoop, bottom right -> bottom left
-	ASIGS_adg,	//swoop, top left -> bottom left
-	ASIGS_gda,	//swoop, bottom left -> top left
-	ASIGS_cfi,	//swoop, top right -> bottom right
-	ASIGS_ifc	//swoop, bottom right -> top right
+	ASIGS_empty = 0,	//for temp usage
+	ASIGS_a = 1,		//singular cells
+	ASIGS_b = 2,
+	ASIGS_c = 4,
+	ASIGS_d = 8,
+	ASIGS_e = 16,		//nuetral state
+	ASIGS_f = 32,
+	ASIGS_g = 64,
+	ASIGS_h = 128,
+	ASIGS_i = 256,
+	ASIGS_FLIP = 512,	//THIS NEEDS TO EXIST, its to tell for opposite directions, PUT AT BACK that way we can run if statement 
+						//		on the sequence to see if ASIGS_FLIP exists in this call, then we know difference between "beh" and "heb"
+						//			To assign said difference, 
+	ASIGS_beh = ASIGS_b | ASIGS_e | ASIGS_h,							//up -> down
+	ASIGS_heb = ASIGS_h | ASIGS_e| ASIGS_b | ASIGS_FLIP,				//down -> up
+	ASIGS_def = ASIGS_d | ASIGS_e | ASIGS_f,							//left -> right
+	ASIGS_fed = ASIGS_f | ASIGS_e | ASIGS_d | ASIGS_FLIP,				//right -> left
+	ASIGS_aei = ASIGS_a | ASIGS_e | ASIGS_i,							//diagnonal, top left -> bottom right
+	ASIGS_iea = ASIGS_i | ASIGS_e | ASIGS_a | ASIGS_FLIP,				//diagonal, bottom right -> top left
+	ASIGS_ceg = ASIGS_c | ASIGS_e | ASIGS_g,							//diagonal, top right -> bottom left
+	ASIGS_gec = ASIGS_g | ASIGS_e | ASIGS_c | ASIGS_FLIP,				//diagonal, bottom left -> top right
+	ASIGS_abc = ASIGS_a | ASIGS_b | ASIGS_c,							//swoop, top left -> top right
+	ASIGS_cba = ASIGS_c | ASIGS_b | ASIGS_a | ASIGS_FLIP,				//swoop, top right -> top left
+	ASIGS_ghi = ASIGS_g | ASIGS_h | ASIGS_i,							//swoop, bottom left -> bottom right
+	ASIGS_ihg = ASIGS_i | ASIGS_h | ASIGS_g | ASIGS_FLIP,				//swoop, bottom right -> bottom left
+	ASIGS_adg = ASIGS_a | ASIGS_d | ASIGS_g,							//swoop, top left -> bottom left
+	ASIGS_gda = ASIGS_g | ASIGS_d | ASIGS_a | ASIGS_FLIP,				//swoop, bottom left -> top left
+	ASIGS_cfi = ASIGS_c | ASIGS_f | ASIGS_i,							//swoop, top right -> bottom right
+	ASIGS_ifc = ASIGS_i | ASIGS_f | ASIGS_c | ASIGS_FLIP				//swoop, bottom right -> top right
 };
 
 struct coord_cell
@@ -249,6 +256,11 @@ protected:
 	*/
 	void SequenceOut(float xAxis, float yAxis, float inputBufferRadius);
 
+	/*
+		combine the sequence list into a single enum value and return it
+	*/
+	ASIGS_STATE ConcatSequence();
+
 
 protected:
 	/**
@@ -298,20 +310,44 @@ protected:
 		bool IsShieldActive = false;
 
 	/*
-		
+		3x3 Grid system for unit circle based analog stick input
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		ASIGS_grid3x3 ASIGS;
 
-
+	/*
+		range to judge a considerable amount of intended input
+	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		std::vector<ASIGS_STATE> Sequence;
+		float IBR = 0.1f;
 
+	/*
+		current single element sequence of enums, later to be combined to create a unique enum 
+		to output to editor (possible swoop or diagonal creation)
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		std::vector<ASIGS_STATE> UpdatingSequence;
+
+	/*
+		prior frames input for pitch and yaw analog stick axis
+	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		std::pair<float, float> PreviousInput;
 
+	/*
+		Value determined by lock on state, if locked on and ready to start casting we are true. default is true.
+	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool GatheringSequence = false;
+		bool GatheringSequence = true;
+
+	/*
+		final return sequence enum signifier to grab from the editor
+		IN EDITOR BLUEPRINTS EXAMPLE:
+
+			if outputsequence == ASIGS_cfi then do the swoop spell
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		ASIGS_STATE OutputSequence;
 
 
 public:
