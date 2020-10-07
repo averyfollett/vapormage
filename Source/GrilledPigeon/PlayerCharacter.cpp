@@ -88,6 +88,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+
+
+	SequenceOut(PlayerInputComponent->GetAxisValue(TEXT("Pitch")), PlayerInputComponent->GetAxisValue(TEXT("Yaw")));
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -178,6 +181,37 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 
 }
 
+
+void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRadius)
+{
+	//check for significant movement in the stick
+	if (bufferRangeCheck(inputBufferRadius, xAxis, yAxis))
+	{
+
+	}
+
+	//make sure this is at very end for next update tick
+	PreviousInput.first = xAxis;
+	PreviousInput.second = yAxis;
+}
+
+bool APlayerCharacter::bufferRangeCheck(float inputBufferRadius, float currentAnalogPosX, float currentAnalogPosY)
+{
+	float xDist = currentAnalogPosX - PreviousInput.first;
+	float yDist = currentAnalogPosY - PreviousInput.second;
+	float distance = sqrt((xDist * xDist) + (yDist * yDist));
+
+	if (distance <= inputBufferRadius)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
 void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 {
 	for (int i = 0; i < ASIGS.mGrid.size() - 1; ++i)
@@ -222,9 +256,4 @@ void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 	}
 }
 
-void APlayerCharacter::SequenceOut()
-{
 
-
-	
-}

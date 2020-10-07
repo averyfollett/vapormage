@@ -239,9 +239,15 @@ protected:
 	void NextInSequence(float xAxis, float yAxis);
 
 	/*
-		determine sequence out from vector
+		return true if given the buffer range that the analog stick has moved "fast enough" for input (its out of the range)
+		uses simple 2d circle point collision. Uses the stored previous value with radius of inputBuffer
 	*/
-	void SequenceOut();
+	bool bufferRangeCheck(float inputBufferRadius, float currentAnalogPosX, float currentAnalogPosY);
+
+	/*
+		determine sequence out from vector, call where input is located
+	*/
+	void SequenceOut(float xAxis, float yAxis, float inputBufferRadius);
 
 
 protected:
@@ -300,6 +306,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		std::vector<ASIGS_STATE> Sequence;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		std::pair<float, float> PreviousInput;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		bool GatheringSequence = false;
 
 
 public:
