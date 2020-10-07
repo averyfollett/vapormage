@@ -2,12 +2,11 @@
 
 #pragma once
 
+#include <utility>
+#include <vector>
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
-
-#include <utility>
-#include <vector>
 
 /*
 	flagged enum with bit operations, allows for combination of enums to create new enums
