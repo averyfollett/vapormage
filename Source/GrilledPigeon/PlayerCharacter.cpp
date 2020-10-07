@@ -177,3 +177,54 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 	GetController()->SetControlRotation(newRotation);
 
 }
+
+void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
+{
+	for (int i = 0; i < ASIGS.mGrid.size() - 1; ++i)
+	{
+		coord_cell rect = ASIGS.mGrid.at(i).mCellCords;
+
+		//basic point box collision detection
+		if (xAxis >= rect.m00.first && xAxis <= rect.m01.first &&
+			yAxis >= rect.m00.second && yAxis <= rect.m10.second)
+		{
+			switch (ASIGS.mGrid.at(i).mCellNum)
+			{
+			case ASIGS_a:
+				Sequence.push_back(ASIGS_a);
+				break;
+			case ASIGS_b:
+				Sequence.push_back(ASIGS_b);
+				break;
+			case ASIGS_c:
+				Sequence.push_back(ASIGS_c);
+				break;
+			case ASIGS_d:
+				Sequence.push_back(ASIGS_d);
+				break;
+			case ASIGS_e:
+				Sequence.push_back(ASIGS_e);
+				break;
+			case ASIGS_f:
+				Sequence.push_back(ASIGS_f);
+				break;
+			case ASIGS_g:
+				Sequence.push_back(ASIGS_g);
+				break;
+			case ASIGS_h:
+				Sequence.push_back(ASIGS_h);
+				break;
+			case ASIGS_i:
+				Sequence.push_back(ASIGS_i);
+				break;
+			}
+		}
+	}
+}
+
+void APlayerCharacter::SequenceOut()
+{
+
+
+	
+}
