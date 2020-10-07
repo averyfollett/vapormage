@@ -14,6 +14,7 @@
 */
 enum ASIGS_STATE	
 {
+	ASIGS_default = -1,
 	ASIGS_empty = 0,	//for temp usage
 	ASIGS_a = 1,		//singular cells
 	ASIGS_b = 2,
@@ -43,6 +44,7 @@ enum ASIGS_STATE
 	ASIGS_gda = ASIGS_g | ASIGS_d | ASIGS_a | ASIGS_FLIP,				//swoop, bottom left -> top left
 	ASIGS_cfi = ASIGS_c | ASIGS_f | ASIGS_i,							//swoop, top right -> bottom right
 	ASIGS_ifc = ASIGS_i | ASIGS_f | ASIGS_c | ASIGS_FLIP				//swoop, bottom right -> top right
+
 };
 
 struct coord_cell
@@ -312,32 +314,32 @@ protected:
 	/*
 		3x3 Grid system for unit circle based analog stick input
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		ASIGS_grid3x3 ASIGS;
 
 	/*
 		range to judge a considerable amount of intended input
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float IBR = 0.1f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
+		float IBR = 0.01f;
 
 	/*
 		current single element sequence of enums, later to be combined to create a unique enum 
 		to output to editor (possible swoop or diagonal creation)
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		std::vector<ASIGS_STATE> UpdatingSequence;
 
 	/*
 		prior frames input for pitch and yaw analog stick axis
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		std::pair<float, float> PreviousInput;
 
 	/*
 		Value determined by lock on state, if locked on and ready to start casting we are true. default is true.
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		bool GatheringSequence = true;
 
 	/*
@@ -346,7 +348,7 @@ protected:
 
 			if outputsequence == ASIGS_cfi then do the swoop spell
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		ASIGS_STATE OutputSequence;
 
 

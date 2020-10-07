@@ -199,6 +199,10 @@ void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRa
 			//combine and release whatever sequence we have
 			//	even if we are constantly gathering, but failing the buffer range check, its okay to release a blank sequence
 			OutputSequence = ConcatSequence();
+
+			//DEBUG
+			int os = (int)OutputSequence;
+			print(FString::FromInt(os));
 		}
 	}
 
@@ -316,7 +320,7 @@ ASIGS_STATE APlayerCharacter::ConcatSequence()
 	}
 
 	//	!!!RETURN TO THIS!!!!!!
-	// find a way to get opposite directions working, probably has to do with a boolean
+	// find a way to get opposite directions working, probably has to do with checking the
 
 
 	//clear the Updating sequence
