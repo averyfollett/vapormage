@@ -62,7 +62,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SequenceOut(this->InputComponent->GetAxisValue(TEXT("Pitch")), this->InputComponent->GetAxisValue(TEXT("Yaw")), IBR);
+	SequenceOut(this->InputComponent->GetAxisValue(TEXT("LookUpRate")), this->InputComponent->GetAxisValue(TEXT("TurnRate")), IBR);
 
 	AutoAimAtEnemy(EnemyActor);
 }
