@@ -211,7 +211,7 @@ void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRa
 
 			if (os != 0)
 			{
-				print(FString::FromInt(os));
+				print(FString::FromInt(os));	//display when sequence isnt empty
 			}
 		}
 		
@@ -265,43 +265,12 @@ void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 		Fcoord_cell rect = ASIGS.mGrid[i].mCellCords;
 		//print(FString::FromInt(i));
 
-		/*
-		* DEBUGGINS
-		if (i == 1)
-		{
-			FString stateX;
-			FString stateY;
-			if (xAxis >= rect.m00.Key && xAxis <= rect.m01.Key)
-			{
-				stateX = FString(TEXT("PASS"));
-			}
-			else
-			{
-				stateX = FString(TEXT("FAIL"));
-			}
-
-			if (yAxis <= rect.m00.Value && yAxis >= rect.m10.Value)
-			{
-				stateY = FString(TEXT("PASS"));
-			}
-			else
-			{
-				stateY = FString(TEXT("FAIL"));
-			}
-
-			print("Cell: " + FString::FromInt(ASIGS.mGrid[i].mCellNum) +
-				"   X Detection (low - Ix - high): " + FString::SanitizeFloat(rect.m00.Key) + " - " + FString::SanitizeFloat(xAxis) + " - " + FString::SanitizeFloat(rect.m01.Key) + "  " + stateX + "  " +
-				"   Y Detection (low - Iy - high): " + FString::SanitizeFloat(rect.m00.Value) + " - " + FString::SanitizeFloat(yAxis) + " - " + FString::SanitizeFloat(rect.m10.Value) + "   " + stateY);
-		}
-		*/
-		
-		
 		//basic point box collision detection
 		if (xAxis >= rect.m00.Key && xAxis <= rect.m01.Key &&
 			yAxis <= rect.m00.Value && yAxis >= rect.m10.Value)
 		{
 			//print("passed box collision");
-			
+
 			switch ((int32)(ASIGS.mGrid[i].mCellNum))
 			{
 			case (int32)(ASIGS_a):
@@ -488,7 +457,26 @@ void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 				print("default");
 				break;
 			}
-			
+		}
+
+
+		
+
+		//flip direction
+		//	use second cells direction based from the middle to judge positive or negative first movement
+		//	
+		//	(-)A	(+)B	(+)C	
+		//	(-)D	(N)E	(+)F
+		//	(-)G	(-)H	(+)I
+
+		if (UpdatingSequence.Num() == 2)
+		{
+			int32 secondCell = (int32)UpdatingSequence[1];
+
+			if (secondCell == ASIGS_a || secondCell == ASIGS_d || secondCell == ASIGS_g || secondCell == ASIGS_h)
+			{
+				isNegative = true;
+			}
 		}
 		
 	}
@@ -512,11 +500,16 @@ ASIGS_STATE APlayerCharacter::ConcatSequence()
 
 	//	!!!RETURN TO THIS!!!!!!
 	// find a way to get opposite directions working, probably has to do with checking the
-
+	if (isNegative)
+	{
+		temp = (ASIGS_STATE)(temp | ASIGS_FLIP);
+	}
 
 	//clear the Updating sequence
 	UpdatingSequence.Empty();
 	//UpdatingSequence.Add(ASIGS_e);
+
+	isNegative = false;	//reset isNegative
 
 	//print("SEQUENCE BREAK");
 
