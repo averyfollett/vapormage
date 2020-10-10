@@ -207,14 +207,14 @@ void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRa
 	}
 
 	//make sure this is at very end for next update tick
-	PreviousInput.first = xAxis;
-	PreviousInput.second = yAxis;
+	PreviousInput.Key = xAxis;
+	PreviousInput.Value = yAxis;
 }
 
 bool APlayerCharacter::bufferRangeCheck(float inputBufferRadius, float currentAnalogPosX, float currentAnalogPosY)
 {
-	float xDist = currentAnalogPosX - PreviousInput.first;
-	float yDist = currentAnalogPosY - PreviousInput.second;
+	float xDist = currentAnalogPosX - PreviousInput.Key;
+	float yDist = currentAnalogPosY - PreviousInput.Value;
 	float distance = sqrt((xDist * xDist) + (yDist * yDist));
 
 	if (distance <= inputBufferRadius)
@@ -230,77 +230,77 @@ bool APlayerCharacter::bufferRangeCheck(float inputBufferRadius, float currentAn
 
 void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
 {
-	for (int i = 0; i < ASIGS.mGrid.size() - 1; ++i)
+	for (int i = 0; i < ASIGS.mGrid.Num() - 1; ++i)
 	{
-		coord_cell rect = ASIGS.mGrid.at(i).mCellCords;
+		Fcoord_cell rect = ASIGS.mGrid[i].mCellCords;
 
 		//basic point box collision detection
-		if (xAxis >= rect.m00.first && xAxis <= rect.m01.first &&
-			yAxis >= rect.m00.second && yAxis <= rect.m10.second)
+		if (xAxis >= rect.m00.Key && xAxis <= rect.m01.Key &&
+			yAxis >= rect.m00.Value && yAxis <= rect.m10.Value)
 		{
-			switch (ASIGS.mGrid.at(i).mCellNum)
+			switch (ASIGS.mGrid[i].mCellNum)
 			{
 			case ASIGS_a:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_a)
+				if (UpdatingSequence.Last() != ASIGS_a)
 				{
-					UpdatingSequence.push_back(ASIGS_a);
+					UpdatingSequence.Add(ASIGS_a);
 				}
 				break;
 			case ASIGS_b:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_b)
+				if (UpdatingSequence.Last() != ASIGS_b)
 				{
-					UpdatingSequence.push_back(ASIGS_b);
+					UpdatingSequence.Add(ASIGS_b);
 				}
 				break;
 			case ASIGS_c:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_c)
+				if (UpdatingSequence.Last() != ASIGS_c)
 				{
-					UpdatingSequence.push_back(ASIGS_c);
+					UpdatingSequence.Add(ASIGS_c);
 				}
 				break;
 			case ASIGS_d:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_d)
+				if (UpdatingSequence.Last() != ASIGS_d)
 				{
-					UpdatingSequence.push_back(ASIGS_d);
+					UpdatingSequence.Add(ASIGS_d);
 				}
 				break;
 			case ASIGS_e:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_e)
+				if (UpdatingSequence.Last() != ASIGS_e)
 				{
-					UpdatingSequence.push_back(ASIGS_e);
+					UpdatingSequence.Add(ASIGS_e);
 				}
 				break;
 			case ASIGS_f:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_f)
+				if (UpdatingSequence.Last() != ASIGS_f)
 				{
-					UpdatingSequence.push_back(ASIGS_f);
+					UpdatingSequence.Add(ASIGS_f);
 				}
 				break;
 			case ASIGS_g:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_g)
+				if (UpdatingSequence.Last() != ASIGS_g)
 				{
-					UpdatingSequence.push_back(ASIGS_g);
+					UpdatingSequence.Add(ASIGS_g);
 				}
 				break;
 			case ASIGS_h:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_h)
+				if (UpdatingSequence.Last() != ASIGS_h)
 				{
-					UpdatingSequence.push_back(ASIGS_h);
+					UpdatingSequence.Add(ASIGS_h);
 				}
 				break;
 			case ASIGS_i:
 				//check and see if we are still in the previous cell. If so, we dont need to record it again.
-				if (UpdatingSequence.back() != ASIGS_i)
+				if (UpdatingSequence.Last() != ASIGS_i)
 				{
-					UpdatingSequence.push_back(ASIGS_i);
+					UpdatingSequence.Add(ASIGS_i);
 				}
 				break;
 			
@@ -314,9 +314,9 @@ ASIGS_STATE APlayerCharacter::ConcatSequence()
 	ASIGS_STATE temp = ASIGS_empty;
 
 	//go through and concat into one enum
-	for (int i = 0; i < UpdatingSequence.size() - 1; ++i)
+	for (int i = 0; i < UpdatingSequence.Num() - 1; ++i)
 	{
-		temp = (ASIGS_STATE)(temp | UpdatingSequence.at(i));	//i dont know why I had to typecast this
+		temp = (ASIGS_STATE)(temp | UpdatingSequence[i]);	//i dont know why I had to typecast this
 	}
 
 	//	!!!RETURN TO THIS!!!!!!
@@ -324,7 +324,7 @@ ASIGS_STATE APlayerCharacter::ConcatSequence()
 
 
 	//clear the Updating sequence
-	UpdatingSequence.clear();
+	UpdatingSequence.Empty();
 
 	return temp;
 }

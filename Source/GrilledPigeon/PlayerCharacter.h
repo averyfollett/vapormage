@@ -2,15 +2,15 @@
 
 #pragma once
 
-#include <utility>
-#include <vector>
 #include "CoreMinimal.h"
+#include "Templates/Tuple.h"
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
 /*
 	flagged enum with bit operations, allows for combination of enums to create new enums
 */
+UENUM(BlueprintType)
 enum ASIGS_STATE	
 {
 	ASIGS_default = -1,
@@ -46,38 +46,40 @@ enum ASIGS_STATE
 
 };
 
-struct coord_cell
+USTRUCT(BlueprintType)
+struct Fcoord_cell
 {
 	// m00  m01
 	// m10  m11
+	GENERATED_USTRUCT_BODY();
 
-	coord_cell()
+	Fcoord_cell()
 	{
-		m00.first = -1;
-		m01.first = 1;
-		m10.first = -1;
-		m11.first = 1;
+		m00.Key = -1;
+		m01.Key = 1;
+		m10.Key = -1;
+		m11.Key = 1;
 
-		m00.second = 1;
-		m01.second = 1;
-		m10.second = -1;
-		m11.second = -1;
+		m00.Value = 1;
+		m01.Value = 1;
+		m10.Value = -1;
+		m11.Value = -1;
 	}
 
-	coord_cell(double _m00x, double _m00y, double _m01x, double _m01y, double _m10x, double _m10y, double _m11x, double _m11y)
+	Fcoord_cell(double _m00x, double _m00y, double _m01x, double _m01y, double _m10x, double _m10y, double _m11x, double _m11y)
 	{
-		m00.first = _m00x;
-		m01.first = _m01x;
-		m10.first = _m10x;
-		m11.first = _m11x;
+		m00.Key = _m00x;
+		m01.Key = _m01x;
+		m10.Key = _m10x;
+		m11.Key = _m11x;
 
-		m00.second = _m00y;
-		m01.second = _m01y;
-		m10.second = _m10y;
-		m11.second = _m11y;
+		m00.Value = _m00y;
+		m01.Value = _m01y;
+		m10.Value = _m10y;
+		m11.Value = _m11y;
 	}
 
-	coord_cell(std::pair<double, double> _m00, std::pair<double, double> _m01, std::pair<double, double> _m10, std::pair<double, double> _m11)
+	Fcoord_cell(TTuple<double, double> _m00, TTuple<double, double> _m01, TTuple<double, double> _m10, TTuple<double, double> _m11)
 	{
 		m00 = _m00;
 		m01 = _m01;
@@ -85,12 +87,22 @@ struct coord_cell
 		m11 = _m11;
 	}
 
-	std::pair<double, double> m00, m01, m10, m11;
+
+	TTuple<double, double> m00, m01, m10, m11;
 };
 
-struct ASIGS_cell
+USTRUCT(BlueprintType)
+struct FASIGS_cell
 {
-	ASIGS_cell(ASIGS_STATE cell)
+	GENERATED_USTRUCT_BODY();
+
+	FASIGS_cell()
+	{
+		mCellNum = ASIGS_e;
+		init();
+	}
+
+	FASIGS_cell(ASIGS_STATE cell)
 	{
 		mCellNum = cell;
 		init();
@@ -103,64 +115,61 @@ struct ASIGS_cell
 		switch (mCellNum)
 		{
 			case ASIGS_a:
-				coord_cell temp(-1.0, 1.0, -0.33, 1.0, -1.0, 0.33, -0.33, 0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-1.0, 1.0, -0.33, 1.0, -1.0, 0.33, -0.33, 0.33);
 				break;
 			case ASIGS_b:
-				coord_cell temp(-0.33, 1.0, 0.33, 1.0, -0.33, 0.33, 0.33, 0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-0.33, 1.0, 0.33, 1.0, -0.33, 0.33, 0.33, 0.33);
 				break;
 			case ASIGS_c:
-				coord_cell temp(0.33, 1.0, 1.0, 1.0, 0.33, 0.33, 1.0, 0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(0.33, 1.0, 1.0, 1.0, 0.33, 0.33, 1.0, 0.33);
 				break;
 			case ASIGS_d:
-				coord_cell temp(-1.0, 0.33, -0.33, 0.33, -1.0, -0.33, -0.33, -0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-1.0, 0.33, -0.33, 0.33, -1.0, -0.33, -0.33, -0.33);
 				break;
 			case ASIGS_e:
-				coord_cell temp(-0.33, 0.33, 0.33, 0.33, -0.33, -0.33, 0.33, -0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-0.33, 0.33, 0.33, 0.33, -0.33, -0.33, 0.33, -0.33);
 				break;
 			case ASIGS_f:
-				coord_cell temp(0.33, 0.33, 1.0, 0.33, 0.33, -0.33, 1.0, -0.33);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(0.33, 0.33, 1.0, 0.33, 0.33, -0.33, 1.0, -0.33);
 				break;
 			case ASIGS_g:
-				coord_cell temp(-1.0, -0.33, -0.33, -0.33, -1.0, -1.0, -0.33, -1.0);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-1.0, -0.33, -0.33, -0.33, -1.0, -1.0, -0.33, -1.0);
 				break;
 			case ASIGS_h:
-				coord_cell temp(-0.33, -0.33, 0.33, -0.33, -0.33, -1.0, 0.33, -1.0);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(-0.33, -0.33, 0.33, -0.33, -0.33, -1.0, 0.33, -1.0);
 				break;
 			case ASIGS_i:
-				coord_cell temp(0.33, -0.33, 1.0, -0.33, 0.33, -1.0, 1.0, -1.0);
-				mCellCords = temp;
+				mCellCords = Fcoord_cell(0.33, -0.33, 1.0, -0.33, 0.33, -1.0, 1.0, -1.0);
+				break;
+			default:
+				mCellCords = Fcoord_cell(-0.33, 0.33, 0.33, 0.33, -0.33, -0.33, 0.33, -0.33);
 				break;
 		}
 	} 
 	
 	ASIGS_STATE mCellNum;
-	coord_cell mCellCords;
+	Fcoord_cell mCellCords;
 };
 
-struct ASIGS_grid3x3
+USTRUCT(BlueprintType)
+struct FASIGS_grid3x3
 {
-	ASIGS_grid3x3()
+	GENERATED_USTRUCT_BODY();
+
+	FASIGS_grid3x3()
 	{
-		mGrid.push_back(ASIGS_cell(ASIGS_a));
-		mGrid.push_back(ASIGS_cell(ASIGS_b));
-		mGrid.push_back(ASIGS_cell(ASIGS_c));
-		mGrid.push_back(ASIGS_cell(ASIGS_d));
-		mGrid.push_back(ASIGS_cell(ASIGS_e));
-		mGrid.push_back(ASIGS_cell(ASIGS_f));
-		mGrid.push_back(ASIGS_cell(ASIGS_g));
-		mGrid.push_back(ASIGS_cell(ASIGS_h));
-		mGrid.push_back(ASIGS_cell(ASIGS_i));
+		mGrid.Add(FASIGS_cell(ASIGS_a));
+		mGrid.Add(FASIGS_cell(ASIGS_b));
+		mGrid.Add(FASIGS_cell(ASIGS_c));
+		mGrid.Add(FASIGS_cell(ASIGS_d));
+		mGrid.Add(FASIGS_cell(ASIGS_e));
+		mGrid.Add(FASIGS_cell(ASIGS_f));
+		mGrid.Add(FASIGS_cell(ASIGS_g));
+		mGrid.Add(FASIGS_cell(ASIGS_h));
+		mGrid.Add(FASIGS_cell(ASIGS_i));
 	}
 
-	std::vector<ASIGS_cell> mGrid;
+	TArray<FASIGS_cell> mGrid;
 };
 
 class UInputComponent;
@@ -314,7 +323,7 @@ protected:
 		3x3 Grid system for unit circle based analog stick input
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-		ASIGS_grid3x3 ASIGS;
+		FASIGS_grid3x3 ASIGS;
 
 	/*
 		range to judge a considerable amount of intended input
@@ -327,13 +336,14 @@ protected:
 		to output to editor (possible swoop or diagonal creation)
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-		std::vector<ASIGS_STATE> UpdatingSequence;
+		TArray<int32> UpdatingSequence;
 
 	/*
 		prior frames input for pitch and yaw analog stick axis
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-		std::pair<float, float> PreviousInput;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
+		TTuple<float, float> PreviousInput;
+	
 
 	/*
 		Value determined by lock on state, if locked on and ready to start casting we are true. default is true.
@@ -348,7 +358,7 @@ protected:
 			if outputsequence == ASIGS_cfi then do the swoop spell
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-		ASIGS_STATE OutputSequence;
+		int32 OutputSequence;
 
 
 public:
