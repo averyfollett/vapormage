@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -41,7 +43,6 @@ APlayerCharacter::APlayerCharacter()
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
-
 }
 
 // Called when the game starts or when spawned
@@ -168,12 +169,20 @@ AActor * APlayerCharacter::CapsuleTraceForEnemy()
 
 void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 {
-	FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation
-		(FirstPersonCameraComponent->GetComponentLocation(), enemy->GetActorLocation());
+	// Cast actor to character class
+	ACharacter* enemyCharacter = Cast<ACharacter>(enemy);
 
+	// Get socket from enemy skeleton
+	USkeletalMeshSocket const* enemySocket = enemyCharacter->GetMesh()->GetSocketByName(FName("spine_03Socket"));
+
+	// Calculate the target rotation
+	FRotator targetRotation = UKismetMathLibrary::FindLookAtRotation
+		(FirstPersonCameraComponent->GetComponentLocation(), enemySocket->GetSocketLocation(enemyCharacter->GetMesh()));
+
+	// Interpolate between current and target rotation
 	FRotator newRotation = FMath::RInterpTo
 		(FirstPersonCameraComponent->GetComponentRotation(), targetRotation, GetWorld()->GetDeltaSeconds(), 20.0f);
 	
+	// Set rotation to interpolated rotation
 	GetController()->SetControlRotation(newRotation);
-
 }

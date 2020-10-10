@@ -95,7 +95,7 @@ protected:
 	 * The enemy actor to be locked on to
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
-		AActor * EnemyActor;
+		AActor* EnemyActor;
 
 	/**
 	 * Array of all enemy actors
