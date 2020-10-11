@@ -56,13 +56,19 @@ void APlayerCharacter::BeginPlay()
 
 	// Print to screen the enemy actor name
 	print("Enemy: " + EnemyActor->GetName());
+
+	//set timers
+	delayTimerCurrent = delayTimerMax;
 }
 
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+	SequenceOut(this->InputComponent->GetAxisValue(TEXT("TurnRate")), -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))), IBR);
+	//print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
+
 	AutoAimAtEnemy(EnemyActor);
 }
 
@@ -89,6 +95,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+
+
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -185,4 +193,334 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 	
 	// Set rotation to interpolated rotation
 	GetController()->SetControlRotation(newRotation);
+}
+
+
+void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRadius)
+{
+	//dont bother doing this if we dont care about gathering the input, save on some input load times
+	if (GatheringSequence)
+	{
+		/*if (UpdatingSequence.Num() > 0)
+		{
+			print("Number in Sequence: " + FString::FromInt(UpdatingSequence.Num()));
+		}*/
+
+
+		if (delayTimerCurrent <= 0)
+		{
+			//combine and release whatever sequence we have
+			//	even if we are constantly gathering, but failing the buffer range check, its okay to release a blank sequence
+			OutputSequence = ConcatSequence();
+
+			//reset times
+
+			//DEBUG
+			int os = (int)OutputSequence;
+
+			if (os != 0)
+			{
+				print(FString::FromInt(os));	//display when sequence isnt empty
+			}
+		}
+		
+		//check for significant movement in the stick
+		if (bufferRangeCheck(inputBufferRadius, xAxis, yAxis) == false)
+		{
+			//print("passing buffer range check");
+			//no collision, we have stick movement, record the values
+			NextInSequence(xAxis, yAxis);
+
+			delayTimerCurrent = delayTimerMax;
+		}
+
+
+		if (delayTimerCurrent >= 0)
+		{
+			delayTimerCurrent--;
+		}
+
+		//print("Timer: " + FString::FromInt(delayTimerCurrent));
+
+
+	}
+
+	//make sure this is at very end for next update tick
+	PreviousInput.Key = xAxis;
+	PreviousInput.Value = yAxis;
+}
+
+bool APlayerCharacter::bufferRangeCheck(float inputBufferRadius, float currentAnalogPosX, float currentAnalogPosY)
+{
+	float xDist = currentAnalogPosX - PreviousInput.Key;
+	float yDist = currentAnalogPosY - PreviousInput.Value;
+	float distance = sqrt((xDist * xDist) + (yDist * yDist));
+
+	if (distance <= inputBufferRadius)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
+
+void APlayerCharacter::NextInSequence(float xAxis, float yAxis)
+{
+	for (int i = 0; i < ASIGS.mGrid.Num(); ++i)
+	{
+		Fcoord_cell rect = ASIGS.mGrid[i].mCellCords;
+		//print(FString::FromInt(i));
+
+		//basic point box collision detection
+		if (xAxis >= rect.m00.Key && xAxis <= rect.m01.Key &&
+			yAxis <= rect.m00.Value && yAxis >= rect.m10.Value)
+		{
+			//print("passed box collision");
+
+			switch ((int32)(ASIGS.mGrid[i].mCellNum))
+			{
+			case (int32)(ASIGS_a):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_a)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_a);
+						//print("A Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_a);
+					//print("A Cell");
+				}
+				break;
+			case (int32)(ASIGS_b):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_b)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_b);
+						//print("B Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_b);
+					//print("B Cell");
+				}
+				break;
+			case (int32)(ASIGS_c):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_c)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_c);
+						//print("C Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_c);
+					//print("C Cell");
+				}
+				break;
+			case (int32)(ASIGS_d):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_d)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_d);
+						//print("D Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_d);
+					//print("D Cell");
+				}
+				break;
+			case (int32)(ASIGS_e):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_e)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_e);
+						//print("E Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_e);
+					//print("E Cell");
+				}
+				break;
+			case (int32)(ASIGS_f):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_f)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_f);
+						//print("F Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_f);
+					//print("F Cell");
+				}
+				break;
+			case (int32)(ASIGS_g):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_g)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_g);
+						//print("G Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_g);
+					//print("G Cell");
+				}
+				break;
+			case (int32)(ASIGS_h):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_h)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_h);
+						//print("H Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_h);
+					//print("H Cell");
+				}
+				break;
+			case (int32)(ASIGS_i):
+				//check and see if we are still in the previous cell. If so, we dont need to record it again.
+				if (UpdatingSequence.Num() > 0)
+				{
+					if (UpdatingSequence.Last() == ASIGS_i)
+					{
+						//print("Still in cell");
+					}
+					else
+					{
+						UpdatingSequence.Add(ASIGS_i);
+						//print("I Cell");
+					}
+				}
+				else
+				{
+					UpdatingSequence.Add(ASIGS_i);
+					//print("I Cell");
+				}
+				break;
+			default:
+				print("default");
+				break;
+			}
+		}
+
+
+		
+
+		//flip direction
+		//	use second cells direction based from the middle to judge positive or negative first movement
+		//	
+		//	(-)A	(+)B	(+)C	
+		//	(-)D	(N)E	(+)F
+		//	(-)G	(-)H	(+)I
+
+		if (UpdatingSequence.Num() == 2)
+		{
+			int32 secondCell = (int32)UpdatingSequence[1];
+
+			if (secondCell == ASIGS_a || secondCell == ASIGS_d || secondCell == ASIGS_g || secondCell == ASIGS_h)
+			{
+				isNegative = true;
+			}
+		}
+		
+	}
+}
+
+ASIGS_STATE APlayerCharacter::ConcatSequence()
+{
+	ASIGS_STATE temp = ASIGS_empty;
+
+	//go through and concat into one enum
+	for (int i = 0; i < UpdatingSequence.Num(); ++i)
+	{
+		temp = (ASIGS_STATE)(temp | UpdatingSequence[i]);	//i dont know why I had to typecast this
+	}
+
+	//if we are only a unique single direction then our stick is just being nothing up there
+	if (temp == ASIGS_a || temp == ASIGS_b || temp == ASIGS_c || temp == ASIGS_d || temp == ASIGS_e || temp == ASIGS_f || temp == ASIGS_h || temp == ASIGS_i)
+	{
+		temp = ASIGS_empty;
+	}
+
+	//	!!!RETURN TO THIS!!!!!!
+	// find a way to get opposite directions working, probably has to do with checking the
+	if (isNegative)
+	{
+		temp = (ASIGS_STATE)(temp | ASIGS_FLIP);
+	}
+
+	//clear the Updating sequence
+	UpdatingSequence.Empty();
+	//UpdatingSequence.Add(ASIGS_e);
+
+	isNegative = false;	//reset isNegative
+
+	//print("SEQUENCE BREAK");
+
+	return temp;
 }
