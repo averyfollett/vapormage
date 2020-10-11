@@ -1,9 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GrilledPigeonGameMode.h"
-#include "GrilledPigeonHUD.h"
 #include "PlayerCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/HUD.h"
 
 AGrilledPigeonGameMode::AGrilledPigeonGameMode()
 	: Super()
@@ -13,5 +13,6 @@ AGrilledPigeonGameMode::AGrilledPigeonGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
 	// use our custom HUD class
-	HUDClass = AGrilledPigeonHUD::StaticClass();
+	static ConstructorHelpers::FClassFinder<AHUD> BP_HUD(TEXT("/Game/Blueprints/UI/BP_HUD"));
+	HUDClass = BP_HUD.Class;
 }
