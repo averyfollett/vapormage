@@ -4,10 +4,11 @@ using UnrealBuildTool;
 
 public class GrilledPigeon : ModuleRules
 {
-	public GrilledPigeon(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    public GrilledPigeon(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
-	}
+        PublicDependencyModuleNames.AddRange(new[]
+            {"Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay"});
+    }
 }

@@ -7,13 +7,10 @@
 #include "GrilledPigeonGameMode.generated.h"
 
 UCLASS(minimalapi)
-class AGrilledPigeonGameMode : public AGameModeBase
+class AGrilledPigeonGameMode final : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	AGrilledPigeonGameMode();
+    AGrilledPigeonGameMode();
 };
-
-
-

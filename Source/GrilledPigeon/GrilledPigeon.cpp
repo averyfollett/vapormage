@@ -3,5 +3,4 @@
 #include "GrilledPigeon.h"
 #include "Modules/ModuleManager.h"
 
-IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, GrilledPigeon, "GrilledPigeon" );
- 
+IMPLEMENT_PRIMARY_GAME_MODULE(FDefaultGameModuleImpl, GrilledPigeon, "GrilledPigeon");
