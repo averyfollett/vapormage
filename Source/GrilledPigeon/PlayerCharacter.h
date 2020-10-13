@@ -269,9 +269,11 @@ protected:
     UFUNCTION(BlueprintCallable)
     AActor* CapsuleTraceForEnemy() const;
 
+    /*
+     * Smoothly aim at skeletal mesh socket on given enemy actor
+     */
     UFUNCTION(BlueprintCallable)
-    void AutoAimAtEnemy(AActor* Enemy) const;
-
+    void AutoAimAtEnemy(AActor* Enemy, FName SocketName) const;
 
     /*
         take in analog stick axis value, determine cell coordinate, add to sequence vector
@@ -294,6 +296,20 @@ protected:
     */
     EAsigs_State ConcatSequence();
 
+    /*
+     * apply x amount of damage to the player
+     * if they have vitality points, those are used first
+     */
+    UFUNCTION(BlueprintCallable)
+    void DamagePlayer(float Damage);
+
+    /*
+     * Run each tick regenerate player's focus up to max based on focus regen speed
+     * Also clamps max current focus to max focus
+     */
+    UFUNCTION(BlueprintCallable)
+    void RegenerateFocus();
+
 
 protected:
     /**
@@ -314,6 +330,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
     TArray<AActor*> EnemyArray;
 
+    /*
+     * Index value of the currently selected/targeted enemy actor from EnemyArray
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
     int CurrentEnemyIndex = 0;
 
@@ -360,6 +379,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
     int DelayTimerMax = 20; //If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
 
+    /*
+     * Current time remaining on delay timer (0 - DelayTimerMax)
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
     int DelayTimerCurrent;
 
@@ -398,17 +420,38 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
     bool bIsNegative = false;
 
+    /*
+     * Maximum amount of focus the player can have at any given time
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-    int MaxHealth = 100;
+    float MaxFocus = 100;
 
+    /*
+     * Current value of focus (0 - MaxFocus)
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-    int CurrentHealth = 100;
-    
+    float CurrentFocus = 20;
+
+    /*
+     * Maximum amount of vitality points the player can have at any given time
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
     int MaxVitality = 3;
 
+    /*
+     * Current value of vitality points (0 - MaxVitality)
+     */
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
     int CurrentVitality = 3;
+
+    /*
+     * The speed (focus/sec) at which CurrentFocus is regenerated
+     */
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    float FocusRegenSpeed = 5;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    float VitalityLossThreshold = 0.1;
 
 public:
     /** Returns Mesh1P subobject **/
