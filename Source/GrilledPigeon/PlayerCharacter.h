@@ -398,6 +398,17 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
     bool bIsNegative = false;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    int MaxHealth = 100;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    int CurrentHealth = 100;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    int MaxVitality = 3;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    int CurrentVitality = 3;
 
 public:
     /** Returns Mesh1P subobject **/
