@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "Templates/Tuple.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 #include "PlayerCharacter.generated.h"
 
 /*
@@ -310,6 +311,22 @@ protected:
     UFUNCTION(BlueprintCallable)
     void RegenerateFocus();
 
+	void Cast();
+
+	//Spell to be cast
+	void CastIceKnifeSpell();
+
+	void CastIceKnifeVarTwoSpell();
+
+
+	/*
+		accessing spell class of ice knife
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = CASTING)
+		TSubclassOf<class AIceKnifeTwo> IceKnifeSpellClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = CASTING)
+		TSubclassOf<class AIceKnifeTwoVarTwo> IceKnifeVarTwoSpellClass;
 
 protected:
     /**
