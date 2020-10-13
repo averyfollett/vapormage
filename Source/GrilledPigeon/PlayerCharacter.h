@@ -394,7 +394,7 @@ protected:
         timer system to delay the concatenation stage
     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-    int DelayTimerMax = 20; //If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
+    int DelayTimerMax = 35; //If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
 
     /*
      * Current time remaining on delay timer (0 - DelayTimerMax)
@@ -436,6 +436,12 @@ protected:
     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
     bool bIsNegative = false;
+
+    /*
+        Offset of spell
+    */
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+        FVector CastOffset;
 
     /*
      * Maximum amount of focus the player can have at any given time

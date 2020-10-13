@@ -9,11 +9,10 @@
 #include "GameFramework/InputSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Kismet/GameplayStatics.h"
 #include "IceKnifeTwo.h"
 #include "IceKnifeTwoVarTwo.h"
-
-DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -69,8 +68,6 @@ void APlayerCharacter::Tick(float DeltaTime)
                 -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))),
                 Ibr);
     //print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
-
-	AutoAimAtEnemy(EnemyActor);
 
 	Cast();
 	
@@ -184,7 +181,7 @@ AActor* APlayerCharacter::CapsuleTraceForEnemy() const
 void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
 {
     // Cast actor to character class
-    ACharacter* EnemyCharacter = Cast<ACharacter>(Enemy);
+    ACharacter* EnemyCharacter = static_cast<ACharacter*>(Enemy);
 
     // Get socket from enemy skeleton
     USkeletalMeshSocket const* EnemySocket = EnemyCharacter->GetMesh()->GetSocketByName(SocketName);
@@ -200,16 +197,6 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
     // Set rotation to interpolated rotation
     GetController()->SetControlRotation(NewRotation);
 }
-void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRadius)
-{
-	//dont bother doing this if we dont care about gathering the input, save on some input load times
-	if (GatheringSequence)
-	{
-		/*if (UpdatingSequence.Num() > 0)
-		{
-			print("Number in Sequence: " + FString::FromInt(UpdatingSequence.Num()));
-		}*/
-
 
 void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const float InputBufferRadius)
 {
@@ -498,41 +485,6 @@ void APlayerCharacter::NextInSequence(float XAxis, float YAxis)
     }
 }
 
-EAsigs_State APlayerCharacter::ConcatSequence()
-{
-    EAsigs_State Temp = Asigs_Empty;
-
-    //go through and concat into one enum
-    for (int i = 0; i < UpdatingSequence.Num(); ++i)
-    {
-        Temp = static_cast<EAsigs_State>(Temp | UpdatingSequence[i]); //i don't know why I had to typecast this
-    }
-
-    //if we are only a unique single direction then our stick is just being nothing up there
-    if (Temp == Asigs_A || Temp == Asigs_B || Temp == Asigs_C || Temp == Asigs_D || Temp == Asigs_E || Temp == Asigs_F
-        || Temp == Asigs_H || Temp == Asigs_I)
-    {
-        Temp = Asigs_Empty;
-    }
-
-    //	!!!RETURN TO THIS!!!!!!
-    // find a way to get opposite directions working, probably has to do with checking the
-    if (bIsNegative)
-    {
-        Temp = static_cast<EAsigs_State>(Temp | Asigs_Flip);
-    }
-
-    //clear the Updating sequence
-    UpdatingSequence.Empty();
-    //UpdatingSequence.Add(ASIGS_e);
-
-    bIsNegative = false; //reset isNegative
-
-    //print("SEQUENCE BREAK");
-
-    return Temp;
-}
-
 void APlayerCharacter::DamagePlayer(const float Damage)
 {
     if (CurrentFocus > 0)
@@ -553,38 +505,39 @@ void APlayerCharacter::RegenerateFocus()
         CurrentFocus = MaxFocus;
 }
 
-ASIGS_STATE APlayerCharacter::ConcatSequence()
+EAsigs_State APlayerCharacter::ConcatSequence()
 {
-	ASIGS_STATE temp = ASIGS_empty;
+	EAsigs_State Temp = Asigs_Empty;
 
 	//go through and concat into one enum
 	for (int i = 0; i < UpdatingSequence.Num(); ++i)
 	{
-		temp = (ASIGS_STATE)(temp | UpdatingSequence[i]);	//i dont know why I had to typecast this
+		Temp = static_cast<EAsigs_State>(Temp | UpdatingSequence[i]); //i don't know why I had to typecast this
 	}
 
 	//if we are only a unique single direction then our stick is just being nothing up there
-	if (temp == ASIGS_a || temp == ASIGS_b || temp == ASIGS_c || temp == ASIGS_d || temp == ASIGS_e || temp == ASIGS_f || temp == ASIGS_h || temp == ASIGS_i)
+	if (Temp == Asigs_A || Temp == Asigs_B || Temp == Asigs_C || Temp == Asigs_D || Temp == Asigs_E || Temp == Asigs_F
+		|| Temp == Asigs_H || Temp == Asigs_I)
 	{
-		temp = ASIGS_empty;
+		Temp = Asigs_Empty;
 	}
 
 	//	!!!RETURN TO THIS!!!!!!
 	// find a way to get opposite directions working, probably has to do with checking the
-	if (isNegative)
+	if (bIsNegative)
 	{
-		temp = (ASIGS_STATE)(temp | ASIGS_FLIP);
+		Temp = static_cast<EAsigs_State>(Temp | Asigs_Flip);
 	}
 
 	//clear the Updating sequence
 	UpdatingSequence.Empty();
 	//UpdatingSequence.Add(ASIGS_e);
 
-	isNegative = false;	//reset isNegative
+	bIsNegative = false; //reset isNegative
 
 	//print("SEQUENCE BREAK");
 
-	return temp;
+	return Temp;
 }
 
 void APlayerCharacter::CastIceKnifeSpell()
@@ -598,7 +551,7 @@ void APlayerCharacter::CastIceKnifeSpell()
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Transform MuzzleOffset from camera space to world space.
-		FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+        const FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
 		FRotator CastRotation = CameraRotation;
 		// Skew the aim to be slightly upwards.
 		CastRotation.Pitch += 10.0f;
@@ -613,7 +566,7 @@ void APlayerCharacter::CastIceKnifeSpell()
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
-				FVector LaunchDirection = CastRotation.Vector();
+                const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 			}
 		}
@@ -631,7 +584,7 @@ void APlayerCharacter::CastIceKnifeVarTwoSpell()
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Transform MuzzleOffset from camera space to world space.
-		FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+        const FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
 		FRotator CastRotation = CameraRotation;
 		// Skew the aim to be slightly upwards.
 		CastRotation.Pitch += 10.0f;
@@ -646,7 +599,7 @@ void APlayerCharacter::CastIceKnifeVarTwoSpell()
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
-				FVector LaunchDirection = CastRotation.Vector();
+                const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 			}
 		}
@@ -655,24 +608,24 @@ void APlayerCharacter::CastIceKnifeVarTwoSpell()
 
 void APlayerCharacter::Cast()
 {
-	if (OutputSequence == ASIGS_ebeh)
+	if (OutputSequence == Asigs_Ebeh)
 	{
-		print("FIRING ICE KNIFE BLUE");
+        PRINT("FIRING ICE KNIFE BLUE");
 		CastIceKnifeSpell();
 	}
-	if (OutputSequence == ASIGS_eheb)
+	if (OutputSequence == Asigs_Eheb)
 	{
-		print("FIRING ICE KNIFE VAR 2 GREEN");
+        PRINT("FIRING ICE KNIFE VAR 2 GREEN");
 		CastIceKnifeVarTwoSpell();
 	}
-	if (OutputSequence == ASIGS_efed)
+	if (OutputSequence == Asigs_Efed)
 	{
-		print("FIRING ICE KNIFE YELLOW");
+        PRINT("FIRING ICE KNIFE YELLOW");
 		//CastIceKnifeSpell();
 	}
-	if (OutputSequence == ASIGS_edef)
+	if (OutputSequence == Asigs_Edef)
 	{
-		print("FIRING ICE KNIFE RED");
+		PRINT("FIRING ICE KNIFE RED");
 		//CastIceKnifeSpell();
 	}
 }
