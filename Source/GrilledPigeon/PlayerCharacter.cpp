@@ -63,10 +63,13 @@ void APlayerCharacter::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     SequenceOut(this->InputComponent->GetAxisValue(TEXT("TurnRate")),
-                -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))), Ibr);
+                -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))),
+                Ibr);
     //print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
 
-    AutoAimAtEnemy(EnemyActor);
+    AutoAimAtEnemy(EnemyActor, FName("spine_03Socket"));
+
+    RegenerateFocus();
 }
 
 // Called to bind functionality to input
@@ -171,13 +174,13 @@ AActor* APlayerCharacter::CapsuleTraceForEnemy() const
     return HitActor.GetActor();
 }
 
-void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy) const
+void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
 {
     // Cast actor to character class
     ACharacter* EnemyCharacter = Cast<ACharacter>(Enemy);
 
     // Get socket from enemy skeleton
-    USkeletalMeshSocket const* EnemySocket = EnemyCharacter->GetMesh()->GetSocketByName(FName("spine_03Socket"));
+    USkeletalMeshSocket const* EnemySocket = EnemyCharacter->GetMesh()->GetSocketByName(SocketName);
 
     // Calculate the target rotation
     const FRotator TargetRotation = UKismetMathLibrary::FindLookAtRotation
@@ -513,3 +516,24 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 
     return Temp;
 }
+
+void APlayerCharacter::DamagePlayer(const float Damage)
+{
+    if (CurrentFocus > 0)
+    {
+        CurrentFocus -= Damage;
+    }
+    if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0)
+    {
+        CurrentVitality--;
+    }
+}
+
+void APlayerCharacter::RegenerateFocus()
+{
+    if (CurrentFocus < MaxFocus)
+        CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+    else if (CurrentFocus > MaxFocus)
+        CurrentFocus = MaxFocus;
+}
+
