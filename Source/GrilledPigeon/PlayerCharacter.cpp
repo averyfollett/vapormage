@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "IceKnifeTwo.h"
+#include "IceKnifeTwoVarTwo.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -69,6 +71,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 	//print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
 
 	AutoAimAtEnemy(EnemyActor);
+
+	Cast();
+	
 }
 
 // Called to bind functionality to input
@@ -185,7 +190,6 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* enemy)
 	GetController()->SetControlRotation(newRotation);
 
 }
-
 
 void APlayerCharacter::SequenceOut(float xAxis, float yAxis, float inputBufferRadius)
 {
@@ -515,3 +519,95 @@ ASIGS_STATE APlayerCharacter::ConcatSequence()
 
 	return temp;
 }
+
+void APlayerCharacter::CastIceKnifeSpell()
+{
+	// Attempt to fire a projectile.
+	if (IceKnifeSpellClass)
+	{
+		// Get the camera transform.
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		// Transform MuzzleOffset from camera space to world space.
+		FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+		FRotator CastRotation = CameraRotation;
+		// Skew the aim to be slightly upwards.
+		CastRotation.Pitch += 10.0f;
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+			// Spawn the projectile at the muzzle.
+			AIceKnifeTwo* Projectile = World->SpawnActor<AIceKnifeTwo>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
+			if (Projectile)
+			{
+				// Set the projectile's initial trajectory.
+				FVector LaunchDirection = CastRotation.Vector();
+				Projectile->CastInDirection(LaunchDirection);
+			}
+		}
+	}
+}
+
+void APlayerCharacter::CastIceKnifeVarTwoSpell()
+{
+	// Attempt to fire a projectile.
+	if (IceKnifeVarTwoSpellClass)
+	{
+		// Get the camera transform.
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		// Transform MuzzleOffset from camera space to world space.
+		FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+		FRotator CastRotation = CameraRotation;
+		// Skew the aim to be slightly upwards.
+		CastRotation.Pitch += 10.0f;
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+			// Spawn the projectile at the muzzle.
+			AIceKnifeTwoVarTwo* Projectile = World->SpawnActor<AIceKnifeTwoVarTwo>(IceKnifeVarTwoSpellClass, CastLocation, CastRotation, SpawnParams);
+			if (Projectile)
+			{
+				// Set the projectile's initial trajectory.
+				FVector LaunchDirection = CastRotation.Vector();
+				Projectile->CastInDirection(LaunchDirection);
+			}
+		}
+	}
+}
+
+void APlayerCharacter::Cast()
+{
+	if (OutputSequence == ASIGS_ebeh)
+	{
+		print("FIRING ICE KNIFE BLUE");
+		CastIceKnifeSpell();
+	}
+	if (OutputSequence == ASIGS_eheb)
+	{
+		print("FIRING ICE KNIFE VAR 2 GREEN");
+		CastIceKnifeVarTwoSpell();
+	}
+	if (OutputSequence == ASIGS_efed)
+	{
+		print("FIRING ICE KNIFE YELLOW");
+		//CastIceKnifeSpell();
+	}
+	if (OutputSequence == ASIGS_edef)
+	{
+		print("FIRING ICE KNIFE RED");
+		//CastIceKnifeSpell();
+	}
+}
+
+

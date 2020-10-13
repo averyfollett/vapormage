@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Templates/Tuple.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 #include "PlayerCharacter.generated.h"
 
 /*
@@ -27,22 +28,22 @@ enum ASIGS_STATE
 	ASIGS_FLIP = 512,	//THIS NEEDS TO EXIST, its to tell for opposite directions, PUT AT BACK that way we can run if statement 
 						//		on the sequence to see if ASIGS_FLIP exists in this call, then we know difference between "beh" and "heb"
 						//			To assign said difference, 
-	ASIGS_ebeh = ASIGS_e | ASIGS_b | ASIGS_e | ASIGS_h,							//up -> down
+	ASIGS_ebeh = ASIGS_e | ASIGS_b | ASIGS_e | ASIGS_h,								//up -> down
 	ASIGS_eheb = ASIGS_e | ASIGS_h | ASIGS_e | ASIGS_b | ASIGS_FLIP,				//down -> up
-	ASIGS_edef = ASIGS_e | ASIGS_d | ASIGS_e | ASIGS_f,							//left -> right
+	ASIGS_edef = ASIGS_e | ASIGS_d | ASIGS_e | ASIGS_f,								//left -> right
 	ASIGS_efed = ASIGS_e | ASIGS_f | ASIGS_e | ASIGS_d | ASIGS_FLIP,				//right -> left
-	ASIGS_eaei = ASIGS_e | ASIGS_a | ASIGS_e | ASIGS_i,							//diagnonal, top left -> bottom right
+	ASIGS_eaei = ASIGS_e | ASIGS_a | ASIGS_e | ASIGS_i,								//diagnonal, top left -> bottom right
 	ASIGS_eiea = ASIGS_e | ASIGS_i | ASIGS_e | ASIGS_a | ASIGS_FLIP,				//diagonal, bottom right -> top left
-	ASIGS_eceg = ASIGS_e | ASIGS_c | ASIGS_e | ASIGS_g,							//diagonal, top right -> bottom left
+	ASIGS_eceg = ASIGS_e | ASIGS_c | ASIGS_e | ASIGS_g,								//diagonal, top right -> bottom left
 	ASIGS_egec = ASIGS_e | ASIGS_g | ASIGS_e | ASIGS_c | ASIGS_FLIP,				//diagonal, bottom left -> top right
-	ASIGS_eabc = ASIGS_e | ASIGS_a | ASIGS_b | ASIGS_c,							//swoop, top left -> top right
+	ASIGS_eabc = ASIGS_e | ASIGS_a | ASIGS_b | ASIGS_c,								//swoop, top left -> top right
 	ASIGS_ecba = ASIGS_e | ASIGS_c | ASIGS_b | ASIGS_a | ASIGS_FLIP,				//swoop, top right -> top left
-	ASIGS_eghi = ASIGS_e | ASIGS_g | ASIGS_h | ASIGS_i,							//swoop, bottom left -> bottom right
+	ASIGS_eghi = ASIGS_e | ASIGS_g | ASIGS_h | ASIGS_i,								//swoop, bottom left -> bottom right
 	ASIGS_eihg = ASIGS_e | ASIGS_i | ASIGS_h | ASIGS_g | ASIGS_FLIP,				//swoop, bottom right -> bottom left
-	ASIGS_eadg = ASIGS_e | ASIGS_a | ASIGS_d | ASIGS_g,							//swoop, top left -> bottom left
+	ASIGS_eadg = ASIGS_e | ASIGS_a | ASIGS_d | ASIGS_g,								//swoop, top left -> bottom left
 	ASIGS_egda = ASIGS_e | ASIGS_g | ASIGS_d | ASIGS_a | ASIGS_FLIP,				//swoop, bottom left -> top left
-	ASIGS_ecfi = ASIGS_e | ASIGS_c | ASIGS_f | ASIGS_i,							//swoop, top right -> bottom right
-	ASIGS_eifc = ASIGS_e | ASIGS_i | ASIGS_f | ASIGS_c | ASIGS_FLIP				//swoop, bottom right -> top right
+	ASIGS_ecfi = ASIGS_e | ASIGS_c | ASIGS_f | ASIGS_i,								//swoop, top right -> bottom right
+	ASIGS_eifc = ASIGS_e | ASIGS_i | ASIGS_f | ASIGS_c | ASIGS_FLIP					//swoop, bottom right -> top right
 
 };
 
@@ -271,6 +272,22 @@ protected:
 	*/
 	ASIGS_STATE ConcatSequence();
 
+	void Cast();
+
+	//Spell to be cast
+	void CastIceKnifeSpell();
+
+	void CastIceKnifeVarTwoSpell();
+
+
+	/*
+		accessing spell class of ice knife
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = CASTING)
+		TSubclassOf<class AIceKnifeTwo> IceKnifeSpellClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = CASTING)
+		TSubclassOf<class AIceKnifeTwoVarTwo> IceKnifeVarTwoSpellClass;
 
 protected:
 	/**
@@ -375,6 +392,14 @@ protected:
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
 		bool isNegative = false;
+
+	/*
+		Offset of spell
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+		FVector CastOffset;
+
+	
 
 
 public:
