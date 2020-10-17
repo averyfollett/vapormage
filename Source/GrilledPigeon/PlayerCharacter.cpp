@@ -51,7 +51,7 @@ void APlayerCharacter::BeginPlay()
     // Pick the first actor tagged with Enemy and set it as the target
     UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Enemy"), EnemyArray);
     EnemyActor = EnemyArray[CurrentEnemyIndex];
-
+    
     // Print to screen the enemy actor name
     PRINT("Enemy: " + EnemyActor->GetName());
 

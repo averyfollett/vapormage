@@ -2,12 +2,11 @@
 
 #define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
+#include "EnemyController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
 #include "EnemyCharacter.h"
-#include "EnemyController.h"
 
 AEnemyController::AEnemyController()
 {
