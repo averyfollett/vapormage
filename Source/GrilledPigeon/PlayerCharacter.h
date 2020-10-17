@@ -316,14 +316,19 @@ protected:
 	//Spell to be cast
 	void CastIceKnifeSpell();
 
+	void CastIceKnifeTwoSpell();
+
 	void CastIceKnifeVarTwoSpell();
 
 
 	/*
 		accessing spell class of ice knife
 	*/
+    UPROPERTY(EditDefaultsOnly, Category = CASTING)
+        TSubclassOf<class AIceKnife> IKSpellClass;
+
 	UPROPERTY(EditDefaultsOnly, Category = CASTING)
-		TSubclassOf<class AIceKnifeTwo> IceKnifeSpellClass;
+		TSubclassOf<class AIceKnifeTwo> IceKnifeTwoSpellClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = CASTING)
 		TSubclassOf<class AIceKnifeTwoVarTwo> IceKnifeVarTwoSpellClass;
