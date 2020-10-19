@@ -38,3 +38,8 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
+void AEnemyCharacter::BlockSpell()
+{
+	
+}
+

@@ -8,7 +8,7 @@
 #include "EnemyCharacter.generated.h"
 
 UCLASS()
-class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
+class GRILLEDPIGEON_API AEnemyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -19,6 +19,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	
 
 protected:
 	/*
@@ -67,5 +69,9 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// Function to run when blocking
+	UFUNCTION(CallInEditor, BlueprintCallable, Category=Combat)
+	virtual void BlockSpell();
 
 };
