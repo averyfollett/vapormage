@@ -71,7 +71,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Function to run when blocking
-	UFUNCTION(CallInEditor, BlueprintCallable, Category=Combat)
-	virtual void BlockSpell();
+	UFUNCTION(Category=Combat)
+	void BlockSpell();
 
 };

@@ -40,6 +40,6 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::BlockSpell()
 {
-	
+	PRINT("Blocking...");
 }
 
