@@ -25,6 +25,8 @@ void AEnemyController::OnPossess(APawn* InPawn)
         BlackboardComponent->InitializeBlackboard(*Char->BehaviorTree->BlackboardAsset);
 
         EnemyKeyID = BlackboardComponent->GetKeyID("EnemyActor");
+        SelfKeyID = BlackboardComponent->GetKeyID("SelfActor");
+        ShouldBlockKeyID = BlackboardComponent->GetKeyID("bShouldBlock");
 
         BehaviorTreeComponent->StartTree(*Char->BehaviorTree);
     }

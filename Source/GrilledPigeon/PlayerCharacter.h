@@ -196,6 +196,14 @@ struct FAsigs_Grid3X3
     TArray<FAsigs_Cell> MGrid;
 };
 
+USTRUCT(BlueprintType)
+struct FPlayerStatus
+{
+    GENERATED_USTRUCT_BODY()
+    
+    bool bIsCasting;
+};
+
 class UInputComponent;
 
 UCLASS(config = Game)
@@ -332,6 +340,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = CASTING)
 		TSubclassOf<class AIceKnifeTwoVarTwo> IceKnifeVarTwoSpellClass;
+
+    void SetCastingStatus(const bool B);
+
+    void EndCastingStatus();
 
 protected:
     /**
@@ -480,6 +492,15 @@ protected:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
     float VitalityLossThreshold = 0.1;
+
+    FTimerHandle CastingTimerHandle;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Combat)
+    float PlayerAttackingTimerLength = 1.0;
+
+public:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
+    FPlayerStatus PlayerStatus;
 
 public:
     /** Returns Mesh1P subobject **/

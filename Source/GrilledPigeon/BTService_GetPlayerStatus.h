@@ -10,8 +10,12 @@
  * 
  */
 UCLASS()
-class GRILLEDPIGEON_API UBTService_GetPlayerStatus : public UBTService
+class GRILLEDPIGEON_API UBTService_GetPlayerStatus final : public UBTService
 {
 	GENERATED_BODY()
-	
+
+public:
+	UBTService_GetPlayerStatus();
+
+	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

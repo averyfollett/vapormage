@@ -569,6 +569,7 @@ void APlayerCharacter::CastIceKnifeSpell()
                 // Set the projectile's initial trajectory.
                 const FVector LaunchDirection = CastRotation.Vector();
                 Projectile->CastInDirection(LaunchDirection);
+                SetCastingStatus(true);
             }
         }
     }
@@ -602,6 +603,7 @@ void APlayerCharacter::CastIceKnifeTwoSpell()
 				// Set the projectile's initial trajectory.
                 const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
+			    SetCastingStatus(true);
 			}
 		}
 	}
@@ -635,9 +637,23 @@ void APlayerCharacter::CastIceKnifeVarTwoSpell()
 				// Set the projectile's initial trajectory.
                 const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
+			    SetCastingStatus(true);
 			}
 		}
 	}
+}
+
+void APlayerCharacter::SetCastingStatus(const bool B)
+{
+    PlayerStatus.bIsCasting = B;
+    
+    GetWorldTimerManager().SetTimer(
+        CastingTimerHandle, this, &APlayerCharacter::EndCastingStatus, PlayerAttackingTimerLength, false);
+}
+
+void APlayerCharacter::EndCastingStatus()
+{
+    PlayerStatus.bIsCasting = false;
 }
 
 void APlayerCharacter::Cast()
