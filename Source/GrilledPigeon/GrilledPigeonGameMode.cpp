@@ -13,6 +13,6 @@ AGrilledPigeonGameMode::AGrilledPigeonGameMode()
     DefaultPawnClass = PlayerPawnClassFinder.Class;
 
     // use our custom HUD class
-    static ConstructorHelpers::FClassFinder<AHUD> BP_HUD(TEXT("/Game/Blueprints/UI/BP_HUD"));
+    static ConstructorHelpers::FClassFinder<AHUD> BP_HUD(TEXT("/Game/Blueprints/UI/InGameUI/BP_HUD"));
     HUDClass = BP_HUD.Class;
 }
