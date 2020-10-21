@@ -33,37 +33,37 @@ enum EAsigs_State
     //THIS NEEDS TO EXIST, its to tell for opposite directions, PUT AT BACK that way we can run if statement 
     //		on the sequence to see if ASIGS_FLIP exists in this call, then we know difference between "beh" and "heb"
     //			To assign said difference, 
-    Asigs_Ebeh = Asigs_E | Asigs_B | Asigs_E | Asigs_H,
+    Asigs_ebeh = Asigs_E | Asigs_B | Asigs_E | Asigs_H,
     //up -> down
-    Asigs_Eheb = Asigs_E | Asigs_H | Asigs_E | Asigs_B | Asigs_Flip,
+    Asigs_eheb = Asigs_E | Asigs_H | Asigs_E | Asigs_B | Asigs_Flip,
     //down -> up
-    Asigs_Edef = Asigs_E | Asigs_D | Asigs_E | Asigs_F,
+    Asigs_edef = Asigs_E | Asigs_D | Asigs_E | Asigs_F,
     //left -> right
-    Asigs_Efed = Asigs_E | Asigs_F | Asigs_E | Asigs_D | Asigs_Flip,
+    Asigs_efed = Asigs_E | Asigs_F | Asigs_E | Asigs_D | Asigs_Flip,
     //right -> left
-    Asigs_Eaei = Asigs_E | Asigs_A | Asigs_E | Asigs_I,
+    Asigs_eaei = Asigs_E | Asigs_A | Asigs_E | Asigs_I,
     //diagonal, top left -> bottom right
-    Asigs_Eiea = Asigs_E | Asigs_I | Asigs_E | Asigs_A | Asigs_Flip,
+    Asigs_eiea = Asigs_E | Asigs_I | Asigs_E | Asigs_A | Asigs_Flip,
     //diagonal, bottom right -> top left
-    Asigs_Eceg = Asigs_E | Asigs_C | Asigs_E | Asigs_G,
+    Asigs_eceg = Asigs_E | Asigs_C | Asigs_E | Asigs_G,
     //diagonal, top right -> bottom left
-    Asigs_Egec = Asigs_E | Asigs_G | Asigs_E | Asigs_C | Asigs_Flip,
+    Asigs_egec = Asigs_E | Asigs_G | Asigs_E | Asigs_C | Asigs_Flip,
     //diagonal, bottom left -> top right
-    Asigs_Eabc = Asigs_E | Asigs_A | Asigs_B | Asigs_C,
+    Asigs_eabc = Asigs_E | Asigs_A | Asigs_B | Asigs_C,
     //swoop, top left -> top right
-    Asigs_Ecba = Asigs_E | Asigs_C | Asigs_B | Asigs_A | Asigs_Flip,
+    Asigs_ecba = Asigs_E | Asigs_C | Asigs_B | Asigs_A | Asigs_Flip,
     //swoop, top right -> top left
-    Asigs_Eghi = Asigs_E | Asigs_G | Asigs_H | Asigs_I,
+    Asigs_eghi = Asigs_E | Asigs_G | Asigs_H | Asigs_I,
     //swoop, bottom left -> bottom right
-    Asigs_Eihg = Asigs_E | Asigs_I | Asigs_H | Asigs_G | Asigs_Flip,
+    Asigs_eihg = Asigs_E | Asigs_I | Asigs_H | Asigs_G | Asigs_Flip,
     //swoop, bottom right -> bottom left
-    Asigs_Eadg = Asigs_E | Asigs_A | Asigs_D | Asigs_G,
+    Asigs_eadg = Asigs_E | Asigs_A | Asigs_D | Asigs_G,
     //swoop, top left -> bottom left
-    Asigs_Egda = Asigs_E | Asigs_G | Asigs_D | Asigs_A | Asigs_Flip,
+    Asigs_egda = Asigs_E | Asigs_G | Asigs_D | Asigs_A | Asigs_Flip,
     //swoop, bottom left -> top left
-    Asigs_Ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
+    Asigs_ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
     //swoop, top right -> bottom right
-    Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip //swoop, bottom right -> top right
+    Asigs_eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip //swoop, bottom right -> top right
 };
 
 USTRUCT(BlueprintType)
@@ -324,6 +324,8 @@ protected:
 	//Spell to be cast
     void CastArcaneBoltSpell(AActor* Enemy);
 
+    void CastGridPulseSpell();
+
 	void CastIceKnifeSpell();
 
 	void CastIceKnifeTwoSpell();
@@ -336,6 +338,12 @@ protected:
     */
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
         TSubclassOf<class AArcaneBolt> ArcaneBoltSpellClass;
+
+    /*
+        accessing spell class of grid pulse
+    */
+    UPROPERTY(EditDefaultsOnly, Category = CASTING)
+        TSubclassOf<class AGridPulse> GridPulseSpellClass;
 
 	/*
 		accessing spell class of ice knife

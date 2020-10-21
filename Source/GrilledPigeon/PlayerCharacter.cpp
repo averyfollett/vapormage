@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "ArcaneBolt.h"
+#include "GridPulse.h"
 #include "IceKnife.h"
 #include "IceKnifeTwo.h"
 #include "IceKnifeTwoVarTwo.h"
@@ -579,6 +580,40 @@ void APlayerCharacter::CastArcaneBoltSpell(AActor* Enemy)
     }
 }
 
+void APlayerCharacter::CastGridPulseSpell()
+{
+    // Attempt to fire a projectile.
+    if (GridPulseSpellClass)
+    {
+        // Get the camera transform.
+        FVector CameraLocation;
+        FRotator CameraRotation;
+        GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+        // Transform MuzzleOffset from camera space to world space.
+        const FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+        FRotator CastRotation = CameraRotation;
+
+        CastRotation.Pitch = 0.0f;  //we want a straight shot with no grav
+        UWorld* World = GetWorld();
+        if (World)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
+            // Spawn the projectile at the muzzle.
+            AGridPulse* Projectile = World->SpawnActor<AGridPulse>(GridPulseSpellClass, CastLocation, CastRotation, SpawnParams);
+            if (Projectile)
+            {
+                // Set the projectile's initial trajectory.
+                const FVector LaunchDirection = CastRotation.Vector();
+                Projectile->CastInDirection(LaunchDirection, EnemyActor, this);
+                SetCastingStatus(true);
+            }
+        }
+    }
+}
+
 void APlayerCharacter::CastIceKnifeSpell()
 {
     // Attempt to fire a projectile.
@@ -696,22 +731,22 @@ void APlayerCharacter::EndCastingStatus()
 
 void APlayerCharacter::Cast()
 {
-	if (OutputSequence == Asigs_Ebeh)
+	if (OutputSequence == Asigs_ebeh)
 	{
         PRINT("FIRING ICE KNIFE BLUE");
 		CastIceKnifeTwoSpell();
 	}
-	if (OutputSequence == Asigs_Eheb)
+	if (OutputSequence == Asigs_eheb)
 	{
-        PRINT("FIRING ICE KNIFE VAR 2 GREEN");
+        PRINT("FIRING GRID PULSE");
 		CastIceKnifeVarTwoSpell();
 	}
-	if (OutputSequence == Asigs_Efed)
+	if (OutputSequence == Asigs_efed)
 	{
         PRINT("FIRING TRUE ICE KNIFE");
 		CastIceKnifeSpell();
 	}
-	if (OutputSequence == Asigs_Edef)
+	if (OutputSequence == Asigs_edef)
 	{
 		PRINT("FIRING ARCANE BOLT");
         CastArcaneBoltSpell(EnemyActor);

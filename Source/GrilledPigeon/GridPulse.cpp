@@ -28,9 +28,10 @@ void AGridPulse::Tick(float DeltaTime)
 
 }
 
-void AGridPulse::CastInDirection(const FVector& ShootDirection, AActor* Enemy)
+void AGridPulse::CastInDirection(const FVector& ShootDirection, AActor* Enemy, AActor* Player)
 {
-	EnemyActor = static_cast<ACharacter*>(Enemy);;
+    EnemyActor = static_cast<AEnemyCharacter*>(Enemy);
+    PlayerActor = static_cast<APlayerCharacter*>(Player);
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
@@ -45,13 +46,19 @@ void AGridPulse::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
      //player has been hit boi, gank him
      if (OtherActor->IsA(APlayerCharacter::StaticClass()))
      {
-
+         if (PlayerActor)
+         {
+             
+         }
      }
 
      //if enemy has been hit
      if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
      {
+         if (EnemyActor)
+         {
 
+         }
      }
  }
 

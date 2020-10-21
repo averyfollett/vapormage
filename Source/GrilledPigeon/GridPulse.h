@@ -28,13 +28,19 @@ public:
 
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	void CastInDirection(const FVector& ShootDirection, AActor* Enemy);
+	void CastInDirection(const FVector& ShootDirection, AActor* Enemy, AActor* Player);
 
 	/*
 		target locked in direction to do pushback onto the target
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* EnemyActor;
+
+	/*
+		player for vitality damage
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+		ACharacter* PlayerActor;
 
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)

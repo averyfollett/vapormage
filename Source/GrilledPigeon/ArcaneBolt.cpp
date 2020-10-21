@@ -58,7 +58,7 @@ void AArcaneBolt::TargetHoming()
 
 void AArcaneBolt::CastInDirection(const FVector& ShootDirection, AActor* Enemy)
 {
-    EnemyActor = static_cast<ACharacter*>(Enemy);;
+    EnemyActor = static_cast<ACharacter*>(Enemy);
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
