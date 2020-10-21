@@ -12,6 +12,20 @@ AGridPulse::AGridPulse()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+    // Use a sphere as a simple collision representation.
+    CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
+    // Set the sphere's collision radius.
+    CollisionComponent->InitSphereRadius(15.0f);
+    // Set the root component to be the collision component.
+    RootComponent = CollisionComponent;
+
+
+    ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
+    ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
+    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;             //have to change this if we want to have it gradually increase as time goes on
+    ProjectileMovementComponent->bRotationFollowsVelocity = true;
+    ProjectileMovementComponent->bShouldBounce = false;
 }
 
 // Called when the game starts or when spawned
@@ -28,38 +42,11 @@ void AGridPulse::Tick(float DeltaTime)
 
 }
 
-void AGridPulse::CastInDirection(const FVector& ShootDirection, AActor* Enemy, AActor* Player)
+void AGridPulse::CastInDirection(const FVector& ShootDirection)
 {
-    EnemyActor = static_cast<AEnemyCharacter*>(Enemy);
-    PlayerActor = static_cast<APlayerCharacter*>(Player);
-	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+    ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
-void AGridPulse::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
- {
-     //if we hit physics simulated object that isnt the player
-     if (OtherActor != this && OtherComponent->IsSimulatingPhysics())
-     {
-         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * ImpactForce, Hit.ImpactPoint);
-     }
 
-     //player has been hit boi, gank him
-     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-     {
-         if (PlayerActor)
-         {
-             
-         }
-     }
-
-     //if enemy has been hit
-     if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
-     {
-         if (EnemyActor)
-         {
-
-         }
-     }
- }
 
 

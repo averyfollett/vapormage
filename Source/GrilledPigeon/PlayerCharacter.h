@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine.h"
 #include "Templates/Tuple.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/Actor.h"
@@ -201,6 +202,7 @@ struct FPlayerStatus
 {
     GENERATED_USTRUCT_BODY()
     
+    //Contains all player status stuff
     bool bIsCasting;
 };
 

@@ -9,6 +9,8 @@
 #include "GameFramework/Actor.h"
 #include "GridPulse.generated.h"
 
+
+
 UCLASS()
 class GRILLEDPIGEON_API AGridPulse : public AActor
 {
@@ -26,20 +28,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	void CastInDirection(const FVector& ShootDirection, AActor* Enemy, AActor* Player);
+	void CastInDirection(const FVector& ShootDirection);
 
 	/*
 		target locked in direction to do pushback onto the target
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* EnemyActor;
 
 	/*
 		player for vitality damage
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* PlayerActor;
 
 

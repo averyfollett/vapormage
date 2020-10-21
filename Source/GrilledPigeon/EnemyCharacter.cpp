@@ -3,6 +3,9 @@
 #define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
 #include "EnemyCharacter.h"
+#include "ArcaneBolt.h"
+#include "IceKnife.h"
+#include "GridPulse.h"
 
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -30,7 +33,7 @@ void AEnemyCharacter::BeginPlay()
 void AEnemyCharacter::Tick(const float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	RegenerateFocus();
 }
 
 // Called to bind functionality to input
@@ -43,10 +46,10 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AEnemyCharacter::CastIceKnifeSpell() const
 {
 	// Attempt to fire a projectile.
-	if (IsValid(IKSpellClass))
+	/*if (IsValid(IKSpellClass))
 	{
 		
-	}
+	}*/
 }
 
 void AEnemyCharacter::BlockSpell()
@@ -54,3 +57,50 @@ void AEnemyCharacter::BlockSpell()
 	PRINT("Blocking...");
 }
 
+void AEnemyCharacter::RegenerateFocus()
+{
+	if (CurrentFocus < MaxFocus)
+		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+	else if (CurrentFocus > MaxFocus)
+		CurrentFocus = MaxFocus;
+}
+
+void AEnemyCharacter::DamageAI(const float Damage)
+{
+	if (CurrentFocus > 0)
+	{
+		CurrentFocus -= Damage;
+	}
+	if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0)
+	{
+		CurrentVitality--;
+	}
+}
+
+void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+{
+	//hit by grid pulse spell, do following effects
+    if (OtherActor->IsA(AGridPulse::StaticClass()))
+    {
+		//knock back
+		HitComponent->AddImpulseAtLocation(-GetActorForwardVector() * 300.0f, Hit.ImpactPoint);
+		
+		//vitality effects
+		DamageAI(GridPulseDamageThreshold);
+    }
+
+	//hit by ice knife spell, do following effects
+    if (OtherActor->IsA(AIceKnife::StaticClass()))
+    {
+		//vitality effects
+		DamageAI(IKDamageThreshold);
+    }
+
+	//hit by arcane bolt spell, do following effects
+	if (OtherActor->IsA(AArcaneBolt::StaticClass()))
+	{
+		//vitality effects
+		DamageAI(ArcaneDamageThreshold);
+	}
+
+}

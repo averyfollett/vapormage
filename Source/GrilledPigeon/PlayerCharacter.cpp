@@ -72,9 +72,10 @@ void APlayerCharacter::Tick(float DeltaTime)
                 Ibr);
     //print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
 
-	Cast();
 	
     AutoAimAtEnemy(EnemyActor, FName("spine_03Socket"));
+
+	Cast();
 
     RegenerateFocus();
 }
@@ -185,7 +186,6 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
 {
     // Cast actor to character class
     ACharacter* EnemyCharacter = static_cast<ACharacter*>(Enemy);
-
     // Get socket from enemy skeleton
     USkeletalMeshSocket const* EnemySocket = EnemyCharacter->GetMesh()->GetSocketByName(SocketName);
 
@@ -607,7 +607,7 @@ void APlayerCharacter::CastGridPulseSpell()
             {
                 // Set the projectile's initial trajectory.
                 const FVector LaunchDirection = CastRotation.Vector();
-                Projectile->CastInDirection(LaunchDirection, EnemyActor, this);
+                Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
             }
         }

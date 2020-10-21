@@ -55,6 +55,6 @@ public:
 		speed and tracking strength
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float TrackingTravelSpeed = 300.0f;
+		float TrackingTravelSpeed = 30.0f;
 
 };

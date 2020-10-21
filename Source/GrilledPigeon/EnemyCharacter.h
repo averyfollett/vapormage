@@ -8,6 +8,7 @@
 #include "IceKnife.h"
 #include "EnemyCharacter.generated.h"
 
+
 UCLASS()
 class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
 {
@@ -75,6 +76,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
 	//Spell to be cast
 	UFUNCTION(Category=Combat)
 	void CastIceKnifeSpell() const;
@@ -83,4 +86,18 @@ public:
 	UFUNCTION(Category=Combat)
 	void BlockSpell();
 
+	void RegenerateFocus();
+
+	UFUNCTION(BlueprintCallable)
+	void DamageAI(float Damage);
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+		float IKDamageThreshold = 15;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+		float ArcaneDamageThreshold = 13;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+		float GridPulseDamageThreshold = 7;
 };
