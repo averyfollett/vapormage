@@ -542,7 +542,6 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 	return Temp;
 }
 
-
 void APlayerCharacter::CastArcaneBoltSpell(AActor* Enemy)
 {
     // Attempt to fire a projectile.
@@ -714,8 +713,8 @@ void APlayerCharacter::Cast()
 	}
 	if (OutputSequence == Asigs_Edef)
 	{
-		PRINT("FIRING ICE KNIFE RED");
-		//CastIceKnifeSpell();
+		PRINT("FIRING ARCANE BOLT");
+        CastArcaneBoltSpell(EnemyActor);
 	}
 }
 
