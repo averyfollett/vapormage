@@ -739,7 +739,7 @@ void APlayerCharacter::Cast()
 	if (OutputSequence == Asigs_eheb)
 	{
         PRINT("FIRING GRID PULSE");
-		CastIceKnifeVarTwoSpell();
+        CastGridPulseSpell();
 	}
 	if (OutputSequence == Asigs_efed)
 	{
