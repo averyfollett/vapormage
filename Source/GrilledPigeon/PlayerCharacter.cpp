@@ -9,6 +9,7 @@
 #include "GameFramework/InputSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ArcaneBolt.h"
 #include "IceKnife.h"
 #include "IceKnifeTwo.h"
 #include "IceKnifeTwoVarTwo.h"
@@ -539,6 +540,44 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 	//print("SEQUENCE BREAK");
 
 	return Temp;
+}
+
+
+void APlayerCharacter::CastArcaneBoltSpell(AActor* Enemy)
+{
+    // Attempt to fire a projectile.
+    if (ArcaneBoltSpellClass)
+    {
+        // Get the camera transform.
+        FVector CameraLocation;
+        FRotator CameraRotation;
+        GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+        // Transform MuzzleOffset from camera space to world space.
+        const FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
+        FRotator CastRotation = CameraRotation;
+
+        //add a little bit of a start pitch and yaw to give a small bit of arc
+        CastRotation.Pitch = FMath::RandRange(0.0f, 3.0f);
+        CastRotation.Yaw = FMath::RandRange(0.0f, 3.0f);
+
+        UWorld* World = GetWorld();
+        if (World)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = GetInstigator();
+
+            AArcaneBolt* Projectile = World->SpawnActor<AArcaneBolt>(ArcaneBoltSpellClass, CastLocation, CastRotation, SpawnParams);
+            if (Projectile)
+            {
+                // Set the projectile's initial trajectory.
+                const FVector LaunchDirection = CastRotation.Vector();
+                Projectile->CastInDirection(LaunchDirection, Enemy);
+                SetCastingStatus(true);
+            }
+        }
+    }
 }
 
 void APlayerCharacter::CastIceKnifeSpell()

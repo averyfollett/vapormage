@@ -322,12 +322,20 @@ protected:
 	void Cast();
 
 	//Spell to be cast
+    void CastArcaneBoltSpell(AActor* Enemy);
+
 	void CastIceKnifeSpell();
 
 	void CastIceKnifeTwoSpell();
 
 	void CastIceKnifeVarTwoSpell();
 
+
+    /*
+        accessing spell class of arcane bolt
+    */
+    UPROPERTY(EditDefaultsOnly, Category = CASTING)
+        TSubclassOf<class AArcaneBolt> ArcaneBoltSpellClass;
 
 	/*
 		accessing spell class of ice knife
