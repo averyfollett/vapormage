@@ -2,8 +2,6 @@
 
 
 #include "IceKnife.h"
-#include "PlayerCharacter.h"
-#include "PlayerCharacter.h"
 
 // Sets default values
 AIceKnife::AIceKnife()
@@ -21,8 +19,8 @@ AIceKnife::AIceKnife()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = travelSpeed;
-    ProjectileMovementComponent->MaxSpeed = travelSpeed;
+    ProjectileMovementComponent->InitialSpeed = TravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = TravelSpeed;
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     //ProjectileMovementComponent->Bounciness = 0.3f;
@@ -43,29 +41,29 @@ void AIceKnife::Tick(float DeltaTime)
     
 }
 
-void AIceKnife::CastInDirection(const FVector& ShootDirection)
+void AIceKnife::CastInDirection(const FVector& ShootDirection) const
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
-void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-    //if we hit physics simulated object that isnt the player
-    if (OtherActor != this && OtherComponent->IsSimulatingPhysics() && !OtherActor->IsA(APlayerCharacter::StaticClass()))
-    {
-        OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
-    }
-
-    //player has been hit boi, gank him
-    if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-    {
-
-    }
-
-
-    /*if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
-    {
-
-    }*/
-}
+// void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+// {
+//     //if we hit physics simulated object that isnt the player
+//     if (OtherActor != this && OtherComponent->IsSimulatingPhysics() && !OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+//     }
+//
+//     //player has been hit boi, gank him
+//     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//
+//     }
+//
+//
+//     /*if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
+//     {
+//
+//     }*/
+// }
 

@@ -495,7 +495,7 @@ protected:
 
     FTimerHandle CastingTimerHandle;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Combat)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Combat)
     float PlayerAttackingTimerLength = 1.0;
 
 public:

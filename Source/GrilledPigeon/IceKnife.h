@@ -5,12 +5,11 @@
 #include "CoreMinimal.h"
 #include "Engine.h"
 #include "Components/SphereComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "IceKnife.generated.h"
 
 UCLASS()
-class GRILLEDPIGEON_API AIceKnife : public AActor
+class GRILLEDPIGEON_API AIceKnife final : public AActor
 {
 	GENERATED_BODY()
 
@@ -35,9 +34,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void CastInDirection(const FVector& ShootDirection);
+	void CastInDirection(const FVector& ShootDirection) const;
 
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
@@ -46,7 +45,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
-	
-	float travelSpeed = 10000.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
+	float TravelSpeed = 10000.0f;
 
 };

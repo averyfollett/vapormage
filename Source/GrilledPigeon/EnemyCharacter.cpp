@@ -3,8 +3,10 @@
 #define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
 #include "EnemyCharacter.h"
+
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -36,6 +38,15 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemyCharacter::CastIceKnifeSpell() const
+{
+	// Attempt to fire a projectile.
+	if (IsValid(IKSpellClass))
+	{
+		
+	}
 }
 
 void AEnemyCharacter::BlockSpell()

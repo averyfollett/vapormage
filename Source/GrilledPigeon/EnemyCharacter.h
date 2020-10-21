@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "PlayerCharacter.h"
 #include "GameFramework/Character.h"
+#include "IceKnife.h"
 #include "EnemyCharacter.generated.h"
 
 UCLASS()
-class GRILLEDPIGEON_API AEnemyCharacter : public ACharacter
+class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -19,8 +20,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	
 
 protected:
 	/*
@@ -59,9 +58,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Enemy)
 	APlayerCharacter * EnemyCharacter;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+	FVector CastOffset;
+
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = CASTING)
+	TSubclassOf<class AIceKnife> IKSpellClass;
 
 public:	
 	// Called every frame
@@ -69,6 +74,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	//Spell to be cast
+	UFUNCTION(Category=Combat)
+	void CastIceKnifeSpell() const;
 
 	// Function to run when blocking
 	UFUNCTION(Category=Combat)
