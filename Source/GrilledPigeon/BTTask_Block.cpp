@@ -15,7 +15,7 @@ UBTTask_Block::UBTTask_Block()
 EBTNodeResult::Type UBTTask_Block::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     // get self character
-    AEnemyCharacter * Char = static_cast<AEnemyCharacter*>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>("SelfActor"));
+    AEnemyCharacter * Char = Cast<AEnemyCharacter>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>("SelfActor"));
 
     // call block function on character
     Char->BlockSpell();
