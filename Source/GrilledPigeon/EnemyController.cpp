@@ -7,6 +7,7 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "EnemyCharacter.h"
+#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 
 AEnemyController::AEnemyController()
 {
@@ -18,7 +19,8 @@ void AEnemyController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
 
-    AEnemyCharacter * Char = static_cast<AEnemyCharacter*>(InPawn);
+    AEnemyCharacter * Char = Cast<AEnemyCharacter>(InPawn);
+    
 
     if (Char && Char->BehaviorTree)
     {
@@ -26,6 +28,7 @@ void AEnemyController::OnPossess(APawn* InPawn)
 
         EnemyKeyID = BlackboardComponent->GetKeyID("EnemyActor");
         SelfKeyID = BlackboardComponent->GetKeyID("SelfActor");
+        BlackboardComponent->SetValue<UBlackboardKeyType_Object>(SelfKeyID, Char);
         ShouldBlockKeyID = BlackboardComponent->GetKeyID("bShouldBlock");
 
         BehaviorTreeComponent->StartTree(*Char->BehaviorTree);

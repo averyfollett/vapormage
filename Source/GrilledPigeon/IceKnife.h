@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine.h"
-#include "Components/SphereComponent.h"
-#include "GameFramework/Actor.h"
 #include "IceKnife.generated.h"
 
 UCLASS()
@@ -39,13 +37,11 @@ public:
 	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-		USphereComponent* CollisionComponent;
-
+	USphereComponent* CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
-		UProjectileMovementComponent* ProjectileMovementComponent;
+	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
 	float TravelSpeed = 10000.0f;
-
 };

@@ -4,8 +4,8 @@
 #include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyAllTypes.h"
-#include "EnemyCharacter.h"
 #include "EnemyController.h"
+#include "PlayerCharacter.h"
 
 UBTService_CheckForPlayer::UBTService_CheckForPlayer()
 {
@@ -14,7 +14,7 @@ UBTService_CheckForPlayer::UBTService_CheckForPlayer()
 
 void UBTService_CheckForPlayer::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-    AEnemyController * EnemyController = static_cast<AEnemyController*>(OwnerComp.GetAIOwner());
+    AEnemyController * EnemyController = Cast<AEnemyController>(OwnerComp.GetAIOwner());
 
     if (EnemyController)
     {

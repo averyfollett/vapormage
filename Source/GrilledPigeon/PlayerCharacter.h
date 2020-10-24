@@ -6,7 +6,6 @@
 #include "CoreMinimal.h"
 #include "Templates/Tuple.h"
 #include "GameFramework/Character.h"
-#include "GameFramework/Actor.h"
 #include "PlayerCharacter.generated.h"
 
 /*
@@ -324,22 +323,12 @@ protected:
 	//Spell to be cast
 	void CastIceKnifeSpell();
 
-	void CastIceKnifeTwoSpell();
-
-	void CastIceKnifeVarTwoSpell();
-
 
 	/*
 		accessing spell class of ice knife
 	*/
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
-        TSubclassOf<class AIceKnife> IKSpellClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = CASTING)
-		TSubclassOf<class AIceKnifeTwo> IceKnifeTwoSpellClass;
-
-	UPROPERTY(EditDefaultsOnly, Category = CASTING)
-		TSubclassOf<class AIceKnifeTwoVarTwo> IceKnifeVarTwoSpellClass;
+    TSubclassOf<class AIceKnife> IKSpellClass;
 
     void SetCastingStatus(const bool B);
 

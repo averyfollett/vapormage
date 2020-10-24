@@ -16,7 +16,6 @@ AIceKnife::AIceKnife()
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
-
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
     ProjectileMovementComponent->InitialSpeed = TravelSpeed;
@@ -30,15 +29,12 @@ AIceKnife::AIceKnife()
 void AIceKnife::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AIceKnife::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-    
 }
 
 void AIceKnife::CastInDirection(const FVector& ShootDirection) const
@@ -66,4 +62,3 @@ void AIceKnife::CastInDirection(const FVector& ShootDirection) const
 //
 //     }*/
 // }
-
