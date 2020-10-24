@@ -7,6 +7,7 @@
 #include "Math/Vector.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "ArcaneBolt.generated.h"
 
 UCLASS()
@@ -15,7 +16,7 @@ class GRILLEDPIGEON_API AArcaneBolt : public AActor
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	class UStaticMeshComponent* sMesh0;
+	class UStaticMeshComponent* sMesh;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -29,7 +30,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void CastInDirection(const FVector& ShootDirection, AActor* Enemy);
+	void CastInDirection(const FVector& ShootDirection);
 
 	void TargetHoming();
 
@@ -41,6 +42,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* EnemyActor;
 
+	/*
+		Location of enemy actor
+	*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+		FVector EnemyActorLocation;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
 
@@ -49,12 +56,12 @@ public:
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float InitialTravelSpeed = 7500.0f;
+		float InitialTravelSpeed = 4000.0f;
 
 	/*
 		speed and tracking strength
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float TrackingTravelSpeed = 30.0f;
+		float TrackingTravelSpeed = 5.0f;
 
 };

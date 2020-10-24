@@ -75,6 +75,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 	
     AutoAimAtEnemy(EnemyActor, FName("spine_03Socket"));
 
+    EnemyActorLocation = EnemyActor->GetActorLocation();
+
 	Cast();
 
     RegenerateFocus();
@@ -543,7 +545,7 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 	return Temp;
 }
 
-void APlayerCharacter::CastArcaneBoltSpell(AActor* Enemy)
+void APlayerCharacter::CastArcaneBoltSpell()
 {
     // Attempt to fire a projectile.
     if (ArcaneBoltSpellClass)
@@ -573,7 +575,7 @@ void APlayerCharacter::CastArcaneBoltSpell(AActor* Enemy)
             {
                 // Set the projectile's initial trajectory.
                 const FVector LaunchDirection = CastRotation.Vector();
-                Projectile->CastInDirection(LaunchDirection, Enemy);
+                Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
             }
         }
@@ -749,7 +751,7 @@ void APlayerCharacter::Cast()
 	if (OutputSequence == Asigs_edef)
 	{
 		PRINT("FIRING ARCANE BOLT");
-        CastArcaneBoltSpell(EnemyActor);
+        CastArcaneBoltSpell();
 	}
 }
 

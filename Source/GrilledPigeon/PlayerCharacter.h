@@ -324,7 +324,7 @@ protected:
 	void Cast();
 
 	//Spell to be cast
-    void CastArcaneBoltSpell(AActor* Enemy);
+    void CastArcaneBoltSpell();
 
     void CastGridPulseSpell();
 
@@ -369,12 +369,6 @@ protected:
      */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
     bool IsLockedOn = false;
-
-    /**
-     * The enemy actor to be locked on to
-     */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
-    AActor* EnemyActor;
 
     /**
      * Array of all enemy actors
@@ -476,7 +470,7 @@ protected:
         Offset of spell
     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
-        FVector CastOffset;
+        FVector CastOffset = FVector(50,50,50);
 
     /*
      * Maximum amount of focus the player can have at any given time
@@ -519,6 +513,15 @@ protected:
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
     FPlayerStatus PlayerStatus;
+
+    /**
+     * The enemy actor to be locked on to
+     */
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+    AActor* EnemyActor;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
+    FVector EnemyActorLocation;
 
 public:
     /** Returns Mesh1P subobject **/
