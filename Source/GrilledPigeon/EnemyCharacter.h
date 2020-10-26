@@ -19,6 +19,9 @@ public:
 	void CastIceKnifeSpell();
 
 	//Spell to be cast
+	void CastSparkSpell();
+
+	//Spell to be cast
 	void CastAshBoltSpell();
 
 	//Spell to be cast
@@ -70,6 +73,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> IKSpellClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
+	TSubclassOf<class AIceKnife> SparkSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> ABSpellClass;
