@@ -18,6 +18,9 @@ public:
 	//Spell to be cast
 	void CastIceKnifeSpell();
 
+	//Spell to be cast
+	void CastAshBoltSpell();
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -64,6 +67,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> IKSpellClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
+	TSubclassOf<class AIceKnife> ABSpellClass;
 
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
