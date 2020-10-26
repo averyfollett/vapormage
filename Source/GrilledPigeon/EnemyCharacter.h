@@ -20,6 +20,9 @@ public:
 
 	//Spell to be cast
 	void CastAshBoltSpell();
+
+	//Spell to be cast
+	void CastFlamePoolSpell();
 	
 protected:
 	// Called when the game starts or when spawned
