@@ -43,5 +43,5 @@ public:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
-	float TravelSpeed = 10000.0f;
+	float TravelSpeed = 2000.0f;
 };

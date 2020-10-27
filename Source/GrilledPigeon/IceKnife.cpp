@@ -23,6 +23,7 @@ AIceKnife::AIceKnife()
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     //ProjectileMovementComponent->Bounciness = 0.3f;
+	ProjectileMovementComponent->ProjectileGravityScale = 0;
 }
 
 // Called when the game starts or when spawned

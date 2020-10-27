@@ -62,7 +62,12 @@ enum EAsigs_State
     //swoop, bottom left -> top left
     Asigs_Ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
     //swoop, top right -> bottom right
-    Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip //swoop, bottom right -> top right
+    Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip,
+    //swoop, bottom right -> top right
+    Asigs_Ed = Asigs_E | Asigs_D | Asigs_Flip,
+    //flick left
+    Asigs_Ef = Asigs_E | Asigs_F
+    //flick right
 };
 
 USTRUCT(BlueprintType)
@@ -201,6 +206,8 @@ struct FPlayerStatus
     GENERATED_USTRUCT_BODY()
     
     bool bIsCasting;
+    bool bIsBlockingLeft;
+    bool bIsBlockingRight;
 };
 
 class UInputComponent;
@@ -240,6 +247,9 @@ public:
 
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+    UFUNCTION()
+    void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 protected:
     /** Handles moving forward/backward */
@@ -309,7 +319,7 @@ protected:
      * if they have vitality points, those are used first
      */
     UFUNCTION(BlueprintCallable)
-    void DamagePlayer(float Damage);
+    void DamagePlayer(float Damage, bool bWasBlocked);
 
     /*
      * Run each tick regenerate player's focus up to max based on focus regen speed
@@ -333,6 +343,14 @@ protected:
     void SetCastingStatus(const bool B);
 
     void EndCastingStatus();
+
+    void BlockLeft();
+
+    void EndBlockingLeftStatus();
+
+    void BlockRight();
+
+    void EndBlockingRightStatus();
 
 protected:
     /**
@@ -486,6 +504,13 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Combat)
     float PlayerAttackingTimerLength = 1.0;
+
+    FTimerHandle BlockingLeftTimerHandle;
+
+    FTimerHandle BlockingRightTimerHandle;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
+    float PlayerBlockingTimerLength = 1.0;
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)

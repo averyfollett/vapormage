@@ -21,6 +21,7 @@ APlayerCharacter::APlayerCharacter()
 
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+    GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleBeginOverlap);
 
     // set our turn rates for input
     BaseTurnRate = 45.f;
@@ -98,6 +99,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+}
+
+void APlayerCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    if (OtherActor->IsA(IKSpellClass))
+    {
+        DamagePlayer(20, PlayerStatus.bIsBlockingLeft);
+    }
+    // Add other spell collision checks here...
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -484,13 +495,14 @@ void APlayerCharacter::NextInSequence(float XAxis, float YAxis)
     }
 }
 
-void APlayerCharacter::DamagePlayer(const float Damage)
+void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
 {
-    if (CurrentFocus > 0)
+    if (CurrentFocus > 0 && bWasBlocked)
     {
         CurrentFocus -= Damage;
     }
-    if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0)
+    if ((CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0) ||
+        !bWasBlocked)
     {
         CurrentVitality--;
     }
@@ -586,6 +598,32 @@ void APlayerCharacter::EndCastingStatus()
     PlayerStatus.bIsCasting = false;
 }
 
+void APlayerCharacter::BlockLeft()
+{
+    PlayerStatus.bIsBlockingLeft = true;
+
+    GetWorldTimerManager().SetTimer(
+       BlockingLeftTimerHandle, this, &APlayerCharacter::EndBlockingLeftStatus, PlayerBlockingTimerLength, false);
+}
+
+void APlayerCharacter::EndBlockingLeftStatus()
+{
+    PlayerStatus.bIsBlockingLeft = false;
+}
+
+void APlayerCharacter::BlockRight()
+{
+    PlayerStatus.bIsBlockingRight = true;
+
+    GetWorldTimerManager().SetTimer(
+       BlockingRightTimerHandle, this, &APlayerCharacter::EndBlockingRightStatus, PlayerBlockingTimerLength, false);
+}
+
+void APlayerCharacter::EndBlockingRightStatus()
+{
+    PlayerStatus.bIsBlockingRight = false;
+}
+
 void APlayerCharacter::Cast()
 {
 	
@@ -599,6 +637,16 @@ void APlayerCharacter::Cast()
 		PRINT("FIRING ICE KNIFE RED");
 		//CastIceKnifeSpell();
 	}
+    if (OutputSequence == Asigs_Ef)
+    {
+        PRINT("BLOCKING RIGHT");
+        //TO DO: call block function
+    }
+    if (OutputSequence == Asigs_Ed)
+    {
+        PRINT("BLOCKING LEFT");
+        BlockLeft();
+    }
 }
 
 
