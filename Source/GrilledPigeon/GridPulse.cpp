@@ -48,5 +48,26 @@ void AGridPulse::CastInDirection(const FVector& ShootDirection)
 }
 
 
+// void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+// {
+//     //if we hit physics simulated object that isnt the player
+//     if (OtherActor != this && OtherComponent->IsSimulatingPhysics() && !OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+//     }
+//
+//     //player has been hit boi, gank him
+//     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//
+//     }
+//
+//
+//     /*if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
+//     {
+//
+//     }*/
+// }
+
 
 

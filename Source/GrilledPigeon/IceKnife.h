@@ -28,16 +28,21 @@ public:
 
 	void CastInDirection(const FVector& ShootDirection) const;
 
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+		ACharacter* EnemyActor;*/
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
-
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
 	float TravelSpeed = 10000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float Damage = 20.0f;
 
 };

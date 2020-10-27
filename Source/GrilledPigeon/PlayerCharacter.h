@@ -307,13 +307,7 @@ protected:
     */
     EAsigs_State ConcatSequence();
 
-    /*
-     * apply x amount of damage to the player
-     * if they have vitality points, those are used first
-     */
-    UFUNCTION(BlueprintCallable)
-    void DamagePlayer(float Damage);
-
+    
     /*
      * Run each tick regenerate player's focus up to max based on focus regen speed
      * Also clamps max current focus to max focus
@@ -530,4 +524,12 @@ public:
     FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
     AActor* getEnemyActor() { return EnemyActor; }
+
+    /*
+     * apply x amount of damage to the player
+     * if they have vitality points, those are used first
+     */
+    UFUNCTION(BlueprintCallable)
+        void DamagePlayer(float Damage);
+
 };
