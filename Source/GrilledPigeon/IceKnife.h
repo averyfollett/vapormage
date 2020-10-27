@@ -11,14 +11,6 @@ class GRILLEDPIGEON_API AIceKnife final : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* Mesh0P;
-
-	UPROPERTY(EditDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* Mesh1P;
-
-	UPROPERTY(EditDefaultsOnly, Category = Mesh)
-		class USkeletalMeshComponent* Mesh2P;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -34,7 +26,10 @@ public:
 
 	void CastInDirection(const FVector& ShootDirection) const;
 
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
+		ACharacter* EnemyActor;*/
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	USphereComponent* CollisionComponent;
@@ -43,5 +38,9 @@ public:
 	UProjectileMovementComponent* ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
-	float TravelSpeed = 2000.0f;
+	float TravelSpeed = 10000.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	float Damage = 20.0f;
+
 };

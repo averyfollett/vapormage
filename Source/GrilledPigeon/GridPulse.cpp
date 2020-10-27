@@ -1,12 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "IceKnife.h"
+#include "GridPulse.h"
 #include "PlayerCharacter.h"
 #include "EnemyCharacter.h"
 
+
 // Sets default values
-AIceKnife::AIceKnife()
+AGridPulse::AGridPulse()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,48 +19,55 @@ AIceKnife::AIceKnife()
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
+
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = TravelSpeed;
-    ProjectileMovementComponent->MaxSpeed = TravelSpeed;
+    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;             //have to change this if we want to have it gradually increase as time goes on
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
-    //ProjectileMovementComponent->Bounciness = 0.3f;
-	ProjectileMovementComponent->ProjectileGravityScale = 0;
 }
 
 // Called when the game starts or when spawned
-void AIceKnife::BeginPlay()
+void AGridPulse::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
-void AIceKnife::Tick(float DeltaTime)
+void AGridPulse::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 }
 
-void AIceKnife::CastInDirection(const FVector& ShootDirection) const
+void AGridPulse::CastInDirection(const FVector& ShootDirection)
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
-void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-     APlayerCharacter* wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+// void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+// {
+//     //if we hit physics simulated object that isnt the player
+//     if (OtherActor != this && OtherComponent->IsSimulatingPhysics() && !OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//         OtherComponent->AddImpulseAtLocation(ProjectileMovementComponent->Velocity * 100.0f, Hit.ImpactPoint);
+//     }
+//
+//     //player has been hit boi, gank him
+//     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
+//     {
+//
+//     }
+//
+//
+//     /*if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
+//     {
+//
+//     }*/
+// }
 
 
-     //player has been hit boi, gank him
-     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-     {
-         wizard->DamagePlayer(Damage);
-     }
-
-
-     if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
-     {
-         Cast<AEnemyCharacter>(wizard->getEnemyActor())->DamageAI(Damage);
-     }
-}
 
