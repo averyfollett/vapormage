@@ -26,8 +26,6 @@ public:
 
 	void CastInDirection(const FVector& ShootDirection) const;
 
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* EnemyActor;*/
 

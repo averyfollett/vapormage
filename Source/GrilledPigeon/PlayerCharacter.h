@@ -544,6 +544,6 @@ public:
      * if they have vitality points, those are used first
      */
     UFUNCTION(BlueprintCallable)
-        void DamagePlayer(float Damage);
+        void DamagePlayer(float Damage, bool bWasBlocked);
 
 };

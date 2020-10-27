@@ -45,21 +45,5 @@ void AIceKnife::CastInDirection(const FVector& ShootDirection) const
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
 
-void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-     APlayerCharacter* wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-
-     //player has been hit boi, gank him
-     if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-     {
-         wizard->DamagePlayer(Damage);
-     }
-
-
-     if (OtherActor->IsA(AEnemyCharacter::StaticClass()))
-     {
-         Cast<AEnemyCharacter>(wizard->getEnemyActor())->DamageAI(Damage);
-     }
-}
 

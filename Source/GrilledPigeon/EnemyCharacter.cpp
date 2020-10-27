@@ -6,11 +6,8 @@
 #include "ArcaneBolt.h"
 #include "IceKnife.h"
 #include "GridPulse.h"
-
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "IceKnife.h"
-#include "PlayerCharacter.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -26,8 +23,6 @@ void AEnemyCharacter::BeginPlay()
 
 	EnemyCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
 	PRINT(EnemyCharacter->GetName());
-
-	
 }
 
 // Called every frame
@@ -46,7 +41,7 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AEnemyCharacter::CastIceKnifeSpell()
 {
 	// Attempt to fire a projectile.
-	if (IKSpellClass)
+	if (IceKnifeSpellClass)
 	{
 		PRINT("Enemy: Cast Ice Knife");
 
@@ -67,7 +62,7 @@ void AEnemyCharacter::CastIceKnifeSpell()
 			SpawnParams.Owner = this;
 			SpawnParams.Instigator = GetInstigator();
 			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IKSpellClass, CastLocation, CastRotation, SpawnParams);
+			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
@@ -103,7 +98,7 @@ void AEnemyCharacter::CastSparkSpell()
 			SpawnParams.Owner = this;
 			SpawnParams.Instigator = GetInstigator();
 			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IKSpellClass, CastLocation, CastRotation, SpawnParams);
+			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
@@ -115,11 +110,10 @@ void AEnemyCharacter::CastSparkSpell()
 	}
 }
 
-void AEnemyCharacter::CastIceKnifeSpell() const
 void AEnemyCharacter::CastAshBoltSpell()
 {
 	// Attempt to fire a projectile.
-	if (ABSpellClass)
+	if (AshBoltSpellClass)
 	{
 		PRINT("Enemy: Cast Ash Bolt");
 
@@ -140,7 +134,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 			SpawnParams.Owner = this;
 			SpawnParams.Instigator = GetInstigator();
 			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IKSpellClass, CastLocation, CastRotation, SpawnParams);
+			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
@@ -208,5 +202,4 @@ void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 		DamageAI(ArcaneDamageThreshold);
 	}
 
-}
 }

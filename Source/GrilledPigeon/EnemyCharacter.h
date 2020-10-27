@@ -73,13 +73,13 @@ protected:
 	FVector CastOffset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> IKSpellClass;
+	TSubclassOf<class AIceKnife> IceKnifeSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> SparkSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> ABSpellClass;
+	TSubclassOf<class AIceKnife> AshBoltSpellClass;
 
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
