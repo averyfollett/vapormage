@@ -485,13 +485,14 @@ void APlayerCharacter::NextInSequence(float XAxis, float YAxis)
     }
 }
 
-void APlayerCharacter::DamagePlayer(const float Damage)
+void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
 {
-    if (CurrentFocus > 0)
+    if (CurrentFocus > 0 && bWasBlocked)
     {
         CurrentFocus -= Damage;
     }
-    if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0)
+    if ((CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0) ||
+        !bWasBlocked)
     {
         CurrentVitality--;
     }

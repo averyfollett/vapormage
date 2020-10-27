@@ -316,7 +316,7 @@ protected:
      * if they have vitality points, those are used first
      */
     UFUNCTION(BlueprintCallable)
-    void DamagePlayer(float Damage);
+    void DamagePlayer(float Damage, bool bWasBlocked);
 
     /*
      * Run each tick regenerate player's focus up to max based on focus regen speed
