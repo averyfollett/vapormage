@@ -12,6 +12,7 @@
 #include "IceKnife.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Math/UnrealMathSSE.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -586,6 +587,32 @@ void APlayerCharacter::EndCastingStatus()
     PlayerStatus.bIsCasting = false;
 }
 
+void APlayerCharacter::BlockLeft()
+{
+    PlayerStatus.bIsBlockingLeft = true;
+
+    GetWorldTimerManager().SetTimer(
+       BlockingLeftTimerHandle, this, &APlayerCharacter::EndBlockingLeftStatus, PlayerBlockingTimerLength, false);
+}
+
+void APlayerCharacter::EndBlockingLeftStatus()
+{
+    PlayerStatus.bIsBlockingLeft = false;
+}
+
+void APlayerCharacter::BlockRight()
+{
+    PlayerStatus.bIsBlockingRight = true;
+
+    GetWorldTimerManager().SetTimer(
+       BlockingRightTimerHandle, this, &APlayerCharacter::EndBlockingRightStatus, PlayerBlockingTimerLength, false);
+}
+
+void APlayerCharacter::EndBlockingRightStatus()
+{
+    PlayerStatus.bIsBlockingRight = false;
+}
+
 void APlayerCharacter::Cast()
 {
 	
@@ -607,7 +634,7 @@ void APlayerCharacter::Cast()
     if (OutputSequence == Asigs_Ed)
     {
         PRINT("BLOCKING LEFT");
-        //TO DO: call block function
+        BlockLeft();
     }
 }
 

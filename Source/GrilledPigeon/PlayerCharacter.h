@@ -206,6 +206,8 @@ struct FPlayerStatus
     GENERATED_USTRUCT_BODY()
     
     bool bIsCasting;
+    bool bIsBlockingLeft;
+    bool bIsBlockingRight;
 };
 
 class UInputComponent;
@@ -338,6 +340,14 @@ protected:
     void SetCastingStatus(const bool B);
 
     void EndCastingStatus();
+
+    void BlockLeft();
+
+    void EndBlockingLeftStatus();
+
+    void BlockRight();
+
+    void EndBlockingRightStatus();
 
 protected:
     /**
@@ -491,6 +501,13 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Combat)
     float PlayerAttackingTimerLength = 1.0;
+
+    FTimerHandle BlockingLeftTimerHandle;
+
+    FTimerHandle BlockingRightTimerHandle;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
+    float PlayerBlockingTimerLength = 1.0;
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
