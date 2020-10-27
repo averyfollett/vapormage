@@ -11,12 +11,12 @@ AArcaneBolt::AArcaneBolt()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-    sMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("sMesh0"));
+    //sMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("sMesh0"));
     //sMesh0->SetOnlyOwnerSee(true);
-    sMesh->bCastDynamicShadow = false;
-    sMesh->CastShadow = false;
-    sMesh->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
-    sMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+    //sMesh->bCastDynamicShadow = false;
+    //sMesh->CastShadow = false;
+    //sMesh->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+    //sMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
     
     //sMesh0->SetSimulatePhysics(true);
 
@@ -24,6 +24,11 @@ AArcaneBolt::AArcaneBolt()
     CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
     // Set the sphere's collision radius.
     CollisionComponent->InitSphereRadius(15.0f);
+
+    //dont let actors jump onto the projectile
+    CollisionComponent->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
+    CollisionComponent->CanCharacterStepUpOn = ECB_No;
+
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
@@ -34,14 +39,19 @@ AArcaneBolt::AArcaneBolt()
     ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;             //have to change this if we want to have it gradually increase as time goes on
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
-    //ProjectileMovementComponent->Bounciness = 0.3f;
+    
+    ProjectileMovementComponent->bIsHomingProjectile = true;
+    ProjectileMovementComponent->HomingAccelerationMagnitude = InitialTravelSpeed + TrackingTravelSpeed;
 }
 
 // Called when the game starts or when spawned
 void AArcaneBolt::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    
+    APlayerCharacter* wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    //ProjectileMovementComponent->HomingTargetComponent = wizard->EnemyActor;
+    ProjectileMovementComponent->HomingTargetComponent = wizard->getEnemyActor()->GetRootComponent();
 }
 
 // Called every frame
@@ -54,9 +64,11 @@ void AArcaneBolt::Tick(float DeltaTime)
     if (wizard != nullptr)
     {
         //EnemyActor = Cast<ACharacter>(wizard->EnemyActor);
-        EnemyActorLocation = wizard->EnemyActorLocation;
+        EnemyActorLocation = wizard->EnemyActorLocation.GetSafeNormal();
     }
     
+    //ProjectileMovementComponent->HomingTargetComponent = EnemyActorLocation;
+
 
     TargetHoming(); //actually home onto the target
 }
@@ -64,8 +76,10 @@ void AArcaneBolt::Tick(float DeltaTime)
 void AArcaneBolt::TargetHoming()
 {
     
-    FVector target = EnemyActorLocation;
-    FVector velocityToTarget = target - this->GetActorLocation();   //get the difference to have direction
+    
+
+    //FVector target = EnemyActorLocation;
+    //FVector velocityToTarget = target - this->GetActorLocation();   //get the difference to have direction
     //velocityToTarget *= TrackingTravelSpeed;                        //impulse increase before attaching it to current direction
     //velocityToTarget += GetVelocity();                              //get current velocity and take its redirection velocityToTarget
 

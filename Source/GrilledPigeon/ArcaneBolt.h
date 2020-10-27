@@ -15,8 +15,8 @@ class GRILLEDPIGEON_API AArcaneBolt : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	class UStaticMeshComponent* sMesh;
+	//UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	//class UStaticMeshComponent* sMesh;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -62,6 +62,6 @@ public:
 		speed and tracking strength
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
-		float TrackingTravelSpeed = 5.0f;
+		float TrackingTravelSpeed = 8000.0f;
 
 };

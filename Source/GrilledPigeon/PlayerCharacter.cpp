@@ -560,8 +560,8 @@ void APlayerCharacter::CastArcaneBoltSpell()
         FRotator CastRotation = CameraRotation;
 
         //add a little bit of a start pitch and yaw to give a small bit of arc
-        CastRotation.Pitch = FMath::RandRange(0.0f, 3.0f);
-        CastRotation.Yaw = FMath::RandRange(0.0f, 3.0f);
+        CastRotation.Pitch += FMath::RandRange(0.0f, 4.0f);
+        CastRotation.Yaw += FMath::RandRange(0.0f, 4.0f);
 
         UWorld* World = GetWorld();
         if (World)
