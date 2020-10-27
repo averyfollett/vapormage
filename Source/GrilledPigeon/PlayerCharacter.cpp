@@ -599,6 +599,16 @@ void APlayerCharacter::Cast()
 		PRINT("FIRING ICE KNIFE RED");
 		//CastIceKnifeSpell();
 	}
+    if (OutputSequence == Asigs_Ef)
+    {
+        PRINT("BLOCKING RIGHT");
+        //TO DO: call block function
+    }
+    if (OutputSequence == Asigs_Ed)
+    {
+        PRINT("BLOCKING LEFT");
+        //TO DO: call block function
+    }
 }
 
 

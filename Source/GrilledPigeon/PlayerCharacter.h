@@ -62,7 +62,12 @@ enum EAsigs_State
     //swoop, bottom left -> top left
     Asigs_Ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
     //swoop, top right -> bottom right
-    Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip //swoop, bottom right -> top right
+    Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip,
+    //swoop, bottom right -> top right
+    Asigs_Ed = Asigs_E | Asigs_D | Asigs_Flip,
+    //flick left
+    Asigs_Ef = Asigs_E | Asigs_F
+    //flick right
 };
 
 USTRUCT(BlueprintType)
