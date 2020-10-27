@@ -42,6 +42,7 @@ AArcaneBolt::AArcaneBolt()
     ProjectileMovementComponent->bShouldBounce = false;
     ProjectileMovementComponent->bIsHomingProjectile = true;
     ProjectileMovementComponent->HomingAccelerationMagnitude = InitialTravelSpeed + TrackingTravelSpeed;
+    ProjectileMovementComponent->ProjectileGravityScale = 0;
 }
 
 // Called when the game starts or when spawned
