@@ -18,6 +18,7 @@ AIceKnife::AIceKnife()
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
+    //SetLifeSpan(10.0f);
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);

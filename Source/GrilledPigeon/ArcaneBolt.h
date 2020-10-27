@@ -64,4 +64,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float TrackingTravelSpeed = 8000.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+		float LifeSpan = 6.0f;
+
 };

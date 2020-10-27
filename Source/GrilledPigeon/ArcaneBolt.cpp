@@ -32,6 +32,7 @@ AArcaneBolt::AArcaneBolt()
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
+    //SetLifeSpan(LifeSpan);
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
