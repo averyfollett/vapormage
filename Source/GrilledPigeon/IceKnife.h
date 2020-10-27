@@ -10,7 +10,6 @@ UCLASS()
 class GRILLEDPIGEON_API AIceKnife final : public AActor
 {
 	GENERATED_BODY()
-
 	
 public:	
 	// Sets default values for this actor's properties
@@ -24,6 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastInDirection(const FVector& ShootDirection) const;
 
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
@@ -40,5 +40,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 	float Damage = 20.0f;
-
 };

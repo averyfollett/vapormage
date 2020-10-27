@@ -4,15 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Engine.h"
-#include "Math/Vector.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "GridPulse.generated.h"
 
-
-
 UCLASS()
-class GRILLEDPIGEON_API AGridPulse : public AActor
+class GRILLEDPIGEON_API AGridPulse final : public AActor
 {
 	GENERATED_BODY()
 	
@@ -28,8 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	void CastInDirection(const FVector& ShootDirection);
+	UFUNCTION(BlueprintCallable, Category=Cast)
+	void CastInDirection(const FVector& ShootDirection) const;
 
 	/*
 		target locked in direction to do pushback onto the target
@@ -43,10 +40,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* PlayerActor;
 
-
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
-
 
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
@@ -56,5 +51,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float ImpactForce = 200.0f;
-
 };

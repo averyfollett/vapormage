@@ -30,5 +30,5 @@ public:
     uint8 EnemyKeyID;
     uint8 SelfKeyID;
     uint8 ShouldBlockKeyID;
-    uint8 TargetPositonKeyID;
+    uint8 TargetPositionKeyID;
 };

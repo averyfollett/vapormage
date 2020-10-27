@@ -1,9 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "IceKnife.h"
 #include "PlayerCharacter.h"
-#include "EnemyCharacter.h"
 
 // Sets default values
 AIceKnife::AIceKnife()
@@ -44,6 +42,3 @@ void AIceKnife::CastInDirection(const FVector& ShootDirection) const
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
-
-
-

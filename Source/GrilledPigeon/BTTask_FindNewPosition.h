@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class GRILLEDPIGEON_API UBTTask_FindNewPosition : public UBTTaskNode
+class GRILLEDPIGEON_API UBTTask_FindNewPosition final : public UBTTaskNode
 {
 	GENERATED_BODY()
 

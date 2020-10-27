@@ -7,11 +7,10 @@
 #include "Math/Vector.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
 #include "ArcaneBolt.generated.h"
 
 UCLASS()
-class GRILLEDPIGEON_API AArcaneBolt : public AActor
+class GRILLEDPIGEON_API AArcaneBolt final : public AActor
 {
 	GENERATED_BODY()
 
@@ -30,8 +29,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void CastInDirection(const FVector& ShootDirection);
+	UFUNCTION(BlueprintCallable, Category=Spell)
+	void CastInDirection(const FVector& ShootDirection) const;
 
+	UFUNCTION(BlueprintCallable, Category=Spell)
 	void TargetHoming();
 
 	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
@@ -51,7 +52,6 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 		USphereComponent* CollisionComponent;
 
-
 	UPROPERTY(VisibleAnywhere, Category = Movement)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 
@@ -66,5 +66,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float LifeSpan = 6.0f;
-
 };

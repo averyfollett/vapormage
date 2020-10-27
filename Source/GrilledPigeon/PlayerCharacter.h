@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 // ReSharper disable IdentifierTypo
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -33,35 +34,35 @@ enum EAsigs_State
     //THIS NEEDS TO EXIST, its to tell for opposite directions, PUT AT BACK that way we can run if statement 
     //		on the sequence to see if ASIGS_FLIP exists in this call, then we know difference between "beh" and "heb"
     //			To assign said difference, 
-    Asigs_ebeh = Asigs_E | Asigs_B | Asigs_E | Asigs_H,
+    Asigs_Ebeh = Asigs_E | Asigs_B | Asigs_E | Asigs_H,
     //up -> down
-    Asigs_eheb = Asigs_E | Asigs_H | Asigs_E | Asigs_B | Asigs_Flip,
+    Asigs_Eheb = Asigs_E | Asigs_H | Asigs_E | Asigs_B | Asigs_Flip,
     //down -> up
-    Asigs_edef = Asigs_E | Asigs_D | Asigs_E | Asigs_F,
+    Asigs_Edef = Asigs_E | Asigs_D | Asigs_E | Asigs_F,
     //left -> right
-    Asigs_efed = Asigs_E | Asigs_F | Asigs_E | Asigs_D | Asigs_Flip,
+    Asigs_Efed = Asigs_E | Asigs_F | Asigs_E | Asigs_D | Asigs_Flip,
     //right -> left
-    Asigs_eaei = Asigs_E | Asigs_A | Asigs_E | Asigs_I,
+    Asigs_Eaei = Asigs_E | Asigs_A | Asigs_E | Asigs_I,
     //diagonal, top left -> bottom right
-    Asigs_eiea = Asigs_E | Asigs_I | Asigs_E | Asigs_A | Asigs_Flip,
+    Asigs_Eiea = Asigs_E | Asigs_I | Asigs_E | Asigs_A | Asigs_Flip,
     //diagonal, bottom right -> top left
-    Asigs_eceg = Asigs_E | Asigs_C | Asigs_E | Asigs_G,
+    Asigs_Eceg = Asigs_E | Asigs_C | Asigs_E | Asigs_G,
     //diagonal, top right -> bottom left
-    Asigs_egec = Asigs_E | Asigs_G | Asigs_E | Asigs_C | Asigs_Flip,
+    Asigs_Egec = Asigs_E | Asigs_G | Asigs_E | Asigs_C | Asigs_Flip,
     //diagonal, bottom left -> top right
-    Asigs_eabc = Asigs_E | Asigs_A | Asigs_B | Asigs_C,
+    Asigs_Eabc = Asigs_E | Asigs_A | Asigs_B | Asigs_C,
     //swoop, top left -> top right
-    Asigs_ecba = Asigs_E | Asigs_C | Asigs_B | Asigs_A | Asigs_Flip,
+    Asigs_Ecba = Asigs_E | Asigs_C | Asigs_B | Asigs_A | Asigs_Flip,
     //swoop, top right -> top left
-    Asigs_eghi = Asigs_E | Asigs_G | Asigs_H | Asigs_I,
+    Asigs_Eghi = Asigs_E | Asigs_G | Asigs_H | Asigs_I,
     //swoop, bottom left -> bottom right
-    Asigs_eihg = Asigs_E | Asigs_I | Asigs_H | Asigs_G | Asigs_Flip,
+    Asigs_Eihg = Asigs_E | Asigs_I | Asigs_H | Asigs_G | Asigs_Flip,
     //swoop, bottom right -> bottom left
-    Asigs_eadg = Asigs_E | Asigs_A | Asigs_D | Asigs_G,
+    Asigs_Eadg = Asigs_E | Asigs_A | Asigs_D | Asigs_G,
     //swoop, top left -> bottom left
-    Asigs_egda = Asigs_E | Asigs_G | Asigs_D | Asigs_A | Asigs_Flip,
+    Asigs_Egda = Asigs_E | Asigs_G | Asigs_D | Asigs_A | Asigs_Flip,
     //swoop, bottom left -> top left
-    Asigs_ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
+    Asigs_Ecfi = Asigs_E | Asigs_C | Asigs_F | Asigs_I,
     //swoop, top right -> bottom right
     Asigs_Eifc = Asigs_E | Asigs_I | Asigs_F | Asigs_C | Asigs_Flip,
     //swoop, bottom right -> top right
@@ -114,7 +115,6 @@ struct FCoord_Cell
         M10 = M10In;
         M11 = M11In;
     }
-
 
     TTuple<double, double> M00, M01, M10, M11;
 };
@@ -286,53 +286,59 @@ protected:
      * Capsule trace from the camera position forward looking for other pawns
      * Returns the hit AActor
      */
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category=AutoAim)
     AActor* CapsuleTraceForEnemy() const;
 
     /*
      * Smoothly aim at skeletal mesh socket on given enemy actor
      */
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category=AutoAim)
     void AutoAimAtEnemy(AActor* Enemy, FName SocketName) const;
 
     /*
         take in analog stick axis value, determine cell coordinate, add to sequence vector
     */
+    UFUNCTION(BlueprintCallable, Category=ASIGS)
     void NextInSequence(float XAxis, float YAxis);
 
     /*
         return true if given the buffer range that the analog stick has moved "fast enough" for input (its out of the range)
         uses simple 2d circle point collision. Uses the stored previous value with radius of inputBuffer
     */
+    UFUNCTION(BlueprintCallable, Category=ASIGS)
     bool BufferRangeCheck(float InputBufferRadius, float CurrentAnalogPosX, float CurrentAnalogPosY) const;
 
     /*
         determine sequence out from vector, call where input is located
     */
+    UFUNCTION(BlueprintCallable, Category=ASIGS)
     void SequenceOut(float XAxis, float YAxis, float InputBufferRadius);
 
     /*
         combine the sequence list into a single enum value and return it
     */
+    UFUNCTION(BlueprintCallable, Category=ASIGS)
     EAsigs_State ConcatSequence();
-
     
     /*
      * Run each tick regenerate player's focus up to max based on focus regen speed
      * Also clamps max current focus to max focus
      */
-    UFUNCTION(BlueprintCallable)
+    UFUNCTION(BlueprintCallable, Category=Health)
     void RegenerateFocus();
 
+    UFUNCTION(BlueprintCallable, Category=Cast)
 	void Cast();
 
 	//Spell to be cast
+    UFUNCTION(BlueprintCallable, Category=Cast)
     void CastArcaneBoltSpell();
 
+    UFUNCTION(BlueprintCallable, Category=Cast)
     void CastGridPulseSpell();
 
+    UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastIceKnifeSpell();
-
 
     /*
         accessing spell class of arcane bolt
@@ -352,16 +358,22 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
     TSubclassOf<class AIceKnife> IKSpellClass;
 
+    UFUNCTION(BlueprintCallable, Category=Cast)
     void SetCastingStatus(const bool B);
 
+    UFUNCTION(BlueprintCallable, Category=Cast)
     void EndCastingStatus();
 
+    UFUNCTION(BlueprintCallable, Category=Block)
     void BlockLeft();
 
+    UFUNCTION(BlueprintCallable, Category=Block)
     void EndBlockingLeftStatus();
 
+    UFUNCTION(BlueprintCallable, Category=Block)
     void BlockRight();
 
+    UFUNCTION(BlueprintCallable, Category=Block)
     void EndBlockingRightStatus();
 
 protected:
@@ -444,7 +456,6 @@ protected:
     */
     TTuple<float, float> PreviousInput;
 
-
     /*
         Value determined by lock on state, if locked on and ready to start casting we are true. default is true.
     */
@@ -471,7 +482,7 @@ protected:
         Offset of spell
     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
-        FVector CastOffset = FVector(50,50,50);
+    FVector CastOffset = FVector(50,50,50);
 
     /*
      * Maximum amount of focus the player can have at any given time
@@ -537,7 +548,8 @@ public:
     /** Returns FirstPersonCameraComponent subobject **/
     FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-    AActor* getEnemyActor() { return EnemyActor; }
+    UFUNCTION(BlueprintCallable, Category=Helper)
+    AActor* GetEnemyActor() const { return EnemyActor; }
 
     /*
      * apply x amount of damage to the player
@@ -545,5 +557,4 @@ public:
      */
     UFUNCTION(BlueprintCallable)
         void DamagePlayer(float Damage, bool bWasBlocked);
-
 };

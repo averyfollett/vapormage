@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class GRILLEDPIGEON_API UBTDecorator_IsEnemyInRange : public UBTDecorator
+class GRILLEDPIGEON_API UBTDecorator_IsEnemyInRange final : public UBTDecorator
 {
 	GENERATED_BODY()
 
