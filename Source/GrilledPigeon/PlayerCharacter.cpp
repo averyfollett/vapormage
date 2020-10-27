@@ -12,7 +12,6 @@
 #include "IceKnife.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "Math/UnrealMathSSE.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -22,6 +21,7 @@ APlayerCharacter::APlayerCharacter()
 
     // Set size for collision capsule
     GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+    GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleBeginOverlap);
 
     // set our turn rates for input
     BaseTurnRate = 45.f;
@@ -99,6 +99,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("TurnRate", this, &APlayerCharacter::TurnAtRate);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
     PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
+}
+
+void APlayerCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+    if (OtherActor->IsA(IKSpellClass))
+    {
+        DamagePlayer(20, PlayerStatus.bIsBlockingLeft);
+    }
+    // Add other spell collision checks here...
 }
 
 void APlayerCharacter::MoveForward(float Value)
