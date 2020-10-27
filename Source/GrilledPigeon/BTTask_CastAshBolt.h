@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class GRILLEDPIGEON_API UBTTask_CastAshBolt : public UBTTaskNode
+class GRILLEDPIGEON_API UBTTask_CastAshBolt final : public UBTTaskNode
 {
 	GENERATED_BODY()
 	

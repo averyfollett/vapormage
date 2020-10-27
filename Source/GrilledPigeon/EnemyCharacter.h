@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
-
 UCLASS()
 class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
 {
@@ -17,15 +16,19 @@ public:
 	AEnemyCharacter();
 
 	//Spell to be cast
+	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastIceKnifeSpell();
 
 	//Spell to be cast
+	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastSparkSpell();
 
 	//Spell to be cast
+	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastAshBoltSpell();
 
 	//Spell to be cast
+	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastFlamePoolSpell();
 	
 protected:
@@ -85,6 +88,15 @@ public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	float IKDamageThreshold = 15;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	float ArcaneDamageThreshold = 13;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	float GridPulseDamageThreshold = 7;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -94,26 +106,13 @@ public:
 
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-	//Spell to be cast
-	UFUNCTION(Category=Combat)
-	void CastIceKnifeSpell() const;
-
 	// Function to run when blocking
-	UFUNCTION(Category=Combat)
+	UFUNCTION(BlueprintCallable, Category=Combat)
 	void BlockSpell();
 
+	UFUNCTION(BlueprintCallable, Category=Health)
 	void RegenerateFocus();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category=Health)
 	void DamageAI(float Damage);
-
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-		float IKDamageThreshold = 15;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-		float ArcaneDamageThreshold = 13;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-		float GridPulseDamageThreshold = 7;
 };

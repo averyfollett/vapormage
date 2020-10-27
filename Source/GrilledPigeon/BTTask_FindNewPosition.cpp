@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BTTask_FindNewPosition.h"
-
 #include "EnemyCharacter.h"
 #include "EnemyController.h"
 #include "NavigationSystem.h"
@@ -35,14 +33,7 @@ EBTNodeResult::Type UBTTask_FindNewPosition::ExecuteTask(UBehaviorTreeComponent&
 
     NavSystem->GetRandomReachablePointInRadius(NewPosition, Radius, NewLocation);
 
-    //UNavigationSystemV1::GetRandomReachablePointInRadius(NewPosition, Radius, NewLocation);
-
-    OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Vector>(EnemyController->TargetPositonKeyID, NewLocation.Location);
-
+    OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Vector>(EnemyController->TargetPositionKeyID, NewLocation.Location);
     
-
-
-    
-
     return EBTNodeResult::Succeeded;
 }

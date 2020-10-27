@@ -7,7 +7,7 @@
 #include "Wand.generated.h"
 
 UCLASS()
-class GRILLEDPIGEON_API AWand : public AActor
+class GRILLEDPIGEON_API AWand final : public AActor
 {
 	GENERATED_BODY()
 	
@@ -22,5 +22,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

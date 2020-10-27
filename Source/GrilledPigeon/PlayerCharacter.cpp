@@ -68,8 +68,6 @@ void APlayerCharacter::Tick(float DeltaTime)
     SequenceOut(this->InputComponent->GetAxisValue(TEXT("TurnRate")),
                 -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))),
                 Ibr);
-    //print(FString::SanitizeFloat(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))));
-
 	
     AutoAimAtEnemy(EnemyActor, FName("spine_03Socket"));
 
@@ -221,7 +219,6 @@ void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const f
             print("Number in Sequence: " + FString::FromInt(UpdatingSequence.Num()));
         }*/
 
-
         if (DelayTimerCurrent <= 0)
         {
             //combine and release whatever sequence we have
@@ -248,7 +245,6 @@ void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const f
 
             DelayTimerCurrent = DelayTimerMax;
         }
-
 
         if (DelayTimerCurrent >= 0)
         {
@@ -478,7 +474,6 @@ void APlayerCharacter::NextInSequence(float XAxis, float YAxis)
             }
         }
 
-
         //flip direction
         //	use second cells direction based from the middle to judge positive or negative first movement
         //	
@@ -700,22 +695,22 @@ void APlayerCharacter::EndBlockingRightStatus()
 
 void APlayerCharacter::Cast()
 {
-	if (OutputSequence == Asigs_ebeh)
+	if (OutputSequence == Asigs_Ebeh)
 	{
         PRINT("FIRING ICE KNIFE BLUE");
 		//CastIceKnifeTwoSpell();
 	}
-	if (OutputSequence == Asigs_eheb)
+	if (OutputSequence == Asigs_Eheb)
 	{
         PRINT("FIRING GRID PULSE");
         CastGridPulseSpell();
 	}
-	if (OutputSequence == Asigs_efed)
+	if (OutputSequence == Asigs_Efed)
 	{
         PRINT("FIRING TRUE ICE KNIFE");
 		CastIceKnifeSpell();
 	}
-	if (OutputSequence == Asigs_edef)
+	if (OutputSequence == Asigs_Edef)
 	{
 		PRINT("FIRING ARCANE BOLT");
         CastArcaneBoltSpell();
@@ -731,5 +726,3 @@ void APlayerCharacter::Cast()
         BlockLeft();
     }
 }
-
-

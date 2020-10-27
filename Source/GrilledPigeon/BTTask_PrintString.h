@@ -3,9 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#include <string>
-
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_PrintString.generated.h"
 
@@ -13,7 +10,7 @@
  * 
  */
 UCLASS()
-class GRILLEDPIGEON_API UBTTask_PrintString : public UBTTaskNode
+class GRILLEDPIGEON_API UBTTask_PrintString final : public UBTTaskNode
 {
 	GENERATED_BODY()
 

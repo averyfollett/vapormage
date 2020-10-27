@@ -1,10 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "GridPulse.h"
 #include "PlayerCharacter.h"
-#include "EnemyCharacter.h"
-
 
 // Sets default values
 AGridPulse::AGridPulse()
@@ -19,7 +16,6 @@ AGridPulse::AGridPulse()
     // Set the root component to be the collision component.
     RootComponent = CollisionComponent;
 
-
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
     ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
@@ -32,21 +28,18 @@ AGridPulse::AGridPulse()
 void AGridPulse::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
 void AGridPulse::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
-void AGridPulse::CastInDirection(const FVector& ShootDirection)
+void AGridPulse::CastInDirection(const FVector& ShootDirection) const
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
 }
-
 
 // void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 // {
@@ -68,6 +61,3 @@ void AGridPulse::CastInDirection(const FVector& ShootDirection)
 //
 //     }*/
 // }
-
-
-

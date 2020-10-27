@@ -7,8 +7,6 @@
 #include "PlayerCharacter.h"
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Bool.h"
 
-class AEnemyController;
-
 UBTService_GetPlayerStatus::UBTService_GetPlayerStatus()
 {
     bCreateNodeInstance = true;
