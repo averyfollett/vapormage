@@ -65,6 +65,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    bAnimIsCasting = false;
+
     SequenceOut(this->InputComponent->GetAxisValue(TEXT("TurnRate")),
                 -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))),
                 Ibr);
@@ -581,6 +583,7 @@ void APlayerCharacter::CastArcaneBoltSpell()
                 const FVector LaunchDirection = CastRotation.Vector();
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
+                bAnimIsCasting = true;
             }
         }
     }
@@ -615,6 +618,7 @@ void APlayerCharacter::CastGridPulseSpell()
                 const FVector LaunchDirection = CastRotation.Vector();
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
+                bAnimIsCasting = true;
             }
         }
     }
@@ -649,6 +653,7 @@ void APlayerCharacter::CastIceKnifeSpell()
                 const FVector LaunchDirection = CastRotation.Vector();
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
+                bAnimIsCasting = true;
             }
         }
     }

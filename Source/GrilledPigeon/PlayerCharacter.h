@@ -219,8 +219,9 @@ class GRILLEDPIGEON_API APlayerCharacter final : public ACharacter
 {
     GENERATED_BODY()
 
+protected:
     /** Pawn mesh: 1st person view (arms; seen only by self) */
-    UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Mesh)
     class USkeletalMeshComponent* Mesh1P;
 
     /** First person camera */
@@ -528,6 +529,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
     float PlayerBlockingTimerLength = 1.0;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
+    bool bAnimIsCasting = false;
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
