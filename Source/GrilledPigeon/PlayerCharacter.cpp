@@ -14,6 +14,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Camera/CameraShake.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -720,12 +721,13 @@ void APlayerCharacter::Cast()
         PRINT("FIRING GRID PULSE");
         CastGridPulseSpell();
 	}
-	if (OutputSequence == Asigs_Efed)
+	if (OutputSequence == Asigs_Edab) //Original left-right = Asigs_Efed
 	{
         PRINT("FIRING TRUE ICE KNIFE");
 		CastIceKnifeSpell();
+		//GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(SHAKE_ASSET_HERE, 1.0f);
 	}
-	if (OutputSequence == Asigs_Edef)
+	if (OutputSequence == Asigs_Efcb) //Original right-left = Asigs_Edef
 	{
 		PRINT("FIRING ARCANE BOLT");
         CastArcaneBoltSpell();
