@@ -511,6 +511,10 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
     {
         UUserWidget * Widget = CreateWidget<UUserWidget>(GetWorld(), LossWidget);
         Widget->AddToViewport();
+        APlayerController * PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        PC->bShowMouseCursor = true;
+        PC->bEnableClickEvents = true; 
+        PC->bEnableMouseOverEvents = true;
     }
 }
 
