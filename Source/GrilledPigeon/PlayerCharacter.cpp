@@ -11,6 +11,7 @@
 #include "ArcaneBolt.h"
 #include "GridPulse.h"
 #include "IceKnife.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
 
@@ -505,6 +506,15 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
         !bWasBlocked)
     {
         CurrentVitality--;
+    }
+    if (CurrentVitality <= 0)
+    {
+        UUserWidget * Widget = CreateWidget<UUserWidget>(GetWorld(), LossWidget);
+        Widget->AddToViewport();
+        APlayerController * PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+        PC->bShowMouseCursor = true;
+        PC->bEnableClickEvents = true; 
+        PC->bEnableMouseOverEvents = true;
     }
 }
 
