@@ -68,8 +68,13 @@ enum EAsigs_State
     //swoop, bottom right -> top right
     Asigs_Ed = Asigs_E | Asigs_D | Asigs_Flip,
     //flick left
-    Asigs_Ef = Asigs_E | Asigs_F
+    Asigs_Ef = Asigs_E | Asigs_F,
     //flick right
+
+	Asigs_Edab = Asigs_E | Asigs_D | Asigs_A | Asigs_B | Asigs_Flip,
+	//quarter circle left up
+	Asigs_Efcb = Asigs_E | Asigs_F | Asigs_C | Asigs_B
+	//quarter circle right up
 };
 
 USTRUCT(BlueprintType)
@@ -437,7 +442,7 @@ protected:
         timer system to delay the concatenation stage
     */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-    int DelayTimerMax = 35; //If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
+    int DelayTimerMax = 10; // WAS AT 35 // If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
 
     /*
      * Current time remaining on delay timer (0 - DelayTimerMax)
