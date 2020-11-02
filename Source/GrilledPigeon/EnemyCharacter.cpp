@@ -4,8 +4,8 @@
 
 #include "EnemyCharacter.h"
 #include "ArcaneBolt.h"
+#include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
-#include "GridPulse.h"
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -14,6 +14,8 @@ AEnemyCharacter::AEnemyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemyCharacter::OnCapsuleBeginOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +25,19 @@ void AEnemyCharacter::BeginPlay()
 
 	EnemyCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
 	PRINT(EnemyCharacter->GetName());
+}
+
+void AEnemyCharacter::RegenerateFocus()
+{
+	if (CurrentFocus < MaxFocus)
+		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+	else if (CurrentFocus > MaxFocus)
+		CurrentFocus = MaxFocus;
+}
+
+void AEnemyCharacter::EndBlockingStatus()
+{
+	EnemyStatus.bIsBlocking = false;
 }
 
 // Called every frame
@@ -154,28 +169,35 @@ void AEnemyCharacter::CastFlamePoolSpell()
 void AEnemyCharacter::BlockSpell()
 {
 	PRINT("Blocking...");
+
+	EnemyStatus.bIsBlocking = true;
+    
+	GetWorldTimerManager().SetTimer(
+        BlockingTimerHandle, this, &AEnemyCharacter::EndBlockingStatus, BlockingTimerLength, false);
 }
 
-void AEnemyCharacter::RegenerateFocus()
+void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
 {
-	if (CurrentFocus < MaxFocus)
-		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
-	else if (CurrentFocus > MaxFocus)
-		CurrentFocus = MaxFocus;
-}
-
-void AEnemyCharacter::DamageAI(const float Damage)
-{
-	if (CurrentFocus > 0)
+	if (CurrentFocus > 0 && bWasBlocked)
 	{
 		CurrentFocus -= Damage;
 	}
-	if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0)
+	if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0 ||
+        !bWasBlocked)
 	{
 		CurrentVitality--;
 	}
+	if (CurrentVitality <= 0)
+	{
+		AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
+		GameMode->SetGameWon();
+		GameMode->CreateWinWidget();
+		
+		//TO DO: Enemy dies
+	}
 }
 
+/*
 void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
 	//hit by grid pulse spell, do following effects
@@ -202,4 +224,15 @@ void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActo
 		DamageAI(ArcaneDamageThreshold);
 	}
 
+}
+*/
+
+void AEnemyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->IsA(IceKnifeSpellClass))
+	{
+		DamageAI(20, EnemyStatus.bIsBlocking);
+	}
+	// Add other spell collision checks here...
 }

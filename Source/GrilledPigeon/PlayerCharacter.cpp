@@ -10,11 +10,11 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "ArcaneBolt.h"
 #include "GridPulse.h"
+#include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
-#include "Camera/CameraShake.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -512,12 +512,11 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
     }
     if (CurrentVitality <= 0)
     {
-        UUserWidget * Widget = CreateWidget<UUserWidget>(GetWorld(), LossWidget);
-        Widget->AddToViewport();
-        APlayerController * PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-        PC->bShowMouseCursor = true;
-        PC->bEnableClickEvents = true; 
-        PC->bEnableMouseOverEvents = true;
+        AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
+        GameMode->SetGameLost();
+        GameMode->CreateLossWidget();
+
+        //TO DO: Kill player
     }
 }
 

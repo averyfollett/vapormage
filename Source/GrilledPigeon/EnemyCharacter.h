@@ -6,6 +6,16 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+USTRUCT(BlueprintType)
+struct FEnemyStatus
+{
+	GENERATED_USTRUCT_BODY()
+    
+    //Contains all player status stuff
+    bool bIsCasting;
+	bool bIsBlocking;
+};
+
 UCLASS()
 class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
 {
@@ -35,44 +45,54 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/*
+	* Run each tick to regenerate enemy's focus up to max based on focus regen speed
+	* Also clamps max current focus to max focus
+	*/
+	UFUNCTION(BlueprintCallable, Category=Health)
+    void RegenerateFocus();
+
+	UFUNCTION(BlueprintCallable, Category=Blocking)
+	void EndBlockingStatus();
+	
 protected:
 	/*
 	* Maximum amount of focus the player can have at any given time
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float MaxFocus = 100;
 
 	/*
 	* Current value of focus (0 - MaxFocus)
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	float CurrentFocus = 20;
 
 	/*
 	* Maximum amount of vitality points the player can have at any given time
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxVitality = 3;
 
 	/*
 	* Current value of vitality points (0 - MaxVitality)
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	int CurrentVitality = 3;
 
 	/*
 	* The speed (focus/sec) at which CurrentFocus is regenerated
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float FocusRegenSpeed = 5;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float VitalityLossThreshold = 0.1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Enemy)
 	class APlayerCharacter * EnemyCharacter;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = CASTING)
 	FVector CastOffset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
@@ -84,18 +104,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> AshBoltSpellClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	float IKDamageThreshold = 15;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	float ArcaneDamageThreshold = 13;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
+	float GridPulseDamageThreshold = 7;
+
+	FTimerHandle BlockingTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
+	float BlockingTimerLength;
+
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-	float IKDamageThreshold = 15;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-	float ArcaneDamageThreshold = 13;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-	float GridPulseDamageThreshold = 7;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
+	FEnemyStatus EnemyStatus;
 
 public:	
 	// Called every frame
@@ -104,15 +132,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+    void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 	// Function to run when blocking
 	UFUNCTION(BlueprintCallable, Category=Combat)
 	void BlockSpell();
 
 	UFUNCTION(BlueprintCallable, Category=Health)
-	void RegenerateFocus();
-
-	UFUNCTION(BlueprintCallable, Category=Health)
-	void DamageAI(float Damage);
+	void DamageAI(float Damage, bool bWasBlocked);
 };

@@ -327,7 +327,7 @@ protected:
     EAsigs_State ConcatSequence();
     
     /*
-     * Run each tick regenerate player's focus up to max based on focus regen speed
+     * Run each tick to regenerate player's focus up to max based on focus regen speed
      * Also clamps max current focus to max focus
      */
     UFUNCTION(BlueprintCallable, Category=Health)
@@ -497,13 +497,13 @@ protected:
     /*
         Offset of spell
     */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
     FVector CastOffset = FVector(50,50,50);
 
     /*
      * Maximum amount of focus the player can have at any given time
      */
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
     float MaxFocus = 100;
 
     /*
@@ -515,7 +515,7 @@ protected:
     /*
      * Maximum amount of vitality points the player can have at any given time
      */
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
     int MaxVitality = 3;
 
     /*
@@ -527,10 +527,10 @@ protected:
     /*
      * The speed (focus/sec) at which CurrentFocus is regenerated
      */
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
     float FocusRegenSpeed = 5;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
     float VitalityLossThreshold = 0.1;
 
     FTimerHandle CastingTimerHandle;
@@ -560,9 +560,6 @@ public:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LockOnSystem)
     FVector EnemyActorLocation;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=UI)
-    TSubclassOf<UUserWidget> LossWidget;
 
 public:
     /** Returns Mesh1P subobject **/
