@@ -382,6 +382,16 @@ protected:
     UFUNCTION(BlueprintCallable, Category=Block)
     void EndBlockingRightStatus();
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_CastSuccess;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_SpellBlocked;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_DamageTaken;
+    
+
 protected:
     /**
      * Whether or not the player's crosshair is locked on to an enemy

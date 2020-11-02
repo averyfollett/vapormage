@@ -502,11 +502,13 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
     if (CurrentFocus > 0 && bWasBlocked)
     {
         CurrentFocus -= Damage;
+        GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_SpellBlocked, 1.0f);
     }
     if ((CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0) ||
         !bWasBlocked)
     {
         CurrentVitality--;
+        GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_DamageTaken, 1.0f);
     }
     if (CurrentVitality <= 0)
     {
@@ -725,12 +727,13 @@ void APlayerCharacter::Cast()
 	{
         PRINT("FIRING TRUE ICE KNIFE");
 		CastIceKnifeSpell();
-		//GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(SHAKE_ASSET_HERE, 1.0f);
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_CastSuccess, 1.0f);
 	}
 	if (OutputSequence == Asigs_Efcb) //Original right-left = Asigs_Edef
 	{
 		PRINT("FIRING ARCANE BOLT");
         CastArcaneBoltSpell();
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_CastSuccess, 1.0f);
 	}
     if (OutputSequence == Asigs_Ef)
     {
