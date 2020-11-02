@@ -327,7 +327,7 @@ protected:
     EAsigs_State ConcatSequence();
     
     /*
-     * Run each tick regenerate player's focus up to max based on focus regen speed
+     * Run each tick to regenerate player's focus up to max based on focus regen speed
      * Also clamps max current focus to max focus
      */
     UFUNCTION(BlueprintCallable, Category=Health)

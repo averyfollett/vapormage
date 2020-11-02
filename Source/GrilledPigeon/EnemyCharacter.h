@@ -35,11 +35,18 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/*
+	* Run each tick to regenerate enemy's focus up to max based on focus regen speed
+	* Also clamps max current focus to max focus
+	*/
+	UFUNCTION(BlueprintCallable, Category=Health)
+    void RegenerateFocus();
+	
 protected:
 	/*
 	* Maximum amount of focus the player can have at any given time
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float MaxFocus = 100;
 
 	/*
@@ -51,7 +58,7 @@ protected:
 	/*
 	* Maximum amount of vitality points the player can have at any given time
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	int MaxVitality = 3;
 
 	/*
@@ -63,16 +70,16 @@ protected:
 	/*
 	* The speed (focus/sec) at which CurrentFocus is regenerated
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float FocusRegenSpeed = 5;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float VitalityLossThreshold = 0.1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Enemy)
 	class APlayerCharacter * EnemyCharacter;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = CASTING)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = CASTING)
 	FVector CastOffset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
@@ -88,13 +95,13 @@ public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float IKDamageThreshold = 15;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float ArcaneDamageThreshold = 13;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float GridPulseDamageThreshold = 7;
 
 public:	
@@ -109,9 +116,6 @@ public:
 	// Function to run when blocking
 	UFUNCTION(BlueprintCallable, Category=Combat)
 	void BlockSpell();
-
-	UFUNCTION(BlueprintCallable, Category=Health)
-	void RegenerateFocus();
 
 	UFUNCTION(BlueprintCallable, Category=Health)
 	void DamageAI(float Damage);

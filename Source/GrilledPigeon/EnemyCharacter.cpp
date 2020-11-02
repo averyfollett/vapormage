@@ -25,6 +25,14 @@ void AEnemyCharacter::BeginPlay()
 	PRINT(EnemyCharacter->GetName());
 }
 
+void AEnemyCharacter::RegenerateFocus()
+{
+	if (CurrentFocus < MaxFocus)
+		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+	else if (CurrentFocus > MaxFocus)
+		CurrentFocus = MaxFocus;
+}
+
 // Called every frame
 void AEnemyCharacter::Tick(const float DeltaTime)
 {
@@ -154,14 +162,6 @@ void AEnemyCharacter::CastFlamePoolSpell()
 void AEnemyCharacter::BlockSpell()
 {
 	PRINT("Blocking...");
-}
-
-void AEnemyCharacter::RegenerateFocus()
-{
-	if (CurrentFocus < MaxFocus)
-		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
-	else if (CurrentFocus > MaxFocus)
-		CurrentFocus = MaxFocus;
 }
 
 void AEnemyCharacter::DamageAI(const float Damage)
