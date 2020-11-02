@@ -6,6 +6,16 @@
 #include "GameFramework/Character.h"
 #include "EnemyCharacter.generated.h"
 
+USTRUCT(BlueprintType)
+struct FEnemyStatus
+{
+	GENERATED_USTRUCT_BODY()
+    
+    //Contains all player status stuff
+    bool bIsCasting;
+	bool bIsBlocking;
+};
+
 UCLASS()
 class GRILLEDPIGEON_API AEnemyCharacter final : public ACharacter
 {
@@ -41,6 +51,9 @@ protected:
 	*/
 	UFUNCTION(BlueprintCallable, Category=Health)
     void RegenerateFocus();
+
+	UFUNCTION(BlueprintCallable, Category=Blocking)
+	void EndBlockingStatus();
 	
 protected:
 	/*
@@ -52,7 +65,7 @@ protected:
 	/*
 	* Current value of focus (0 - MaxFocus)
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	float CurrentFocus = 20;
 
 	/*
@@ -64,7 +77,7 @@ protected:
 	/*
 	* Current value of vitality points (0 - MaxVitality)
 	*/
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
 	int CurrentVitality = 3;
 
 	/*
@@ -91,10 +104,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> AshBoltSpellClass;
 
-public:
-	UPROPERTY(EditAnywhere, Category=Behaviour)
-	class UBehaviorTree * BehaviorTree;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float IKDamageThreshold = 15;
 	
@@ -104,6 +113,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float GridPulseDamageThreshold = 7;
 
+	FTimerHandle BlockingTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
+	float BlockingTimerLength;
+
+public:
+	UPROPERTY(EditAnywhere, Category=Behaviour)
+	class UBehaviorTree * BehaviorTree;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
+	FEnemyStatus EnemyStatus;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -111,12 +132,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
+	UFUNCTION()
+    void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
 	// Function to run when blocking
 	UFUNCTION(BlueprintCallable, Category=Combat)
 	void BlockSpell();
 
 	UFUNCTION(BlueprintCallable, Category=Health)
-	void DamageAI(float Damage);
+	void DamageAI(float Damage, bool bWasBlocked);
 };
