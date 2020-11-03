@@ -15,6 +15,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -44,6 +45,10 @@ APlayerCharacter::APlayerCharacter()
     Mesh1P->CastShadow = false;
     Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
     Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
+
+    PlayerUIComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayerUI"));
+    PlayerUIComponent->SetupAttachment(FirstPersonCameraComponent);
+    
 }
 
 // Called when the game starts or when spawned

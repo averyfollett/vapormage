@@ -233,9 +233,13 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
     class UCameraComponent* FirstPersonCameraComponent;
 
+
 public:
     // Sets default values for this character's properties
     APlayerCharacter();
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = UI)
+    class UWidgetComponent* PlayerUIComponent;
 
 protected:
     // Called when the game starts or when spawned
