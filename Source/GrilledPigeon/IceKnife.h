@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine.h"
+#include "GameFramework/Actor.h"
 #include "IceKnife.generated.h"
 
 UCLASS()
@@ -25,6 +26,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastInDirection(const FVector& ShootDirection) const;
+
+	UFUNCTION()
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LockOnSystem)
 		ACharacter* EnemyActor;*/
