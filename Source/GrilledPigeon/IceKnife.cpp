@@ -50,7 +50,7 @@ void AIceKnife::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
     {
         //Destroy();
         this->Destroy();
-        PRINT("DESTROY THIS");
+        PRINT("destroy ik");
     }
 }
 

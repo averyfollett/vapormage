@@ -43,6 +43,8 @@ AArcaneBolt::AArcaneBolt()
     ProjectileMovementComponent->bIsHomingProjectile = true;
     ProjectileMovementComponent->HomingAccelerationMagnitude = InitialTravelSpeed + TrackingTravelSpeed;
     ProjectileMovementComponent->ProjectileGravityScale = 0;
+
+    CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AArcaneBolt::OnOverlapBegin);
 }
 
 // Called when the game starts or when spawned
@@ -85,6 +87,16 @@ void AArcaneBolt::TargetHoming()
     //PRINT("VelocityToTarget:  " + FString::SanitizeFloat(velocityToTarget.X) + ", " + FString::SanitizeFloat(velocityToTarget.Y) + ", " + FString::SanitizeFloat(velocityToTarget.Z));
     //PRINT("TargetLoc:  " + FString::SanitizeFloat(target.X) + ", " + FString::SanitizeFloat(target.Y) + ", " + FString::SanitizeFloat(target.Z));
     //PRINT("this loc:  " + FString::SanitizeFloat(this->GetActorLocation().X) + ", " + FString::SanitizeFloat(this->GetActorLocation().Y) + ", " + FString::SanitizeFloat(this->GetActorLocation().Z));
+}
+
+void AArcaneBolt::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+    if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
+    {
+        this->Destroy();
+        PRINT("destroy ab");
+    }
 }
 
 void AArcaneBolt::CastInDirection(const FVector& ShootDirection) const
