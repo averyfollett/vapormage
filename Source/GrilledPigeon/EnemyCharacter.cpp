@@ -188,13 +188,10 @@ void AEnemyCharacter::CastAshBoltSpell()
 
 void AEnemyCharacter::CastFlamePoolSpell()
 {
-	PRINT("Enemy: Cast Flame Pool");
 }
 
 void AEnemyCharacter::BlockSpell()
 {
-	PRINT("Blocking...");
-
 	EnemyStatus.bIsBlocking = true;
     
 	GetWorldTimerManager().SetTimer(

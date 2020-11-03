@@ -72,7 +72,7 @@ protected:
 	* Current value of focus (0 - MaxFocus)
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-	float CurrentFocus = 20;
+	float CurrentFocus = 100;
 
 	/*
 	* Maximum amount of vitality points the player can have at any given time
