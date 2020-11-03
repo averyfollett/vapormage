@@ -687,7 +687,7 @@ void APlayerCharacter::EndCastingStatus()
 void APlayerCharacter::BlockLeft()
 {
     PlayerStatus.bIsBlockingLeft = true;
-    sBlockMesh->ToggleVisibility();
+    //sBlockMesh->ToggleVisibility();
 
     GetWorldTimerManager().SetTimer(
        BlockingLeftTimerHandle, this, &APlayerCharacter::EndBlockingLeftStatus, PlayerBlockingTimerLength, false);
@@ -696,13 +696,13 @@ void APlayerCharacter::BlockLeft()
 void APlayerCharacter::EndBlockingLeftStatus()
 {
     PlayerStatus.bIsBlockingLeft = false;
-    sBlockMesh->ToggleVisibility();
+    //sBlockMesh->ToggleVisibility();
 }
 
 void APlayerCharacter::BlockRight()
 {
     PlayerStatus.bIsBlockingRight = true;
-    sBlockMesh->ToggleVisibility();
+    //sBlockMesh->ToggleVisibility();
 
     GetWorldTimerManager().SetTimer(
        BlockingRightTimerHandle, this, &APlayerCharacter::EndBlockingRightStatus, PlayerBlockingTimerLength, false);
@@ -711,7 +711,7 @@ void APlayerCharacter::BlockRight()
 void APlayerCharacter::EndBlockingRightStatus()
 {
     PlayerStatus.bIsBlockingRight = false;
-    sBlockMesh->ToggleVisibility();
+    //sBlockMesh->ToggleVisibility();
 }
 
 void APlayerCharacter::Cast()
