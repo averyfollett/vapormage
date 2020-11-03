@@ -522,10 +522,13 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
 
 void APlayerCharacter::RegenerateFocus()
 {
-    if (CurrentFocus < MaxFocus)
-        CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
-    else if (CurrentFocus > MaxFocus)
-        CurrentFocus = MaxFocus;
+    if (bCanRegenFocus)
+    {
+        if (CurrentFocus < MaxFocus)
+            CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+        else if (CurrentFocus > MaxFocus)
+            CurrentFocus = MaxFocus;
+    }
 }
 
 EAsigs_State APlayerCharacter::ConcatSequence()
@@ -566,8 +569,11 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 void APlayerCharacter::CastArcaneBoltSpell()
 {
     // Attempt to fire a projectile.
-    if (ArcaneBoltSpellClass)
+    if (ArcaneBoltSpellClass &&
+        ArcaneBoltFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= ArcaneBoltFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;
@@ -596,6 +602,7 @@ void APlayerCharacter::CastArcaneBoltSpell()
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
                 bAnimIsCasting = true;
+                DelayBeforeRegen();
             }
         }
     }
@@ -604,8 +611,11 @@ void APlayerCharacter::CastArcaneBoltSpell()
 void APlayerCharacter::CastGridPulseSpell()
 {
     // Attempt to fire a projectile.
-    if (GridPulseSpellClass)
+    if (GridPulseSpellClass &&
+        GridPulseFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= GridPulseFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;
@@ -631,6 +641,7 @@ void APlayerCharacter::CastGridPulseSpell()
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
                 bAnimIsCasting = true;
+                DelayBeforeRegen();
             }
         }
     }
@@ -639,8 +650,11 @@ void APlayerCharacter::CastGridPulseSpell()
 void APlayerCharacter::CastIceKnifeSpell()
 {
     // Attempt to fire a projectile.
-    if (IKSpellClass)
+    if (IKSpellClass &&
+        IceKnifeFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= IceKnifeFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;
@@ -666,6 +680,7 @@ void APlayerCharacter::CastIceKnifeSpell()
                 Projectile->CastInDirection(LaunchDirection);
                 SetCastingStatus(true);
                 bAnimIsCasting = true;
+                DelayBeforeRegen();
             }
         }
     }
@@ -691,6 +706,8 @@ void APlayerCharacter::BlockLeft()
 
     GetWorldTimerManager().SetTimer(
        BlockingLeftTimerHandle, this, &APlayerCharacter::EndBlockingLeftStatus, PlayerBlockingTimerLength, false);
+
+    DelayBeforeRegen();
 }
 
 void APlayerCharacter::EndBlockingLeftStatus()
@@ -706,12 +723,27 @@ void APlayerCharacter::BlockRight()
 
     GetWorldTimerManager().SetTimer(
        BlockingRightTimerHandle, this, &APlayerCharacter::EndBlockingRightStatus, PlayerBlockingTimerLength, false);
+
+    DelayBeforeRegen();
 }
 
 void APlayerCharacter::EndBlockingRightStatus()
 {
     PlayerStatus.bIsBlockingRight = false;
     //sBlockMesh->ToggleVisibility();
+}
+
+void APlayerCharacter::DelayBeforeRegen()
+{
+    bCanRegenFocus = false;
+    
+    GetWorldTimerManager().SetTimer(
+        RegenDelayTimerHandle, this, &APlayerCharacter::SetRegenEnabled, RegenDelayLength, false);
+}
+
+void APlayerCharacter::SetRegenEnabled()
+{
+    bCanRegenFocus = true;
 }
 
 void APlayerCharacter::Cast()

@@ -382,15 +382,11 @@ protected:
     UFUNCTION(BlueprintCallable, Category=Block)
     void EndBlockingRightStatus();
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
-    TSubclassOf<class UCameraShake> CameraShake_CastSuccess;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
-    TSubclassOf<class UCameraShake> CameraShake_SpellBlocked;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
-    TSubclassOf<class UCameraShake> CameraShake_DamageTaken;
-    
+    UFUNCTION(BlueprintCallable, Category=Health)
+    void DelayBeforeRegen();
+
+    UFUNCTION(BlueprintCallable, Category=Health)
+    void SetRegenEnabled();
 
 protected:
     /**
@@ -510,7 +506,7 @@ protected:
      * Current value of focus (0 - MaxFocus)
      */
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Health)
-    float CurrentFocus = 20;
+    float CurrentFocus = 100;
 
     /*
      * Maximum amount of vitality points the player can have at any given time
@@ -550,6 +546,32 @@ protected:
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
     bool bAnimIsCasting = false;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float ArcaneBoltFocusCost = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float GridPulseFocusCost = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float IceKnifeFocusCost = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_CastSuccess;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_SpellBlocked;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=CameraShake)
+    TSubclassOf<class UCameraShake> CameraShake_DamageTaken;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Health)
+    bool bCanRegenFocus = true;
+
+    FTimerHandle RegenDelayTimerHandle;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Health)
+    float RegenDelayLength = 1;
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)

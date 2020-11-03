@@ -54,6 +54,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category=Blocking)
 	void EndBlockingStatus();
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+	void DelayBeforeRegen();
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+	void SetRegenEnabled();
 	
 protected:
 	/*
@@ -66,7 +72,7 @@ protected:
 	* Current value of focus (0 - MaxFocus)
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-	float CurrentFocus = 20;
+	float CurrentFocus = 100;
 
 	/*
 	* Maximum amount of vitality points the player can have at any given time
@@ -116,7 +122,24 @@ protected:
 	FTimerHandle BlockingTimerHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
-	float BlockingTimerLength;
+	float BlockingTimerLength = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float FlamePoolFocusCost = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float SparkFocusCost = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float AshBoltFocusCost = 30;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Health)
+	bool bCanRegenFocus = true;
+
+	FTimerHandle RegenDelayTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Health)
+	float RegenDelayLength = 1;
 
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)

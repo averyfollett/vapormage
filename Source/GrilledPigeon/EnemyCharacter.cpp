@@ -29,15 +29,31 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::RegenerateFocus()
 {
-	if (CurrentFocus < MaxFocus)
-		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
-	else if (CurrentFocus > MaxFocus)
-		CurrentFocus = MaxFocus;
+	if (bCanRegenFocus)
+	{
+		if (CurrentFocus < MaxFocus)
+			CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+		else if (CurrentFocus > MaxFocus)
+			CurrentFocus = MaxFocus;
+	}
 }
 
 void AEnemyCharacter::EndBlockingStatus()
 {
 	EnemyStatus.bIsBlocking = false;
+}
+
+void AEnemyCharacter::DelayBeforeRegen()
+{
+	bCanRegenFocus = false;
+    
+	GetWorldTimerManager().SetTimer(
+        RegenDelayTimerHandle, this, &AEnemyCharacter::SetRegenEnabled, RegenDelayLength, false);
+}
+
+void AEnemyCharacter::SetRegenEnabled()
+{
+	bCanRegenFocus = true;
 }
 
 // Called every frame
@@ -84,6 +100,7 @@ void AEnemyCharacter::CastIceKnifeSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -92,9 +109,12 @@ void AEnemyCharacter::CastIceKnifeSpell()
 void AEnemyCharacter::CastSparkSpell()
 {
 	// Attempt to fire a projectile.
-	if (SparkSpellClass)
+	if (SparkSpellClass &&
+		SparkFocusCost <= CurrentFocus)
 	{
 		PRINT("Enemy: Cast Spark");
+
+		CurrentFocus -= SparkFocusCost;
 
 		// Get the camera transform.
 		FVector CameraLocation;
@@ -120,6 +140,7 @@ void AEnemyCharacter::CastSparkSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -128,9 +149,12 @@ void AEnemyCharacter::CastSparkSpell()
 void AEnemyCharacter::CastAshBoltSpell()
 {
 	// Attempt to fire a projectile.
-	if (AshBoltSpellClass)
+	if (AshBoltSpellClass &&
+		AshBoltFocusCost <= CurrentFocus)
 	{
 		PRINT("Enemy: Cast Ash Bolt");
+
+		CurrentFocus -= AshBoltFocusCost;
 
 		// Get the camera transform.
 		FVector CameraLocation;
@@ -156,6 +180,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -163,17 +188,16 @@ void AEnemyCharacter::CastAshBoltSpell()
 
 void AEnemyCharacter::CastFlamePoolSpell()
 {
-	PRINT("Enemy: Cast Flame Pool");
 }
 
 void AEnemyCharacter::BlockSpell()
 {
-	PRINT("Blocking...");
-
 	EnemyStatus.bIsBlocking = true;
     
 	GetWorldTimerManager().SetTimer(
         BlockingTimerHandle, this, &AEnemyCharacter::EndBlockingStatus, BlockingTimerLength, false);
+
+	DelayBeforeRegen();
 }
 
 void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
