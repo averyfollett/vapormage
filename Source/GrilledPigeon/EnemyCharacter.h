@@ -54,6 +54,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category=Blocking)
 	void EndBlockingStatus();
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+	void DelayBeforeRegen();
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+	void SetRegenEnabled();
 	
 protected:
 	/*
@@ -116,7 +122,7 @@ protected:
 	FTimerHandle BlockingTimerHandle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
-	float BlockingTimerLength;
+	float BlockingTimerLength = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
 	float FlamePoolFocusCost = 30;
@@ -126,6 +132,14 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
 	float AshBoltFocusCost = 30;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Health)
+	bool bCanRegenFocus = true;
+
+	FTimerHandle RegenDelayTimerHandle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Health)
+	float RegenDelayLength = 1;
 
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)

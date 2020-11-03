@@ -29,15 +29,31 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::RegenerateFocus()
 {
-	if (CurrentFocus < MaxFocus)
-		CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
-	else if (CurrentFocus > MaxFocus)
-		CurrentFocus = MaxFocus;
+	if (bCanRegenFocus)
+	{
+		if (CurrentFocus < MaxFocus)
+			CurrentFocus += FocusRegenSpeed * GetWorld()->GetDeltaSeconds();
+		else if (CurrentFocus > MaxFocus)
+			CurrentFocus = MaxFocus;
+	}
 }
 
 void AEnemyCharacter::EndBlockingStatus()
 {
 	EnemyStatus.bIsBlocking = false;
+}
+
+void AEnemyCharacter::DelayBeforeRegen()
+{
+	bCanRegenFocus = false;
+    
+	GetWorldTimerManager().SetTimer(
+        RegenDelayTimerHandle, this, &AEnemyCharacter::SetRegenEnabled, RegenDelayLength, false);
+}
+
+void AEnemyCharacter::SetRegenEnabled()
+{
+	bCanRegenFocus = true;
 }
 
 // Called every frame
@@ -84,6 +100,7 @@ void AEnemyCharacter::CastIceKnifeSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -123,6 +140,7 @@ void AEnemyCharacter::CastSparkSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -162,6 +180,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 				const FVector LaunchDirection = CastRotation.Vector();
 				Projectile->CastInDirection(LaunchDirection);
 				//SetCastingStatus(true);
+				DelayBeforeRegen();
 			}
 		}
 	}
@@ -180,6 +199,8 @@ void AEnemyCharacter::BlockSpell()
     
 	GetWorldTimerManager().SetTimer(
         BlockingTimerHandle, this, &AEnemyCharacter::EndBlockingStatus, BlockingTimerLength, false);
+
+	DelayBeforeRegen();
 }
 
 void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
