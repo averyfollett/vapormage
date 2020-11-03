@@ -533,6 +533,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
     float VitalityLossThreshold = 0.1;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+    class UStaticMeshComponent* sBlockMesh;
+
     FTimerHandle CastingTimerHandle;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Combat)
