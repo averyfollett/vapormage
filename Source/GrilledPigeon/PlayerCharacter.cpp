@@ -566,8 +566,11 @@ EAsigs_State APlayerCharacter::ConcatSequence()
 void APlayerCharacter::CastArcaneBoltSpell()
 {
     // Attempt to fire a projectile.
-    if (ArcaneBoltSpellClass)
+    if (ArcaneBoltSpellClass &&
+        ArcaneBoltFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= ArcaneBoltFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;
@@ -604,8 +607,11 @@ void APlayerCharacter::CastArcaneBoltSpell()
 void APlayerCharacter::CastGridPulseSpell()
 {
     // Attempt to fire a projectile.
-    if (GridPulseSpellClass)
+    if (GridPulseSpellClass &&
+        GridPulseFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= GridPulseFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;
@@ -639,8 +645,11 @@ void APlayerCharacter::CastGridPulseSpell()
 void APlayerCharacter::CastIceKnifeSpell()
 {
     // Attempt to fire a projectile.
-    if (IKSpellClass)
+    if (IKSpellClass &&
+        IceKnifeFocusCost <= CurrentFocus)
     {
+        CurrentFocus -= IceKnifeFocusCost;
+        
         // Get the camera transform.
         FVector CameraLocation;
         FRotator CameraRotation;

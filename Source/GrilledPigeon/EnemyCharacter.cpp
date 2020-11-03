@@ -92,9 +92,12 @@ void AEnemyCharacter::CastIceKnifeSpell()
 void AEnemyCharacter::CastSparkSpell()
 {
 	// Attempt to fire a projectile.
-	if (SparkSpellClass)
+	if (SparkSpellClass &&
+		SparkFocusCost <= CurrentFocus)
 	{
 		PRINT("Enemy: Cast Spark");
+
+		CurrentFocus -= SparkFocusCost;
 
 		// Get the camera transform.
 		FVector CameraLocation;
@@ -128,9 +131,12 @@ void AEnemyCharacter::CastSparkSpell()
 void AEnemyCharacter::CastAshBoltSpell()
 {
 	// Attempt to fire a projectile.
-	if (AshBoltSpellClass)
+	if (AshBoltSpellClass &&
+		AshBoltFocusCost <= CurrentFocus)
 	{
 		PRINT("Enemy: Cast Ash Bolt");
+
+		CurrentFocus -= AshBoltFocusCost;
 
 		// Get the camera transform.
 		FVector CameraLocation;

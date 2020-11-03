@@ -118,6 +118,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Blocking)
 	float BlockingTimerLength;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float FlamePoolFocusCost = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float SparkFocusCost = 30;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+	float AshBoltFocusCost = 30;
+
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;

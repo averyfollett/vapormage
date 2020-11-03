@@ -551,6 +551,15 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Animation)
     bool bAnimIsCasting = false;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float ArcaneBoltFocusCost = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float GridPulseFocusCost = 30;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FocusCosts)
+    float IceKnifeFocusCost = 30;
+
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
     FPlayerStatus PlayerStatus;
