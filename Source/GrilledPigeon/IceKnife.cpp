@@ -3,6 +3,9 @@
 #include "IceKnife.h"
 #include "PlayerCharacter.h"
 
+#define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
+
+
 // Sets default values
 AIceKnife::AIceKnife()
 {
@@ -24,6 +27,8 @@ AIceKnife::AIceKnife()
     ProjectileMovementComponent->bShouldBounce = false;
     //ProjectileMovementComponent->Bounciness = 0.3f;
 	ProjectileMovementComponent->ProjectileGravityScale = 0;
+
+    CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AIceKnife::OnOverlapBegin);
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +41,17 @@ void AIceKnife::BeginPlay()
 void AIceKnife::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AIceKnife::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+    if (OtherActor != nullptr && OtherActor != this && OtherComp != nullptr)
+    {
+        //Destroy();
+        this->Destroy();
+        PRINT("destroy ik");
+    }
 }
 
 void AIceKnife::CastInDirection(const FVector& ShootDirection) const
