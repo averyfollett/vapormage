@@ -7,7 +7,11 @@
 #include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
 #include "PlayerCharacter.h"
+#include "PlayerUI.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/Class.h"
+#include "Blueprint/UserWidget.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -43,6 +47,15 @@ void AEnemyCharacter::EndBlockingStatus()
 	EnemyStatus.bIsBlocking = false;
 }
 
+void AEnemyCharacter::ShowBlockIndicator(int direction)
+{
+	//TESTING: call a function in the player's UI to pop up a Block Direction indicator.
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	UWidgetComponent* WidgeyBoi = PlayerCharacter->PlayerUIComponent;
+	UUserWidget* PlayerUI = WidgeyBoi->GetUserWidgetObject();
+	UPlayerUI* PlayerUI2 = Cast<UPlayerUI>(PlayerUI);
+	
+	PlayerUI2->ActivateBlockIndicator(direction);
 void AEnemyCharacter::DelayBeforeRegen()
 {
 	bCanRegenFocus = false;
@@ -115,6 +128,8 @@ void AEnemyCharacter::CastSparkSpell()
 		PRINT("Enemy: Cast Spark");
 
 		CurrentFocus -= SparkFocusCost;
+		//Displays LEFT block.
+		ShowBlockIndicator(3);
 
 		// Get the camera transform.
 		FVector CameraLocation;
@@ -153,6 +168,9 @@ void AEnemyCharacter::CastAshBoltSpell()
 		AshBoltFocusCost <= CurrentFocus)
 	{
 		PRINT("Enemy: Cast Ash Bolt");
+		
+		//Displays RIGHT block.
+		ShowBlockIndicator(1);
 
 		CurrentFocus -= AshBoltFocusCost;
 

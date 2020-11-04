@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Blueprint/UserWidget.h"
 #include "EnemyCharacter.generated.h"
 
 USTRUCT(BlueprintType)
@@ -55,6 +56,8 @@ protected:
 	UFUNCTION(BlueprintCallable, Category=Blocking)
 	void EndBlockingStatus();
 
+	UFUNCTION(BlueprintCallable, Category=Blocking)
+	void ShowBlockIndicator(int direction);
 	UFUNCTION(BlueprintCallable, Category=Health)
 	void DelayBeforeRegen();
 
@@ -63,7 +66,7 @@ protected:
 	
 protected:
 	/*
-	* Maximum amount of focus the player can have at any given time
+	* Maximum amount of focus the enemy can have at any given time
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float MaxFocus = 100;
