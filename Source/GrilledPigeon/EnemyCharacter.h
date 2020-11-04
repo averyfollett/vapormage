@@ -57,7 +57,7 @@ protected:
 	void EndBlockingStatus();
 
 	UFUNCTION(BlueprintCallable, Category=Blocking)
-	void ShowBlockIndicator(int direction);
+	void ShowBlockIndicator(int Direction) const;
 	UFUNCTION(BlueprintCallable, Category=Health)
 	void DelayBeforeRegen();
 

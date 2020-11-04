@@ -9,7 +9,6 @@
 #include "PlayerCharacter.h"
 #include "PlayerUI.h"
 #include "Kismet/GameplayStatics.h"
-#include "UObject/Class.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
 
@@ -47,15 +46,17 @@ void AEnemyCharacter::EndBlockingStatus()
 	EnemyStatus.bIsBlocking = false;
 }
 
-void AEnemyCharacter::ShowBlockIndicator(int direction)
+void AEnemyCharacter::ShowBlockIndicator(const int Direction) const
 {
 	//TESTING: call a function in the player's UI to pop up a Block Direction indicator.
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	UWidgetComponent* WidgeyBoi = PlayerCharacter->PlayerUIComponent;
-	UUserWidget* PlayerUI = WidgeyBoi->GetUserWidgetObject();
+	UWidgetComponent* PlayerWidgetComponent= PlayerCharacter->PlayerUIComponent;
+	UUserWidget* PlayerUI = PlayerWidgetComponent->GetUserWidgetObject();
 	UPlayerUI* PlayerUI2 = Cast<UPlayerUI>(PlayerUI);
 	
-	PlayerUI2->ActivateBlockIndicator(direction);
+	PlayerUI2->ActivateBlockIndicator(Direction);
+}
+	
 void AEnemyCharacter::DelayBeforeRegen()
 {
 	bCanRegenFocus = false;
@@ -206,6 +207,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 
 void AEnemyCharacter::CastFlamePoolSpell()
 {
+	//TO DO: Cast flame pool
 }
 
 void AEnemyCharacter::BlockSpell()
