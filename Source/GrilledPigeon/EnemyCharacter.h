@@ -143,6 +143,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Health)
 	float RegenDelayLength = 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Health)
+	bool bCanTakeDamage = true;
 
 public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
