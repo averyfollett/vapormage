@@ -28,6 +28,9 @@ void AEnemyCharacter::BeginPlay()
 
 	EnemyCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
 	PRINT(EnemyCharacter->GetName());
+
+	CurrentVitality = MaxVitality;
+	CurrentFocus = MaxFocus;
 }
 
 void AEnemyCharacter::RegenerateFocus()
