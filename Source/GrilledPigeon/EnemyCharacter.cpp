@@ -222,22 +222,25 @@ void AEnemyCharacter::BlockSpell()
 
 void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
 {
-	if (CurrentFocus > 0 && bWasBlocked)
+	if (bCanTakeDamage)
 	{
-		CurrentFocus -= Damage;
-	}
-	if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0 ||
-        !bWasBlocked)
-	{
-		CurrentVitality--;
-	}
-	if (CurrentVitality <= 0)
-	{
-		AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
-		GameMode->SetGameWon();
-		GameMode->CreateWinWidget();
+		if (CurrentFocus > 0 && bWasBlocked)
+		{
+			CurrentFocus -= Damage;
+		}
+		if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0 ||
+            !bWasBlocked)
+		{
+			CurrentVitality--;
+		}
+		if (CurrentVitality <= 0)
+		{
+			AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
+			GameMode->SetGameWon();
+			GameMode->CreateWinWidget();
 		
-		//TO DO: Enemy dies
+			//TO DO: Enemy dies
+		}
 	}
 }
 
