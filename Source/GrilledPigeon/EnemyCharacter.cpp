@@ -6,6 +6,7 @@
 #include "ArcaneBolt.h"
 #include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
+#include "ArcaneBolt.h"
 #include "PlayerCharacter.h"
 #include "PlayerUI.h"
 #include "Kismet/GameplayStatics.h"
@@ -277,6 +278,10 @@ void AEnemyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp,
 	if (OtherActor->IsA(IceKnifeSpellClass))
 	{
 		DamageAI(20, EnemyStatus.bIsBlocking);
+	}
+	if (OtherActor->IsA(ArcaneBoltSpellClass))
+	{
+		DamageAI(25, EnemyStatus.bIsBlocking);
 	}
 	// Add other spell collision checks here...
 }
