@@ -69,25 +69,25 @@ protected:
 	* Maximum amount of focus the enemy can have at any given time
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
-	float MaxFocus = 100;
+	float MaxFocus;
 
 	/*
 	* Current value of focus (0 - MaxFocus)
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-	float CurrentFocus = 100;
+	float CurrentFocus;
 
 	/*
 	* Maximum amount of vitality points the player can have at any given time
 	*/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
-	int MaxVitality = 3;
+	int MaxVitality;
 
 	/*
 	* Current value of vitality points (0 - MaxVitality)
 	*/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Health)
-	int CurrentVitality = 3;
+	int CurrentVitality;
 
 	/*
 	* The speed (focus/sec) at which CurrentFocus is regenerated
