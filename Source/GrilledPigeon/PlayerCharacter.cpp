@@ -212,7 +212,7 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
 
     // Interpolate between current and target rotation
     const FRotator NewRotation = FMath::RInterpTo
-        (GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
+        (GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 100.0f);
 
     // Set rotation to interpolated rotation
     GetController()->SetControlRotation(NewRotation);
