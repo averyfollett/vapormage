@@ -3,6 +3,9 @@
 #define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
 #include "GrilledPigeonGameMode.h"
+
+#include "EnemyCharacter.h"
+#include "EnemyController.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/HUD.h"
 #include "Blueprint/UserWidget.h"
@@ -24,11 +27,13 @@ AGrilledPigeonGameMode::AGrilledPigeonGameMode()
 void AGrilledPigeonGameMode::SetGameLost()
 {
     bIsGameLost = true;
+    PauseAllEnemies();
 }
 
 void AGrilledPigeonGameMode::SetGameWon()
 {
     bIsGameWon = true;
+    PauseAllEnemies();
 }
 
 void AGrilledPigeonGameMode::CreateLossWidget() const
@@ -49,4 +54,14 @@ void AGrilledPigeonGameMode::CreateWinWidget() const
     PC->bShowMouseCursor = true;
     PC->bEnableClickEvents = true; 
     PC->bEnableMouseOverEvents = true;
+}
+
+void AGrilledPigeonGameMode::PauseAllEnemies() const
+{
+    TArray<AActor*> EnemyActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyCharacter::StaticClass(), EnemyActors);
+    for (auto It = EnemyActors.begin(); It != EnemyActors.end(); It.operator++())
+    {
+        Cast<AEnemyController>(Cast<AEnemyCharacter>(*It)->GetController())->PauseBehaviourTree();
+    }
 }

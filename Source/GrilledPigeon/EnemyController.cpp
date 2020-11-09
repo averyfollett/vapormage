@@ -15,6 +15,11 @@ AEnemyController::AEnemyController()
     BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComponent"));
 }
 
+void AEnemyController::PauseBehaviourTree() const
+{
+    BehaviorTreeComponent->PauseLogic("Pause");
+}
+
 void AEnemyController::UnPauseBehaviourTree() const
 {
     BehaviorTreeComponent->ResumeLogic("Resume");
