@@ -21,12 +21,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category=Sound)
+    void PlayRandomCastSound();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category=Cast)
-	void CastInDirection(const FVector& ShootDirection) const;
+	void CastInDirection(const FVector& ShootDirection);
 
 	/*
 		target locked in direction to do pushback onto the target
@@ -51,4 +54,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float ImpactForce = 200.0f;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sound)
+	TArray<USoundCue*> CastSoundArray;
 };

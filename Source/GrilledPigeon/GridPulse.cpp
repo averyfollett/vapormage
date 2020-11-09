@@ -30,15 +30,24 @@ void AGridPulse::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AGridPulse::PlayRandomCastSound()
+{
+	UGameplayStatics::PlaySound2D(
+        GetWorld(),
+        CastSoundArray[FMath::RandRange(0, CastSoundArray.Num() - 1)]
+        );
+}
+
 // Called every frame
 void AGridPulse::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AGridPulse::CastInDirection(const FVector& ShootDirection) const
+void AGridPulse::CastInDirection(const FVector& ShootDirection)
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+	PlayRandomCastSound();
 }
 
 // void AIceKnife::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
