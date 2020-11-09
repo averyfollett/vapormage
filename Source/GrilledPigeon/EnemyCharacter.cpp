@@ -235,6 +235,7 @@ void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
             !bWasBlocked)
 		{
 			CurrentVitality--;
+			CurrentFocus = MaxFocus;
 		}
 		if (CurrentVitality <= 0)
 		{

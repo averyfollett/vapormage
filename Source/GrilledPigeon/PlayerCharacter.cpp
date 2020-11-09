@@ -513,6 +513,7 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
         !bWasBlocked)
     {
         CurrentVitality--;
+        CurrentFocus = MaxFocus;
         GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_DamageTaken, 1.0f);
     }
     if (CurrentVitality <= 0)
