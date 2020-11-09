@@ -19,6 +19,9 @@ public:
     AEnemyController();
 
     UFUNCTION(BlueprintCallable)
+    void PauseBehaviourTree() const;
+
+    UFUNCTION(BlueprintCallable)
     void UnPauseBehaviourTree() const;
 
     virtual void OnPossess(APawn* InPawn) override;

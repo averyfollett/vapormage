@@ -26,6 +26,9 @@ public:
     UFUNCTION(BlueprintCallable, Category=UI)
     void CreateWinWidget() const;
 
+    UFUNCTION(BlueprintCallable, Category=State)
+    void PauseAllEnemies() const;
+
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=State)
     bool bIsGameLost = false;
