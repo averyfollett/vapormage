@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "IceKnife.h"
-#include "PlayerCharacter.h"
-
 #define PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text)
 
+#include "IceKnife.h"
+#include "PlayerCharacter.h"
 
 // Sets default values
 AIceKnife::AIceKnife()
@@ -37,6 +36,14 @@ void AIceKnife::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AIceKnife::PlayRandomCastSound()
+{
+    UGameplayStatics::PlaySound2D(
+        GetWorld(),
+        CastSoundArray[FMath::RandRange(0, CastSoundArray.Num() - 1)]
+        );
+}
+
 // Called every frame
 void AIceKnife::Tick(float DeltaTime)
 {
@@ -54,7 +61,8 @@ void AIceKnife::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
     }
 }
 
-void AIceKnife::CastInDirection(const FVector& ShootDirection) const
+void AIceKnife::CastInDirection(const FVector& ShootDirection)
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+    PlayRandomCastSound();
 }

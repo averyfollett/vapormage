@@ -57,6 +57,14 @@ void AArcaneBolt::BeginPlay()
     ProjectileMovementComponent->HomingTargetComponent = Wizard->GetEnemyActor()->GetRootComponent();
 }
 
+void AArcaneBolt::PlayRandomCastSound()
+{
+    UGameplayStatics::PlaySound2D(
+        GetWorld(),
+        CastSoundArray[FMath::RandRange(0, CastSoundArray.Num() - 1)]
+        );
+}
+
 // Called every frame
 void AArcaneBolt::Tick(const float DeltaTime)
 {
@@ -99,7 +107,8 @@ void AArcaneBolt::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, clas
     }
 }
 
-void AArcaneBolt::CastInDirection(const FVector& ShootDirection) const
+void AArcaneBolt::CastInDirection(const FVector& ShootDirection)
 {
 	ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+    PlayRandomCastSound();
 }
