@@ -15,6 +15,11 @@ AEnemyController::AEnemyController()
     BehaviorTreeComponent = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComponent"));
 }
 
+void AEnemyController::UnPauseBehaviourTree() const
+{
+    BehaviorTreeComponent->ResumeLogic("Resume");
+}
+
 void AEnemyController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
@@ -32,5 +37,9 @@ void AEnemyController::OnPossess(APawn* InPawn)
         TargetPositionKeyID = BlackboardComponent->GetKeyID("TargetPosition");
 
         BehaviorTreeComponent->StartTree(*Char->BehaviorTree);
+        if (bStartBehaviorTreePaused)
+        {
+            BehaviorTreeComponent->PauseLogic("Delay");
+        }
     }
 }

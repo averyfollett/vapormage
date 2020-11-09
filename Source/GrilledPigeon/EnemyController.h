@@ -15,6 +15,20 @@ class GRILLEDPIGEON_API AEnemyController final : public AAIController
 {
 	GENERATED_BODY()
 
+public:
+    AEnemyController();
+
+    UFUNCTION(BlueprintCallable)
+    void UnPauseBehaviourTree() const;
+
+    virtual void OnPossess(APawn* InPawn) override;
+
+public:
+    uint8 EnemyKeyID;
+    uint8 SelfKeyID;
+    uint8 ShouldBlockKeyID;
+    uint8 TargetPositionKeyID;
+
 protected:
     UPROPERTY(Transient)
     class UBlackboardComponent * BlackboardComponent;
@@ -22,13 +36,6 @@ protected:
     UPROPERTY(Transient)
     class UBehaviorTreeComponent * BehaviorTreeComponent;
 
-public:
-    AEnemyController();
-
-    virtual void OnPossess(APawn* InPawn) override;
-
-    uint8 EnemyKeyID;
-    uint8 SelfKeyID;
-    uint8 ShouldBlockKeyID;
-    uint8 TargetPositionKeyID;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=BehaviorTree)
+    bool bStartBehaviorTreePaused = true;
 };
