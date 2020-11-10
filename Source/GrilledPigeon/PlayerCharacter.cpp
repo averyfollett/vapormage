@@ -767,13 +767,13 @@ void APlayerCharacter::Cast()
         PRINT("FIRING GRID PULSE");
         CastGridPulseSpell();
 	}
-	if (OutputSequence == Asigs_Edab) //Original left-right = Asigs_Efed
+	if (OutputSequence == Asigs_Edab || OutputSequence == Asigs_Edabc)
 	{
         PRINT("FIRING TRUE ICE KNIFE");
 		CastIceKnifeSpell();
 		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_CastSuccess, 1.0f);
 	}
-	if (OutputSequence == Asigs_Efcb) //Original right-left = Asigs_Edef
+	if (OutputSequence == Asigs_Efcb || OutputSequence == Asigs_Efcba)
 	{
 		PRINT("FIRING ARCANE BOLT");
         CastArcaneBoltSpell();

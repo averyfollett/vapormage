@@ -72,9 +72,14 @@ enum EAsigs_State
     //flick right
 
 	Asigs_Edab = Asigs_E | Asigs_D | Asigs_A | Asigs_B | Asigs_Flip,
-	//quarter circle left up
-	Asigs_Efcb = Asigs_E | Asigs_F | Asigs_C | Asigs_B
-	//quarter circle right up
+    //quarter circle left up
+    Asigs_Edabc = Asigs_E | Asigs_D | Asigs_A | Asigs_B | Asigs_C | Asigs_Flip,
+    //quarter circle left up - overshoot
+    
+	Asigs_Efcb = Asigs_E | Asigs_F | Asigs_C | Asigs_B,
+    //quarter circle right up
+    Asigs_Efcba = Asigs_E | Asigs_F | Asigs_C | Asigs_B | Asigs_A
+    //quarter circle right up - overshoot
 };
 
 USTRUCT(BlueprintType)
