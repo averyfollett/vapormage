@@ -119,7 +119,10 @@ void APlayerCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp
     {
         DamagePlayer(20, PlayerStatus.bIsBlockingLeft);
     }
-    // Add other spell collision checks here...
+    if (OtherActor->IsA(ArcaneBoltSpellClass))
+    {
+        DamagePlayer(25, PlayerStatus.bIsBlockingRight);
+    }
 }
 
 void APlayerCharacter::MoveForward(float Value)

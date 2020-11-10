@@ -113,6 +113,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> AshBoltSpellClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
+	TSubclassOf<class AIceKnife> ArcaneBoltSpellClass;					//we need this even though this guy doesnt fire it in order to take damage from it
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float IKDamageThreshold = 15;
 	
