@@ -359,25 +359,19 @@ protected:
         accessing spell class of arcane bolt
     */
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
-        TSubclassOf<class AArcaneBolt> ArcaneBoltSpellClass;
+    TSubclassOf<class AArcaneBolt> ArcaneBoltSpellClass;
 
     /*
         accessing spell class of grid pulse
     */
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
-        TSubclassOf<class AGridPulse> GridPulseSpellClass;
+    TSubclassOf<class AGridPulse> GridPulseSpellClass;
 
 	/*
 		accessing spell class of ice knife
 	*/
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
     TSubclassOf<class AIceKnife> IKSpellClass;
-
-    /*
-        accessing spell class of ash bolt
-    */
-    UPROPERTY(EditDefaultsOnly, Category = CASTING)
-    TSubclassOf<class AAshBolt> AshBoltSpellClass;
 
     UFUNCTION(BlueprintCallable, Category=Cast)
     void SetCastingStatus(const bool B);
