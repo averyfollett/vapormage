@@ -116,17 +116,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 void APlayerCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-    if (OtherActor->IsA(IKSpellClass))
+    if (OtherActor->IsA(AIceKnife::StaticClass()))
     {
         DamagePlayer(20, PlayerStatus.bIsBlockingLeft);
     }
-    if (OtherActor->IsA(ArcaneBoltSpellClass))
+    if (OtherActor->IsA(AArcaneBolt::StaticClass()))
     {
         DamagePlayer(25, PlayerStatus.bIsBlockingRight);
     }
-    if (OtherActor->IsA(AshBoltSpellClass))
+    if (OtherActor->IsA(AAshBolt::StaticClass()))
     {
-        DamagePlayer(25, PlayerStatus.bIsBlockingRight);
+        DamagePlayer(25, PlayerStatus.bIsBlockingRight || PlayerStatus.bIsBlockingLeft);
     }
 }
 

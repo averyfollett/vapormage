@@ -136,6 +136,7 @@ void AEnemyCharacter::CastSparkSpell()
 		CurrentFocus -= SparkFocusCost;
 		//Displays LEFT block.
 		ShowBlockIndicator(3);
+		ShowBlockIndicator(1);
 
 		// Get the camera transform.
 		FVector CameraLocation;
@@ -177,6 +178,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 		
 		//Displays RIGHT block.
 		ShowBlockIndicator(1);
+		ShowBlockIndicator(3);
 
 		CurrentFocus -= AshBoltFocusCost;
 
