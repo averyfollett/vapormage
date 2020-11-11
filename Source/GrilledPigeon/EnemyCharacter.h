@@ -28,10 +28,6 @@ public:
 
 	//Spell to be cast
 	UFUNCTION(BlueprintCallable, Category=Cast)
-	void CastIceKnifeSpell();
-
-	//Spell to be cast
-	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastSparkSpell();
 
 	//Spell to be cast
@@ -105,16 +101,10 @@ protected:
 	FVector CastOffset;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> IceKnifeSpellClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AAshBolt> SparkSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AAshBolt> AshBoltSpellClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> ArcaneBoltSpellClass;					//we need this even though this guy doesnt fire it in order to take damage from it
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 	float IKDamageThreshold = 15;
@@ -163,8 +153,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
     void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

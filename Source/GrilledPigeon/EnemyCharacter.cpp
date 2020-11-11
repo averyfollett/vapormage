@@ -88,43 +88,6 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AEnemyCharacter::CastIceKnifeSpell()
-{
-	// Attempt to fire a projectile.
-	if (IceKnifeSpellClass)
-	{
-		PRINT("Enemy: Cast Ice Knife");
-
-		// Get the camera transform.
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		GetActorEyesViewPoint(CameraLocation, CameraRotation);
-
-		// Transform MuzzleOffset from camera space to world space.
-		const FVector CastLocation = CameraLocation + FTransform(CameraRotation).TransformVector(CastOffset);
-		FRotator CastRotation = CameraRotation;
-
-		CastRotation.Pitch = 0.0f;  //we want a straight shot with no grav
-		UWorld* World = GetWorld();
-		if (World)
-		{
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
-			SpawnParams.Instigator = GetInstigator();
-			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
-			if (Projectile)
-			{
-				// Set the projectile's initial trajectory.
-				const FVector LaunchDirection = CastRotation.Vector();
-				Projectile->CastInDirection(LaunchDirection);
-				//SetCastingStatus(true);
-				DelayBeforeRegen();
-			}
-		}
-	}
-}
-
 void AEnemyCharacter::CastSparkSpell()
 {
 	// Attempt to fire a projectile.
@@ -252,44 +215,14 @@ void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
 	}
 }
 
-/*
-void AEnemyCharacter::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
-{
-	//hit by grid pulse spell, do following effects
-    if (OtherActor->IsA(AGridPulse::StaticClass()))
-    {
-		//knock back
-		HitComponent->AddImpulseAtLocation(-GetActorForwardVector() * 300.0f, Hit.ImpactPoint);
-		
-		//vitality effects
-		DamageAI(GridPulseDamageThreshold);
-    }
-
-	//hit by ice knife spell, do following effects
-    if (OtherActor->IsA(AIceKnife::StaticClass()))
-    {
-		//vitality effects
-		DamageAI(IKDamageThreshold);
-    }
-
-	//hit by arcane bolt spell, do following effects
-	if (OtherActor->IsA(AArcaneBolt::StaticClass()))
-	{
-		//vitality effects
-		DamageAI(ArcaneDamageThreshold);
-	}
-
-}
-*/
-
 void AEnemyCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->IsA(IceKnifeSpellClass))
+	if (OtherActor->IsA(AIceKnife::StaticClass()))
 	{
 		DamageAI(20, EnemyStatus.bIsBlocking);
 	}
-	if (OtherActor->IsA(ArcaneBoltSpellClass))
+	if (OtherActor->IsA(AArcaneBolt::StaticClass()))
 	{
 		DamageAI(25, EnemyStatus.bIsBlocking);
 	}

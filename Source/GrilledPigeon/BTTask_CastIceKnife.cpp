@@ -15,7 +15,7 @@ EBTNodeResult::Type UBTTask_CastIceKnife::ExecuteTask(UBehaviorTreeComponent& Ow
     AEnemyCharacter * Char = Cast<AEnemyCharacter>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>("SelfActor"));
 
     // call block function on character
-    Char->CastIceKnifeSpell();
+    //Char->CastIceKnifeSpell();
 
     return EBTNodeResult::Succeeded;
 }

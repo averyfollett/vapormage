@@ -787,7 +787,7 @@ void APlayerCharacter::Cast()
     if (OutputSequence == Asigs_Ef)
     {
         PRINT("BLOCKING RIGHT");
-        //TO DO: call block function
+        BlockRight();
     }
     if (OutputSequence == Asigs_Ed)
     {
