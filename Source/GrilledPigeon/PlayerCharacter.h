@@ -217,8 +217,13 @@ struct FPlayerStatus
     GENERATED_USTRUCT_BODY()
     
     //Contains all player status stuff
+    UPROPERTY(BlueprintReadWrite)
     bool bIsCasting;
+
+    UPROPERTY(BlueprintReadWrite)
     bool bIsBlockingLeft;
+
+    UPROPERTY(BlueprintReadWrite)
     bool bIsBlockingRight;
 };
 
@@ -583,7 +588,7 @@ protected:
     float RegenDelayLength = 1;
 
 public:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Status)
     FPlayerStatus PlayerStatus;
 
     /**
