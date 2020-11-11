@@ -198,7 +198,7 @@ AActor* APlayerCharacter::CapsuleTraceForEnemy() const
         GetForwardVector() * 1500.0f);
     FCollisionShape Capsule = FCollisionShape::MakeCapsule(FVector(100.0f, 100.0f, 100.0f));
     const FName TraceTag("LockOnTrace");
-    GetWorld()->DebugDrawTraceTag = TraceTag;
+    //GetWorld()->DebugDrawTraceTag = TraceTag;
     FCollisionQueryParams CollisionParams;
     CollisionParams.TraceTag = TraceTag;
 
@@ -220,7 +220,7 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
 
     // Interpolate between current and target rotation
     const FRotator NewRotation = FMath::RInterpTo
-        (GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 100.0f);
+        (GetActorRotation(), TargetRotation, GetWorld()->GetDeltaSeconds(), 10.0f);
 
     // Set rotation to interpolated rotation
     GetController()->SetControlRotation(NewRotation);

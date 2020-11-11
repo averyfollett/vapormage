@@ -60,8 +60,8 @@ void AGrilledPigeonGameMode::PauseAllEnemies() const
 {
     TArray<AActor*> EnemyActors;
     UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyCharacter::StaticClass(), EnemyActors);
-    for (auto It = EnemyActors.begin(); It != EnemyActors.end(); It.operator++())
+    for (int i = 0; i < EnemyActors.Num(); i++)
     {
-        Cast<AEnemyController>(Cast<AEnemyCharacter>(*It)->GetController())->PauseBehaviourTree();
+        Cast<AEnemyController>(Cast<AEnemyCharacter>(EnemyActors[i])->GetController())->PauseBehaviourTree();
     }
 }
