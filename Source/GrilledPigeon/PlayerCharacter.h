@@ -373,6 +373,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = CASTING)
     TSubclassOf<class AIceKnife> IKSpellClass;
 
+    /*
+        accessing spell class of ash bolt
+    */
+    UPROPERTY(EditDefaultsOnly, Category = CASTING)
+    TSubclassOf<class AAshBolt> AshBoltSpellClass;
+
     UFUNCTION(BlueprintCallable, Category=Cast)
     void SetCastingStatus(const bool B);
 

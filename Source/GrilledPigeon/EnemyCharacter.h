@@ -108,10 +108,10 @@ protected:
 	TSubclassOf<class AIceKnife> IceKnifeSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> SparkSpellClass;
+	TSubclassOf<class AAshBolt> SparkSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
-	TSubclassOf<class AIceKnife> AshBoltSpellClass;
+	TSubclassOf<class AAshBolt> AshBoltSpellClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CASTING)
 	TSubclassOf<class AIceKnife> ArcaneBoltSpellClass;					//we need this even though this guy doesnt fire it in order to take damage from it

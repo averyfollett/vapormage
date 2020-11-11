@@ -12,6 +12,7 @@
 #include "GridPulse.h"
 #include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
+#include "AshBolt.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -120,6 +121,10 @@ void APlayerCharacter::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp
         DamagePlayer(20, PlayerStatus.bIsBlockingLeft);
     }
     if (OtherActor->IsA(ArcaneBoltSpellClass))
+    {
+        DamagePlayer(25, PlayerStatus.bIsBlockingRight);
+    }
+    if (OtherActor->IsA(AshBoltSpellClass))
     {
         DamagePlayer(25, PlayerStatus.bIsBlockingRight);
     }

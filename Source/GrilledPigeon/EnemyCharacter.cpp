@@ -7,6 +7,7 @@
 #include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
 #include "ArcaneBolt.h"
+#include "AshBolt.h"
 #include "PlayerCharacter.h"
 #include "PlayerUI.h"
 #include "Kismet/GameplayStatics.h"
@@ -153,7 +154,7 @@ void AEnemyCharacter::CastSparkSpell()
 			SpawnParams.Owner = this;
 			SpawnParams.Instigator = GetInstigator();
 			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
+			AAshBolt* Projectile = World->SpawnActor<AAshBolt>(SparkSpellClass, CastLocation, CastRotation, SpawnParams);
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
@@ -196,7 +197,7 @@ void AEnemyCharacter::CastAshBoltSpell()
 			SpawnParams.Owner = this;
 			SpawnParams.Instigator = GetInstigator();
 			// Spawn the projectile at the muzzle.
-			AIceKnife* Projectile = World->SpawnActor<AIceKnife>(IceKnifeSpellClass, CastLocation, CastRotation, SpawnParams);
+			AAshBolt* Projectile = World->SpawnActor<AAshBolt>(AshBoltSpellClass, CastLocation, CastRotation, SpawnParams);
 			if (Projectile)
 			{
 				// Set the projectile's initial trajectory.
