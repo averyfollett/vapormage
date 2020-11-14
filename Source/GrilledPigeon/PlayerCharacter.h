@@ -70,6 +70,10 @@ enum EAsigs_State
     //flick left
     Asigs_Ef = Asigs_E | Asigs_F,
     //flick right
+    Asigs_Ede = Asigs_E | Asigs_D | Asigs_E | Asigs_Flip,
+    //flick left release to center
+    Asigs_Efe = Asigs_E | Asigs_F | Asigs_E,
+    //flick right release to center
 
 	Asigs_Edab = Asigs_E | Asigs_D | Asigs_A | Asigs_B | Asigs_Flip,
     //quarter circle left up

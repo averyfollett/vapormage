@@ -784,12 +784,12 @@ void APlayerCharacter::Cast()
         CastArcaneBoltSpell();
 		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->PlayCameraShake(CameraShake_CastSuccess, 1.0f);
 	}
-    if (OutputSequence == Asigs_Ef)
+    if (OutputSequence == Asigs_Efe)
     {
         PRINT("BLOCKING RIGHT");
         BlockRight();
     }
-    if (OutputSequence == Asigs_Ed)
+    if (OutputSequence == Asigs_Ede)
     {
         PRINT("BLOCKING LEFT");
         BlockLeft();
