@@ -13,7 +13,10 @@ struct FEnemyStatus
 	GENERATED_USTRUCT_BODY()
     
     //Contains all player status stuff
+	UPROPERTY(BlueprintReadWrite)
     bool bIsCasting;
+
+	UPROPERTY(BlueprintReadWrite)
 	bool bIsBlocking;
 };
 
@@ -144,7 +147,7 @@ public:
 	UPROPERTY(EditAnywhere, Category=Behaviour)
 	class UBehaviorTree * BehaviorTree;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Status)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Status)
 	FEnemyStatus EnemyStatus;
 
 public:	
