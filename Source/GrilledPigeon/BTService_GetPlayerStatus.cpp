@@ -19,5 +19,6 @@ void UBTService_GetPlayerStatus::TickNode(UBehaviorTreeComponent& OwnerComp, uin
     APlayerCharacter* Enemy = static_cast<APlayerCharacter*>(OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Object>(
         EnemyController->EnemyKeyID));
 
-    OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(EnemyController->ShouldBlockKeyID, Enemy->PlayerStatus.bIsCasting);
+    if (IsValid(EnemyController) && IsValid(Enemy) && IsValid(&OwnerComp))
+        OwnerComp.GetBlackboardComponent()->SetValue<UBlackboardKeyType_Bool>(EnemyController->ShouldBlockKeyID, Enemy->PlayerStatus.bIsCasting);
 }
