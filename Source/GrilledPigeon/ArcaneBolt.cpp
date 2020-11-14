@@ -36,8 +36,7 @@ AArcaneBolt::AArcaneBolt()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
-    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed; //have to change this if we want to have it gradually increase as time goes on
+    
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     ProjectileMovementComponent->bIsHomingProjectile = true;
@@ -55,6 +54,9 @@ void AArcaneBolt::BeginPlay()
     APlayerCharacter* Wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
     //ProjectileMovementComponent->HomingTargetComponent = Wizard->EnemyActor;
     ProjectileMovementComponent->HomingTargetComponent = Wizard->GetEnemyActor()->GetRootComponent();
+
+    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed; //have to change this if we want to have it gradually increase as time goes on
 }
 
 void AArcaneBolt::PlayRandomCastSound()

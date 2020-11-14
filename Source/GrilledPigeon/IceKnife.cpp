@@ -20,8 +20,7 @@ AIceKnife::AIceKnife()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
-    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;
+    
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     //ProjectileMovementComponent->Bounciness = 0.3f;
@@ -42,6 +41,9 @@ void AIceKnife::BeginPlay()
     APlayerCharacter* Wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
     //ProjectileMovementComponent->HomingTargetComponent = Wizard->EnemyActor;
     ProjectileMovementComponent->HomingTargetComponent = Wizard->GetEnemyActor()->GetRootComponent();
+
+    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;
 }
 
 void AIceKnife::PlayRandomCastSound()

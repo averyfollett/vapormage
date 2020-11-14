@@ -20,8 +20,6 @@ AAshBolt::AAshBolt()
 
     ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
     ProjectileMovementComponent->SetUpdatedComponent(CollisionComponent);
-    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
-    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;
     ProjectileMovementComponent->bRotationFollowsVelocity = true;
     ProjectileMovementComponent->bShouldBounce = false;
     //ProjectileMovementComponent->Bounciness = 0.3f;
@@ -39,6 +37,9 @@ void AAshBolt::BeginPlay()
     APlayerCharacter* Wizard = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
     //ProjectileMovementComponent->HomingTargetComponent = Wizard->EnemyActor;
     ProjectileMovementComponent->HomingTargetComponent = Wizard->GetRootComponent();
+
+    ProjectileMovementComponent->InitialSpeed = InitialTravelSpeed;
+    ProjectileMovementComponent->MaxSpeed = InitialTravelSpeed;
 }
 
 void AAshBolt::PlayRandomCastSound()
