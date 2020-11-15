@@ -207,7 +207,7 @@ AActor* APlayerCharacter::CapsuleTraceForEnemy() const
     return HitActor.GetActor();
 }
 
-void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, FName SocketName) const
+void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, const FName SocketName) const
 {
     // Cast actor to character class
     ACharacter* EnemyCharacter = static_cast<ACharacter*>(Enemy);
