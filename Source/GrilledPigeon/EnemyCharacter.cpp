@@ -6,7 +6,6 @@
 #include "ArcaneBolt.h"
 #include "GrilledPigeonGameMode.h"
 #include "IceKnife.h"
-#include "ArcaneBolt.h"
 #include "AshBolt.h"
 #include "PlayerCharacter.h"
 #include "PlayerUI.h"

@@ -721,7 +721,7 @@ void APlayerCharacter::BlockLeft()
     GetWorldTimerManager().SetTimer(
        BlockingLeftTimerHandle, this, &APlayerCharacter::EndBlockingLeftStatus, PlayerBlockingTimerLength, false);
 
-    DelayBeforeRegen();
+    //DelayBeforeRegen();
 }
 
 void APlayerCharacter::EndBlockingLeftStatus()
@@ -738,7 +738,7 @@ void APlayerCharacter::BlockRight()
     GetWorldTimerManager().SetTimer(
        BlockingRightTimerHandle, this, &APlayerCharacter::EndBlockingRightStatus, PlayerBlockingTimerLength, false);
 
-    DelayBeforeRegen();
+    //DelayBeforeRegen();
 }
 
 void APlayerCharacter::EndBlockingRightStatus()
