@@ -40,6 +40,15 @@ public:
 	//Spell to be cast
 	UFUNCTION(BlueprintCallable, Category=Cast)
 	void CastFlamePoolSpell();
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+	float GetCurrentFocus() const;
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+    float GetMaxFocus() const;
+
+	UFUNCTION(BlueprintCallable, Category=Health)
+    float GetVitalityLossThreshold() const;
 	
 protected:
 	// Called when the game starts or when spawned

@@ -26,14 +26,22 @@ AGrilledPigeonGameMode::AGrilledPigeonGameMode()
 
 void AGrilledPigeonGameMode::SetGameLost()
 {
-    bIsGameLost = true;
-    PauseAllEnemies();
+    if (!bIsGameWon)
+    {
+        bIsGameLost = true;
+        PauseAllEnemies();
+        CreateLossWidget();
+    }
 }
 
 void AGrilledPigeonGameMode::SetGameWon()
 {
-    bIsGameWon = true;
-    PauseAllEnemies();
+    if (!bIsGameLost)
+    {
+        bIsGameWon = true;
+        PauseAllEnemies();
+        CreateWinWidget();
+    }
 }
 
 void AGrilledPigeonGameMode::CreateLossWidget() const

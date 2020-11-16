@@ -528,7 +528,6 @@ void APlayerCharacter::DamagePlayer(const float Damage, const bool bWasBlocked)
     {
         AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
         GameMode->SetGameLost();
-        GameMode->CreateLossWidget();
 
         //TO DO: Kill player
     }

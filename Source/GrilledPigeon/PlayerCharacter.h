@@ -463,13 +463,13 @@ protected:
     /*
         range to judge a considerable amount of intended input
     */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ASIGS)
     float Ibr = 0.000001f;
 
     /*
         timer system to delay the concatenation stage
     */
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ASIGS)
     int DelayTimerMax = 10; // WAS AT 35 // If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
 
     /*

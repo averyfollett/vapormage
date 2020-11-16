@@ -179,6 +179,21 @@ void AEnemyCharacter::CastFlamePoolSpell()
 	//TO DO: Cast flame pool
 }
 
+float AEnemyCharacter::GetCurrentFocus() const
+{
+	return CurrentFocus;
+}
+
+float AEnemyCharacter::GetMaxFocus() const
+{
+	return MaxFocus;
+}
+
+float AEnemyCharacter::GetVitalityLossThreshold() const
+{
+	return VitalityLossThreshold;
+}
+
 void AEnemyCharacter::BlockSpell()
 {
 	EnemyStatus.bIsBlocking = true;
@@ -197,7 +212,7 @@ void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
 		{
 			CurrentFocus -= Damage;
 		}
-		if (CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0 ||
+		if ((CurrentFocus <= MaxFocus * VitalityLossThreshold && CurrentVitality > 0) ||
             !bWasBlocked)
 		{
 			CurrentVitality--;
@@ -207,7 +222,6 @@ void AEnemyCharacter::DamageAI(const float Damage, const bool bWasBlocked)
 		{
 			AGrilledPigeonGameMode * GameMode = static_cast<AGrilledPigeonGameMode*>(GetWorld()->GetAuthGameMode());
 			GameMode->SetGameWon();
-			GameMode->CreateWinWidget();
 		
 			//TO DO: Enemy dies
 		}
