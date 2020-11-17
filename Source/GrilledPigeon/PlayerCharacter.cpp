@@ -77,7 +77,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 
     SequenceOut(this->InputComponent->GetAxisValue(TEXT("TurnRate")),
                 -(this->InputComponent->GetAxisValue(TEXT("LookUpRate"))),
-                Ibr);
+                Ibr,
+                DeltaTime);
 	
     AutoAimAtEnemy(EnemyActor, FName("spine_03Socket"));
 
@@ -226,7 +227,7 @@ void APlayerCharacter::AutoAimAtEnemy(AActor* Enemy, const FName SocketName) con
     GetController()->SetControlRotation(NewRotation);
 }
 
-void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const float InputBufferRadius)
+void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const float InputBufferRadius, float DeltaTime)
 {
     //don't bother doing this if we don't care about gathering the input, save on some input load times
     if (GatheringSequence)
@@ -265,7 +266,7 @@ void APlayerCharacter::SequenceOut(const float XAxis, const float YAxis, const f
 
         if (DelayTimerCurrent >= 0)
         {
-            DelayTimerCurrent--;
+            DelayTimerCurrent -= DeltaTime;
         }
 
         //print("Timer: " + FString::FromInt(delayTimerCurrent));

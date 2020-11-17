@@ -340,7 +340,7 @@ protected:
         determine sequence out from vector, call where input is located
     */
     UFUNCTION(BlueprintCallable, Category=ASIGS)
-    void SequenceOut(float XAxis, float YAxis, float InputBufferRadius);
+    void SequenceOut(float XAxis, float YAxis, float InputBufferRadius, float DeltaTime);
 
     /*
         combine the sequence list into a single enum value and return it
@@ -470,13 +470,13 @@ protected:
         timer system to delay the concatenation stage
     */
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ASIGS)
-    int DelayTimerMax = 10; // WAS AT 35 // If at 10, wait for 1/6 of a second before going into concat stage when fps is locked at 60
+    float DelayTimerMax = 0.16; // If at 0.16, wait for 1/6 of a second before going into concat stage
 
     /*
      * Current time remaining on delay timer (0 - DelayTimerMax)
      */
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ASIGS)
-    int DelayTimerCurrent;
+    float DelayTimerCurrent;
 
     /*
         current single element sequence of enums, later to be combined to create a unique enum 
