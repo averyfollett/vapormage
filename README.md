@@ -24,6 +24,7 @@ Responsibilities:
  * AI design
  * Narrative design
  * Menu design
+ * Practice range design
 
 **David Iooss:**
  * Project/team management
